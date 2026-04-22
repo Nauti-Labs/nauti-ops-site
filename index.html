@@ -352,6 +352,151 @@
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
 
+        /* ── CLICKABLE STAT CARDS ── */
+        .stat-card {
+            cursor: pointer;
+            transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+            position: relative;
+        }
+        .stat-card:hover {
+            border-color: var(--blue);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(0,119,255,0.12);
+        }
+        .stat-card::after {
+            content: '↗';
+            position: absolute; top: 0.7rem; right: 0.9rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem; color: var(--text-muted);
+            opacity: 0; transition: opacity 0.2s, color 0.2s;
+        }
+        .stat-card:hover::after { opacity: 1; color: var(--blue); }
+
+        /* ── WEATHER LOCAL TIME ── */
+        .wx-local-time {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            color: var(--blue);
+            margin-top: 0.2rem;
+            letter-spacing: 0.04em;
+        }
+        .wx-local-time .wx-tz {
+            color: var(--text-muted); font-size: 0.65rem;
+            margin-left: 0.3rem; letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        /* ── MODAL ── */
+        .modal-overlay {
+            position: fixed; inset: 0;
+            background: rgba(6, 9, 15, 0.78);
+            backdrop-filter: blur(8px);
+            display: none;
+            align-items: center; justify-content: center;
+            z-index: 10000;
+            padding: 1.5rem;
+            animation: fadeIn 0.2s ease-out;
+        }
+        .modal-overlay.open { display: flex; }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .modal {
+            background: var(--bg2);
+            border: 1px solid var(--blue-dim);
+            border-radius: 14px;
+            width: 100%; max-width: 680px;
+            max-height: 86vh; overflow: hidden;
+            display: flex; flex-direction: column;
+            box-shadow: 0 20px 60px rgba(0, 119, 255, 0.25);
+            animation: slideUp 0.25s ease-out;
+        }
+        .modal-header {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: space-between;
+            background: linear-gradient(180deg, rgba(0,119,255,0.08), transparent);
+        }
+        .modal-title {
+            font-size: 1.1rem; font-weight: 800;
+            color: var(--text); letter-spacing: -0.01em;
+        }
+        .modal-sub {
+            font-size: 0.72rem; color: var(--amber);
+            letter-spacing: 0.12em; text-transform: uppercase;
+            font-family: 'JetBrains Mono', monospace;
+            margin-top: 0.25rem;
+        }
+        .modal-close {
+            background: transparent; border: 1px solid var(--border);
+            color: var(--text-muted);
+            width: 32px; height: 32px; border-radius: 8px;
+            cursor: pointer; font-size: 1rem;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s;
+        }
+        .modal-close:hover { color: var(--blue); border-color: var(--blue); }
+        .modal-body {
+            padding: 1.25rem 1.5rem;
+            overflow-y: auto; flex: 1;
+        }
+        .modal-table {
+            width: 100%; border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+        .modal-table th {
+            text-align: left; padding: 0.55rem 0.6rem;
+            font-size: 0.7rem; color: var(--blue);
+            text-transform: uppercase; letter-spacing: 0.08em;
+            border-bottom: 1px solid var(--border);
+            font-weight: 600;
+        }
+        .modal-table td {
+            padding: 0.75rem 0.6rem;
+            border-bottom: 1px solid rgba(0,119,255,0.06);
+            color: var(--text);
+        }
+        .modal-table td.mono {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+        }
+        .modal-table td.muted { color: var(--text-muted); font-size: 0.78rem; }
+        .modal-table tr:last-child td { border-bottom: none; }
+        .modal-mini-row {
+            display: flex; gap: 0.75rem;
+            padding: 0.85rem 0;
+            border-bottom: 1px solid rgba(0,119,255,0.08);
+            align-items: center;
+        }
+        .modal-mini-row:last-child { border-bottom: none; }
+        .modal-mini-icon {
+            width: 36px; height: 36px; border-radius: 10px;
+            background: var(--amber-dim); border: 1px solid var(--border-amber);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1rem; flex-shrink: 0;
+        }
+        .modal-mini-icon.blue { background: var(--blue-dim); border-color: var(--border); }
+        .modal-progress {
+            height: 6px; background: var(--bg3); border-radius: 99px;
+            overflow: hidden; margin-top: 0.4rem;
+        }
+        .modal-progress-fill {
+            height: 100%; border-radius: 99px;
+            background: linear-gradient(90deg, var(--blue), var(--amber));
+        }
+        .modal-footer-note {
+            padding-top: 0.75rem; margin-top: 0.75rem;
+            border-top: 1px solid var(--border);
+            font-size: 0.72rem; color: var(--text-muted);
+            font-family: 'JetBrains Mono', monospace;
+            display: flex; justify-content: space-between;
+        }
+
         /* ── RESPONSIVE ── */
         @media (max-width: 1100px) {
             main { grid-template-columns: 1fr 1fr; }
@@ -411,28 +556,28 @@
 
         <!-- STAT CARDS -->
         <div class="stats-row">
-            <div class="stat-card">
+            <div class="stat-card" onclick="openDetail('vessels')" role="button" tabindex="0">
                 <div class="stat-icon blue">🚢</div>
                 <div>
                     <div class="stat-value" style="color:var(--blue)">4</div>
                     <div class="stat-label">Vessels Active</div>
                 </div>
             </div>
-            <div class="stat-card">
+            <div class="stat-card" onclick="openDetail('prearrivals')" role="button" tabindex="0">
                 <div class="stat-icon amber">📋</div>
                 <div>
                     <div class="stat-value" style="color:var(--amber)">3</div>
                     <div class="stat-label">Pre-Arrivals Pending</div>
                 </div>
             </div>
-            <div class="stat-card">
+            <div class="stat-card" onclick="openDetail('cargo')" role="button" tabindex="0">
                 <div class="stat-icon green">⚓</div>
                 <div>
                     <div class="stat-value" style="color:var(--success)">2</div>
                     <div class="stat-label">Cargo Ops Running</div>
                 </div>
             </div>
-            <div class="stat-card">
+            <div class="stat-card" onclick="openDetail('documents')" role="button" tabindex="0">
                 <div class="stat-icon blue">📄</div>
                 <div>
                     <div class="stat-value" style="color:var(--blue)">18</div>
@@ -447,6 +592,7 @@
                 <div class="wx-icon">🌊</div>
                 <div>
                     <div class="wx-port">Rotterdam</div>
+                    <div class="wx-local-time" id="wx-rotterdam-time">--:--:-- <span class="wx-tz">CET</span></div>
                     <div class="wx-temp wx-loading" id="wx-rotterdam-temp">Loading…</div>
                     <div class="wx-wind" id="wx-rotterdam-wind"></div>
                     <div class="wx-desc" id="wx-rotterdam-desc"></div>
@@ -456,6 +602,7 @@
                 <div class="wx-icon">⚓</div>
                 <div>
                     <div class="wx-port">Houston Ship Channel</div>
+                    <div class="wx-local-time" id="wx-houston-time">--:--:-- <span class="wx-tz">CDT</span></div>
                     <div class="wx-temp wx-loading" id="wx-houston-temp">Loading…</div>
                     <div class="wx-wind" id="wx-houston-wind"></div>
                     <div class="wx-desc" id="wx-houston-desc"></div>
@@ -465,6 +612,7 @@
                 <div class="wx-icon">🌏</div>
                 <div>
                     <div class="wx-port">Singapore</div>
+                    <div class="wx-local-time" id="wx-singapore-time">--:--:-- <span class="wx-tz">SGT</span></div>
                     <div class="wx-temp wx-loading" id="wx-singapore-temp">Loading…</div>
                     <div class="wx-wind" id="wx-singapore-wind"></div>
                     <div class="wx-desc" id="wx-singapore-desc"></div>
@@ -804,6 +952,20 @@
     </main>
 </div>
 
+<!-- ── DETAIL MODAL ── -->
+<div class="modal-overlay" id="detailModal" onclick="closeDetail(event)" aria-hidden="true">
+    <div class="modal" onclick="event.stopPropagation()" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="modal-header">
+            <div>
+                <div class="modal-title" id="modalTitle">—</div>
+                <div class="modal-sub" id="modalSub">—</div>
+            </div>
+            <button class="modal-close" onclick="closeDetail()" aria-label="Close">✕</button>
+        </div>
+        <div class="modal-body" id="modalBody">—</div>
+    </div>
+</div>
+
 <script>
     // ── LIVE CLOCK (UTC) ──
     function updateClock() {
@@ -813,6 +975,252 @@
     }
     updateClock();
     setInterval(updateClock, 1000);
+
+    // ── PORT LOCAL TIMES ──
+    const PORT_TZ = [
+        { id: 'rotterdam', zone: 'Europe/Amsterdam' },
+        { id: 'houston',   zone: 'America/Chicago'  },
+        { id: 'singapore', zone: 'Asia/Singapore'   },
+    ];
+    function updatePortTimes() {
+        const now = new Date();
+        for (const p of PORT_TZ) {
+            const el = document.getElementById(`wx-${p.id}-time`);
+            if (!el) continue;
+            try {
+                const parts = new Intl.DateTimeFormat('en-GB', {
+                    timeZone: p.zone, hour12: false,
+                    hour: '2-digit', minute: '2-digit', second: '2-digit',
+                    timeZoneName: 'short'
+                }).formatToParts(now);
+                const time = parts.filter(x => ['hour','minute','second','literal'].includes(x.type))
+                                  .map(x => x.value).join('');
+                const tz = parts.find(x => x.type === 'timeZoneName')?.value || '';
+                el.innerHTML = `${time.replace(/::/g,':').trim()} <span class="wx-tz">${tz}</span>`;
+            } catch(e) { /* stay with placeholder */ }
+        }
+    }
+    updatePortTimes();
+    setInterval(updatePortTimes, 1000);
+
+    // ── DETAIL MODAL ──
+    const DETAIL_CONTENT = {
+        vessels: {
+            title: 'Active Vessels',
+            sub: '4 · Live fleet status',
+            html: `
+                <table class="modal-table">
+                    <thead>
+                        <tr><th>Vessel</th><th>IMO</th><th>Cargo</th><th>Position</th><th>Status</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>CHEM NAVIGATOR</strong></td>
+                            <td class="mono">9741230</td>
+                            <td>Methanol · 22,500 MT</td>
+                            <td class="muted">Inbound · ETA 08:00</td>
+                            <td><span class="status-tag tag-arriving">Arriving</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>ATLANTIC CHEMICAL</strong></td>
+                            <td class="mono">9654012</td>
+                            <td>Ethylene Glycol · 20,000 MT</td>
+                            <td class="muted">Berth 12 · HSC</td>
+                            <td><span class="status-tag tag-loading">Loading</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>GULF CARRIER</strong></td>
+                            <td class="mono">9523887</td>
+                            <td>Benzene · 18,000 MT</td>
+                            <td class="muted">Berth 8 · HSC</td>
+                            <td><span class="status-tag tag-discharging">Discharging</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>NAUTI STAR</strong></td>
+                            <td class="mono">9312045</td>
+                            <td>Acetone · 15,400 MT</td>
+                            <td class="muted">Berth 3 · ETD 22:00</td>
+                            <td><span class="status-tag tag-departing">Departing</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="modal-footer-note">
+                    <span>LAST UPDATED · 2 MIN AGO</span>
+                    <span>FLEET · CHEMICAL TANKER</span>
+                </div>
+            `
+        },
+        prearrivals: {
+            title: 'Pre-Arrival Queue',
+            sub: '3 pending · Agent review required',
+            html: `
+                <div class="modal-mini-row">
+                    <div class="modal-mini-icon">01</div>
+                    <div style="flex:1;">
+                        <div style="font-weight:700;">OCEAN ZENITH</div>
+                        <div style="font-size:0.78rem; color: var(--text-muted);">Toluene · 22,400 MT · Shipper: Dow Chemical</div>
+                    </div>
+                    <div class="mono" style="color: var(--amber); font-size:0.8rem; text-align:right;">
+                        ETA Apr 7<br>06:30
+                    </div>
+                </div>
+                <div class="modal-mini-row">
+                    <div class="modal-mini-icon">02</div>
+                    <div style="flex:1;">
+                        <div style="font-weight:700;">MARE NOSTRUM</div>
+                        <div style="font-size:0.78rem; color: var(--text-muted);">Styrene · 18,100 MT · Shipper: LyondellBasell</div>
+                    </div>
+                    <div class="mono" style="color: var(--amber); font-size:0.8rem; text-align:right;">
+                        ETA Apr 8<br>14:00
+                    </div>
+                </div>
+                <div class="modal-mini-row">
+                    <div class="modal-mini-icon">03</div>
+                    <div style="flex:1;">
+                        <div style="font-weight:700;">BLUE HORIZON</div>
+                        <div style="font-size:0.78rem; color: var(--text-muted);">MEG · 31,000 MT · Shipper: Saudi Aramco</div>
+                    </div>
+                    <div class="mono" style="color: var(--amber); font-size:0.8rem; text-align:right;">
+                        ETA Apr 9<br>09:15
+                    </div>
+                </div>
+                <div class="modal-footer-note">
+                    <span>AVG. REVIEW TIME · 12 MIN</span>
+                    <span>AGENT · REVIEW REQUIRED</span>
+                </div>
+            `
+        },
+        cargo: {
+            title: 'Cargo Operations In Progress',
+            sub: '2 active · Live progress',
+            html: `
+                <div class="modal-mini-row" style="align-items: stretch;">
+                    <div class="modal-mini-icon" style="background: rgba(0,217,126,0.1); border-color: rgba(0,217,126,0.3);">⚓</div>
+                    <div style="flex:1;">
+                        <div style="display:flex; justify-content:space-between;">
+                            <div>
+                                <div style="font-weight:700;">ATLANTIC CHEMICAL</div>
+                                <div style="font-size:0.78rem; color: var(--text-muted);">Ethylene Glycol · Loading · Berth 12</div>
+                            </div>
+                            <div class="mono" style="color: var(--amber); font-weight:700;">67%</div>
+                        </div>
+                        <div class="modal-progress"><div class="modal-progress-fill" style="width:67%"></div></div>
+                        <div style="display:flex; justify-content:space-between; margin-top:0.35rem; font-size:0.72rem; color:var(--text-muted);">
+                            <span>13,400 / 20,000 MT</span>
+                            <span>Est. completion · 04:30</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-mini-row" style="align-items: stretch;">
+                    <div class="modal-mini-icon">⚓</div>
+                    <div style="flex:1;">
+                        <div style="display:flex; justify-content:space-between;">
+                            <div>
+                                <div style="font-weight:700;">GULF CARRIER</div>
+                                <div style="font-size:0.78rem; color: var(--text-muted);">Benzene · Discharge · Berth 8</div>
+                            </div>
+                            <div class="mono" style="color: var(--amber); font-weight:700;">41%</div>
+                        </div>
+                        <div class="modal-progress"><div class="modal-progress-fill" style="width:41%"></div></div>
+                        <div style="display:flex; justify-content:space-between; margin-top:0.35rem; font-size:0.72rem; color:var(--text-muted);">
+                            <span>7,380 / 18,000 MT</span>
+                            <span>Est. completion · 09:00</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer-note">
+                    <span>COMBINED THROUGHPUT · 20,780 MT</span>
+                    <span>LIVE · UPDATED EVERY 30s</span>
+                </div>
+            `
+        },
+        documents: {
+            title: 'Documents Filed This Month',
+            sub: '18 total · 6 shown · April 2026',
+            html: `
+                <div class="modal-mini-row">
+                    <div class="modal-mini-icon">📄</div>
+                    <div style="flex:1;">
+                        <div style="font-weight:600; font-size:0.9rem;">Statement of Facts — CHEM NAVIGATOR</div>
+                        <div style="font-size:0.72rem; color: var(--text-muted);">Signed · Apr 19 · 3 pages</div>
+                    </div>
+                    <div class="mono" style="font-size:0.72rem; color: var(--amber);">SOF</div>
+                </div>
+                <div class="modal-mini-row">
+                    <div class="modal-mini-icon">📋</div>
+                    <div style="flex:1;">
+                        <div style="font-weight:600; font-size:0.9rem;">Notice of Readiness — ATLANTIC CHEMICAL</div>
+                        <div style="font-size:0.72rem; color: var(--text-muted);">Tendered · Apr 18 · Berth 12</div>
+                    </div>
+                    <div class="mono" style="font-size:0.72rem; color: var(--amber);">NOR</div>
+                </div>
+                <div class="modal-mini-row">
+                    <div class="modal-mini-icon">📦</div>
+                    <div style="flex:1;">
+                        <div style="font-weight:600; font-size:0.9rem;">Cargo Manifest — GULF CARRIER</div>
+                        <div style="font-size:0.72rem; color: var(--text-muted);">Filed · Apr 17 · CBP cleared</div>
+                    </div>
+                    <div class="mono" style="font-size:0.72rem; color: var(--amber);">CM</div>
+                </div>
+                <div class="modal-mini-row">
+                    <div class="modal-mini-icon">🧪</div>
+                    <div style="flex:1;">
+                        <div style="font-weight:600; font-size:0.9rem;">Tank Inspection Report — GULF CARRIER</div>
+                        <div style="font-size:0.72rem; color: var(--text-muted);">Complete · Apr 16 · Clean</div>
+                    </div>
+                    <div class="mono" style="font-size:0.72rem; color: var(--amber);">TIR</div>
+                </div>
+                <div class="modal-mini-row">
+                    <div class="modal-mini-icon">⚓</div>
+                    <div style="flex:1;">
+                        <div style="font-weight:600; font-size:0.9rem;">Pilot Dispatch Confirmation — NAUTI STAR</div>
+                        <div style="font-size:0.72rem; color: var(--text-muted);">Confirmed · Apr 15 · 22:00 ETD</div>
+                    </div>
+                    <div class="mono" style="font-size:0.72rem; color: var(--amber);">PDC</div>
+                </div>
+                <div class="modal-mini-row">
+                    <div class="modal-mini-icon">💸</div>
+                    <div style="flex:1;">
+                        <div style="font-weight:600; font-size:0.9rem;">Owner's Disbursement Account — ATLANTIC CHEMICAL</div>
+                        <div style="font-size:0.72rem; color: var(--text-muted);">Issued · Apr 14 · Draft</div>
+                    </div>
+                    <div class="mono" style="font-size:0.72rem; color: var(--amber);">DA</div>
+                </div>
+                <div class="modal-footer-note">
+                    <span>TOTAL FILED · 18</span>
+                    <span>AVG. TURNAROUND · 4.2 HRS</span>
+                </div>
+            `
+        }
+    };
+
+    function openDetail(key) {
+        const d = DETAIL_CONTENT[key];
+        if (!d) return;
+        document.getElementById('modalTitle').textContent = d.title;
+        document.getElementById('modalSub').textContent = d.sub;
+        document.getElementById('modalBody').innerHTML = d.html;
+        const modal = document.getElementById('detailModal');
+        modal.classList.add('open');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeDetail(ev) {
+        if (ev && ev.currentTarget !== ev.target) return;
+        const modal = document.getElementById('detailModal');
+        modal.classList.remove('open');
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+    }
+    // Keyboard: Enter/Space on focused stat card + Escape to close
+    document.querySelectorAll('.stat-card').forEach(card => {
+        card.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); card.click(); }
+        });
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeDetail();
+    });
 
     // ── WEATHER (Open-Meteo — free, no key) ──
     const WX_PORTS = [
