@@ -1,4 +1,4 @@
-const CACHE_NAME = 'glaucus-nauti-v1';
+const CACHE_NAME = 'nauti-ops-v1';
 const URLS_TO_CACHE = ['/'];
 
 self.addEventListener('install', e => {
