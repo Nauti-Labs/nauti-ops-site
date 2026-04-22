@@ -609,14 +609,14 @@
 <div class="modal-veil" id="modal" style="display:none;">
     <div class="modal">
         <h2>Connect to the channel</h2>
-        <p>Nauti-Vision pulls live AIS vessel data from <a href="https://aisstream.io/" target="_blank" rel="noopener">aisstream.io</a> — a free service. Paste your API key to start streaming.</p>
+        <p>Nauti-Vision pulls live AIS vessel data from <a href="https://aisstream.io/" target="_blank" rel="noopener">aisstream.io</a>. For local testing, you can paste an operator API key below to start streaming.</p>
         <input type="text" id="key-input" placeholder="aisstream.io API key" autocomplete="off" spellcheck="false">
         <div class="modal-actions">
             <button class="btn ghost" id="key-skip">Demo mode</button>
             <button class="btn primary" id="key-save">Connect</button>
         </div>
         <div class="modal-hint">
-            Don't have one? Sign up free at <code>aisstream.io</code>. Your key stays on this device — we never send it to Nauti-Labs servers.
+            Production note: aisstream.io recommends keeping API keys on a backend relay you control. This local key flow is for operator testing only.
         </div>
     </div>
 </div>

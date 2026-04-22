@@ -220,6 +220,13 @@
             margin-bottom: 0.5rem;
         }
         .section-head p { color: var(--text-muted); font-size: 1rem; }
+        .section-note {
+            margin-top: 1rem;
+            color: var(--text-muted);
+            font-size: 0.84rem;
+            font-family: 'JetBrains Mono', monospace;
+            letter-spacing: 0.04em;
+        }
         .tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
         @media (max-width: 900px) { .tiers { grid-template-columns: 1fr; } }
         .tier {
@@ -398,17 +405,17 @@
 <section class="hero">
     <div class="eyebrow">6:00 AM CT · Monday to Friday</div>
     <h1>
-        The Houston Ship Channel,<br>
-        <span class="accent">in your inbox.</span>
+        The morning channel brief<br>
+        <span class="accent">before your phone starts ringing.</span>
     </h1>
     <p class="hero-sub">
-        Daily intel on vessel movements, tide windows, and channel anomalies —
-        written for agents, brokers, and terminal ops who don't have time
-        to stare at AIS maps all morning.
+        Daily Houston Ship Channel intelligence on inbound traffic, berth pressure,
+        tide windows, and watch items, written for vessel agents, brokers, and terminal
+        operators who need a clean read before the desk gets noisy.
     </p>
     <div class="hero-cta">
-        <a href="#subscribe" class="btn primary">See Pricing →</a>
-        <a href="/vision/" class="btn ghost">Try the Live Dashboard</a>
+        <a href="#subscribe" class="btn primary">See Plans →</a>
+        <a href="/vision/" class="btn ghost">Open Live Dashboard</a>
     </div>
 </section>
 
@@ -419,21 +426,21 @@
             <div class="digest-date">Tue · 22 Apr · 06:00 CT</div>
         </div>
         <div class="digest-body">
-            <h2>47 vessels in the channel. 12 tankers working.</h2>
-            <p class="sub">Morgan's Point tide 1.24 ft rising to +1.8 by noon. Light fog cleared at 0430. No active USCG advisories. Clean morning.</p>
+            <h2>47 vessels in play. 12 tankers on the board.</h2>
+            <p class="sub">Morgan's Point at +1.24 ft and rising toward the late-morning window. Early fog lifted by 0430. No active USCG restrictions at publish time.</p>
 
             <h3>Inbound (7)</h3>
             <ul>
-                <li><span class="tag in">INBOUND</span><span>ULTRA HOUSTON · Chem tanker · dest: HOU</span><span class="val">ETA 08:15</span></li>
-                <li><span class="tag in">INBOUND</span><span>STOLT TAURUS · Chem tanker · dest: BAYPORT</span><span class="val">ETA 09:40</span></li>
-                <li><span class="tag in">INBOUND</span><span>MOL CELEBRATION · Container · dest: HOU</span><span class="val">ETA 10:25</span></li>
-                <li><span class="tag in">INBOUND</span><span>ENTERPRISE LPG 3 · LPG · dest: SEABROOK</span><span class="val">ETA 11:10</span></li>
+                <li><span class="tag in">INBOUND</span><span>ULTRA HOUSTON · Chem tanker · Houston</span><span class="val">ETA 08:15</span></li>
+                <li><span class="tag in">INBOUND</span><span>STOLT TAURUS · Chem tanker · Bayport</span><span class="val">ETA 09:40</span></li>
+                <li><span class="tag in">INBOUND</span><span>MOL CELEBRATION · Container · Houston</span><span class="val">ETA 10:25</span></li>
+                <li><span class="tag in">INBOUND</span><span>ENTERPRISE LPG 3 · LPG · Seabrook</span><span class="val">ETA 11:10</span></li>
             </ul>
 
             <h3>Outbound (5)</h3>
             <ul>
-                <li><span class="tag out">OUTBOUND</span><span>CHEM VENTURE · Chem tanker · last: OILTANKING 2</span><span class="val">departed 05:40</span></li>
-                <li><span class="tag out">OUTBOUND</span><span>GULF PIONEER · Crude · last: KINDER PUB</span><span class="val">departed 04:55</span></li>
+                <li><span class="tag out">OUTBOUND</span><span>CHEM VENTURE · Chem tanker · last berth Oiltanking 2</span><span class="val">departed 05:40</span></li>
+                <li><span class="tag out">OUTBOUND</span><span>GULF PIONEER · Crude · last berth Kinder Pub</span><span class="val">departed 04:55</span></li>
             </ul>
 
             <h3>At Anchor (9)</h3>
@@ -443,9 +450,9 @@
             </ul>
 
             <h3>Watch Items</h3>
-            <p>• MOL CELEBRATION showing draft increase — possible cargo discrepancy, confirm with agent.<br>
-               • Bayport congestion: 4 vessels waiting, normal is 1–2. Surge may delay scheduled calls.<br>
-               • Pilot boat traffic 18% above 7-day average — confirms the inbound surge.</p>
+            <p>• Bayport has 4 vessels stacked against a normal 1 to 2 vessel queue. Expect berth compression if the 0940 and 1025 arrivals hold.<br>
+               • Two chem tankers are converging on the same late-morning tide window. Watch tug and pilot sequencing around Morgan's Point.<br>
+               • Bolivar anchorage dwell remains above the 7-day average. Useful signal for charterer update language if owners start pressing on delay exposure.</p>
         </div>
     </div>
     <p class="digest-preview-note">This is a mock. Real digests pull live from AIS, NOAA, and USCG feeds. Sent weekdays at 6am CT.</p>
@@ -454,7 +461,8 @@
 <section class="pricing-section" id="subscribe">
     <div class="section-head">
         <h2>Built by someone who used to run these calls.</h2>
-        <p>Three tiers. Start free, upgrade when you've seen the value.</p>
+        <p>Start free. Pro is the first paid tier. Custom coverage is quoted case by case.</p>
+        <p class="section-note">Stripe checkout is being wired next. Founding customers can be onboarded directly by email in the meantime.</p>
     </div>
 
     <div class="tiers">
@@ -475,33 +483,33 @@
         <div class="tier featured">
             <div class="tier-name">Pro</div>
             <div class="tier-price">$99<span class="per">/mo</span></div>
-            <div class="tier-tag">Full digest + live dashboard + vessel alerts.</div>
+            <div class="tier-tag">Full morning brief, live dashboard access, and watchlist coverage for a real desk.</div>
             <ul class="tier-features">
                 <li>Everything in Free</li>
-                <li>Complete vessel manifest (not just top 10)</li>
+                <li>Complete vessel board, not just the top 10 moves</li>
                 <li>Live dashboard access (Nauti-Vision)</li>
-                <li>Custom vessel watchlist + email alerts</li>
+                <li>Custom vessel watchlist with alert emails</li>
                 <li>Historical lookback (30 days)</li>
                 <li>Agent-ready CSV export</li>
-                <li>Priority support (direct email)</li>
+                <li>Priority support from Nauti-Labs</li>
             </ul>
-            <a href="#contact" class="btn primary">Start Pro →</a>
+            <a href="mailto:consulting@nauti-labs.com?subject=Nauti-Letter%20Pro%20Access" class="btn primary">Request Pro Access →</a>
         </div>
 
         <div class="tier">
-            <div class="tier-name">Pilot</div>
-            <div class="tier-price">$499<span class="per">/mo</span></div>
-            <div class="tier-tag">Pilot-grade scheduling. The real one.</div>
+            <div class="tier-name">Custom</div>
+            <div class="tier-price">Quoted</div>
+            <div class="tier-tag">For desks that need custom port coverage, pilot visibility, or team delivery.</div>
             <ul class="tier-features">
                 <li>Everything in Pro</li>
-                <li>Live pilot assignments (via PortXchange PilotTracker)</li>
-                <li>True ETA confidence intervals</li>
-                <li>Berth availability forecasting</li>
-                <li>Custom reports for your terminal / fleet</li>
-                <li>Slack / Teams integration</li>
+                <li>Custom port or terminal coverage</li>
+                <li>Pilot and berth workflow enrichment where licensed</li>
+                <li>Team distribution and watchlist setup</li>
+                <li>Custom reports for your fleet or terminal</li>
+                <li>Slack or Teams delivery options</li>
                 <li>Direct line to the builder</li>
             </ul>
-            <a href="#contact" class="btn ghost">Talk to us →</a>
+            <a href="mailto:consulting@nauti-labs.com?subject=Nauti-Letter%20Custom%20Coverage" class="btn ghost">Discuss Custom Coverage →</a>
         </div>
     </div>
 </section>
@@ -522,7 +530,7 @@
 
     <div class="faq">
         <div class="faq-q">Where does the data come from?</div>
-        <div class="faq-a">AIS vessel positions from aisstream.io, tides and currents from NOAA CO-OPS, and USCG Local Notice to Mariners. The Pro tier adds our own fusion layer. The Pilot tier adds PortXchange PilotTracker for real pilot schedules.</div>
+        <div class="faq-a">AIS vessel positions from aisstream.io, tides and currents from NOAA CO-OPS, and USCG notice data. Pro adds Nauti-Labs curation and desk-friendly formatting. Custom plans can include additional licensed or client-specific inputs.</div>
     </div>
     <div class="faq">
         <div class="faq-q">Who is this for?</div>
@@ -530,22 +538,22 @@
     </div>
     <div class="faq">
         <div class="faq-q">Can I cancel?</div>
-        <div class="faq-a">Anytime. Month-to-month. No phone trees, no retention calls. Email Justin, done.</div>
+        <div class="faq-a">Anytime. Month-to-month. No phone trees and no retention dance. Email consulting@nauti-labs.com and it gets handled.</div>
     </div>
     <div class="faq">
         <div class="faq-q">Do you cover Galveston / Texas City / Freeport?</div>
-        <div class="faq-a">Houston Ship Channel and Galveston Bay out to Bolivar today. Texas City coming. Freeport / Corpus by Q3. Custom port coverage available on Pilot tier.</div>
+        <div class="faq-a">Houston Ship Channel and Galveston Bay out to Bolivar today. Texas City, Freeport, and other port expansions are best handled as custom coverage so the product stays accurate instead of hand-wavy.</div>
     </div>
     <div class="faq">
         <div class="faq-q">Is this affiliated with Houston Pilots or the Port Bureau?</div>
-        <div class="faq-a">No. Nauti-Labs is independent. We use public data feeds (AIS, NOAA, USCG) on Free/Pro. The Pilot tier integrates PortXchange PilotTracker, which is a separately-licensed partnership product.</div>
+        <div class="faq-a">No. Nauti-Labs is independent. Free and Pro use public and operator-curated sources. Any premium pilot or terminal data would be handled as a separately scoped custom engagement.</div>
     </div>
 </section>
 
 <section class="capture" id="subscribe-form">
     <h3>Get the next digest.</h3>
     <p>Drop your email — first one hits your inbox tomorrow morning. Unsubscribe with one click.</p>
-    <form id="signup" action="mailto:justin@nauti-labs.com" method="POST" enctype="text/plain">
+    <form id="signup" action="mailto:consulting@nauti-labs.com" method="POST" enctype="text/plain">
         <input type="email" name="email" placeholder="you@company.com" required>
         <button type="submit" class="btn primary">Subscribe Free</button>
     </form>
@@ -558,7 +566,7 @@
     © 2026 Nauti-Labs LLC · Mont Belvieu, TX ·
     <a href="/">Nauti-Ops</a> ·
     <a href="/vision/">Live Dashboard</a> ·
-    <a href="mailto:justin@nauti-labs.com">justin@nauti-labs.com</a>
+    <a href="mailto:consulting@nauti-labs.com">consulting@nauti-labs.com</a>
 </footer>
 
 </body>
