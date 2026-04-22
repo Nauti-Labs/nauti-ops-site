@@ -1415,7 +1415,10 @@
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/service-worker.js')
-      .then(r => console.log('SW registered'))
+      .then(r => {
+        r.update();
+        console.log('SW registered');
+      })
       .catch(e => console.log('SW failed:', e));
   });
 }

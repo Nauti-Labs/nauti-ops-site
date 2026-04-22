@@ -1,5 +1,5 @@
-const CACHE_NAME = 'nauti-ops-v1';
-const URLS_TO_CACHE = ['/'];
+const CACHE_NAME = 'nauti-ops-v2';
+const URLS_TO_CACHE = ['/manifest.json', '/icon-192.png', '/icon-512.png'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(URLS_TO_CACHE)));
@@ -14,16 +14,29 @@ self.addEventListener('activate', e => {
 });
 
 self.addEventListener('fetch', e => {
-  // Network-first for API calls, cache-first for static assets
-  if (e.request.url.includes('/api/') || e.request.url.includes('/ws')) {
-    e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
-  } else {
+  if (e.request.method !== 'GET') return;
+
+  const isApiRequest = e.request.url.includes('/api/') || e.request.url.includes('/ws');
+  const isNavigation = e.request.mode === 'navigate' || e.request.destination === 'document';
+
+  // Always prefer the network for HTML so content updates land immediately.
+  if (isNavigation || isApiRequest) {
     e.respondWith(
-      caches.match(e.request).then(cached => cached || fetch(e.request).then(res => {
+      fetch(e.request).then(res => {
         const clone = res.clone();
         caches.open(CACHE_NAME).then(c => c.put(e.request, clone));
         return res;
-      }))
+      }).catch(() => caches.match(e.request).then(cached => cached || caches.match('/')))
     );
+    return;
   }
+
+  // Static assets can stay cache-first for snappy repeat visits.
+  e.respondWith(
+    caches.match(e.request).then(cached => cached || fetch(e.request).then(res => {
+      const clone = res.clone();
+      caches.open(CACHE_NAME).then(c => c.put(e.request, clone));
+      return res;
+    }))
+  );
 });
