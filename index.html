@@ -150,12 +150,19 @@
         .stat-icon {
             width: 44px; height: 44px; border-radius: 10px;
             display: flex; align-items: center; justify-content: center;
-            font-size: 1.3rem; flex-shrink: 0;
+            flex-shrink: 0;
         }
-        .stat-icon.blue  { background: var(--blue-dim); }
-        .stat-icon.amber { background: var(--amber-dim); }
-        .stat-icon.green { background: rgba(0,217,126,0.1); }
-        .stat-icon.red   { background: rgba(255,71,87,0.1); }
+        .stat-icon.blue  { background: var(--blue-dim); color: var(--blue); }
+        .stat-icon.amber { background: var(--amber-dim); color: var(--amber); }
+        .stat-icon.green { background: rgba(0,217,126,0.1); color: var(--success); }
+        .stat-icon.red   { background: rgba(255,71,87,0.1); color: var(--danger); }
+        .app-icon {
+            width: 22px; height: 22px;
+            display: block;
+        }
+        .stat-icon .app-icon {
+            width: 24px; height: 24px;
+        }
         .stat-value { font-size: 1.8rem; font-weight: 800; line-height: 1; }
         .stat-label { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.2rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; }
 
@@ -281,8 +288,15 @@
             width: 32px; height: 32px; border-radius: 8px;
             background: var(--amber-dim); border: 1px solid var(--border-amber);
             display: flex; align-items: center; justify-content: center;
-            font-size: 0.95rem; flex-shrink: 0;
+            color: var(--amber); flex-shrink: 0;
         }
+        .doc-icon.blue {
+            background: var(--blue-dim); border-color: var(--border); color: var(--blue);
+        }
+        .doc-icon.green {
+            background: rgba(0,217,126,0.1); border-color: rgba(0,217,126,0.22); color: var(--success);
+        }
+        .doc-icon .app-icon { width: 17px; height: 17px; }
         .doc-name { font-size: 0.82rem; font-weight: 600; }
         .doc-meta { font-size: 0.7rem; color: var(--text-muted); }
         .doc-btn {
@@ -326,7 +340,27 @@
             content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
             background: linear-gradient(90deg, var(--blue), transparent);
         }
-        .wx-icon { font-size: 1.8rem; flex-shrink: 0; }
+        .wx-icon {
+            width: 42px; height: 42px;
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+            background: var(--blue-dim);
+            border: 1px solid var(--border);
+            color: var(--blue);
+        }
+        .wx-icon.rotterdam { color: #40aaff; }
+        .wx-icon.houston {
+            background: var(--amber-dim);
+            border-color: var(--border-amber);
+            color: var(--amber);
+        }
+        .wx-icon.singapore {
+            background: rgba(0,217,126,0.08);
+            border-color: rgba(0,217,126,0.22);
+            color: var(--success);
+        }
+        .wx-icon .app-icon { width: 21px; height: 21px; }
         .wx-port { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); }
         .wx-temp { font-family: 'JetBrains Mono', monospace; font-size: 1.4rem; font-weight: 700; color: var(--text); }
         .wx-wind { font-size: 0.72rem; color: var(--amber); font-family: 'JetBrains Mono', monospace; }
@@ -478,9 +512,13 @@
             width: 36px; height: 36px; border-radius: 10px;
             background: var(--amber-dim); border: 1px solid var(--border-amber);
             display: flex; align-items: center; justify-content: center;
-            font-size: 1rem; flex-shrink: 0;
+            color: var(--amber); flex-shrink: 0;
         }
-        .modal-mini-icon.blue { background: var(--blue-dim); border-color: var(--border); }
+        .modal-mini-icon.blue { background: var(--blue-dim); border-color: var(--border); color: var(--blue); }
+        .modal-mini-icon.green {
+            background: rgba(0,217,126,0.1); border-color: rgba(0,217,126,0.22); color: var(--success);
+        }
+        .modal-mini-icon .app-icon { width: 18px; height: 18px; }
         .modal-progress {
             height: 6px; background: var(--bg3); border-radius: 99px;
             overflow: hidden; margin-top: 0.4rem;
@@ -513,6 +551,55 @@
     </style>
 </head>
 <body>
+
+<svg aria-hidden="true" style="position:absolute; width:0; height:0; overflow:hidden">
+    <symbol id="icon-vessel" viewBox="0 0 24 24">
+        <path d="M4 15.5h16l-1.8 3H5.8L4 15.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+        <path d="M8 15.5V9.5h5.5l2 2v4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M13.5 9.5v3M6 20c1 .5 2 .5 3 0s2-.5 3 0 2 .5 3 0 2-.5 3 0" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="icon-checklist" viewBox="0 0 24 24">
+        <rect x="6" y="4" width="12" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <path d="M9 4.5h6M9 10l1.3 1.3L13 8.8M14.5 10H9M14.5 14H9M14.5 18H9" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="icon-barrel" viewBox="0 0 24 24">
+        <path d="M7 5.5c0 1 2.2 1.8 5 1.8s5-.8 5-1.8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M7 5.5v13c0 1 2.2 1.8 5 1.8s5-.8 5-1.8v-13" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <path d="M7 12c0 1 2.2 1.8 5 1.8s5-.8 5-1.8M7.8 8.6h8.4M7.8 15.4h8.4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="icon-document" viewBox="0 0 24 24">
+        <path d="M8 4.5h6l4 4v11H8z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+        <path d="M14 4.5v4h4M10 12h6M10 15h6M10 18h4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="icon-chart" viewBox="0 0 24 24">
+        <path d="M5 19.5h14M8 17v-4M12 17V9M16 17V6.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="icon-box" viewBox="0 0 24 24">
+        <path d="M12 4.8 18.5 8v8L12 19.2 5.5 16V8L12 4.8Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+        <path d="M5.8 8.2 12 11.5l6.2-3.3M12 11.5v7.2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="icon-flask" viewBox="0 0 24 24">
+        <path d="M10 4.5h4M11 4.5v4.2l-4.2 7a2 2 0 0 0 1.7 3h7a2 2 0 0 0 1.7-3L13 8.7V4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M9 14h6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="icon-anchor" viewBox="0 0 24 24">
+        <path d="M12 4.5a1.8 1.8 0 1 1 0 3.6 1.8 1.8 0 0 1 0-3.6ZM12 8.2v8.1M8.5 12.4H15.5M6.3 14.2A5.9 5.9 0 0 0 12 19a5.9 5.9 0 0 0 5.7-4.8M6.3 14.2H4.8M17.7 14.2h1.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="icon-ledger" viewBox="0 0 24 24">
+        <path d="M7 4.5h10v15H7z" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <path d="M10 9h4M10 12.5h4M10 16h2.5M8.5 4.5v15" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="icon-rotterdam" viewBox="0 0 24 24">
+        <path d="M4.5 18.5h15M6 18.5V10M18 18.5V7.5M6 10h8l4-2.5M14 10v4.5M11 14.5h6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="icon-houston" viewBox="0 0 24 24">
+        <path d="M4.5 18.5h15M6.5 18.5v-5.5h4v5.5M13.5 18.5V6h2.8v12.5M17.5 18.5v-8h2v8M14.9 9.2h1.4M18.4 12.4h1.1" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="icon-singapore" viewBox="0 0 24 24">
+        <path d="M12 5.2 14.6 10h-5.2L12 5.2ZM12 10v7.8M8.5 18.5h7M6 19.8c1.2-.7 2.4-.7 3.6 0 1.2.7 2.4.7 3.6 0 1.2-.7 2.4-.7 3.6 0" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M8.7 8.8 6.8 10M15.3 8.8 17.2 10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+    </symbol>
+</svg>
 
 <!-- Scan overlay -->
 <div class="scan-overlay"><div class="scan-beam"></div></div>
@@ -557,28 +644,28 @@
         <!-- STAT CARDS -->
         <div class="stats-row">
             <div class="stat-card" onclick="openDetail('vessels')" role="button" tabindex="0">
-                <div class="stat-icon blue">🚢</div>
+                <div class="stat-icon blue" aria-hidden="true"><svg class="app-icon" viewBox="0 0 24 24"><use href="#icon-vessel"/></svg></div>
                 <div>
                     <div class="stat-value" style="color:var(--blue)">4</div>
                     <div class="stat-label">Vessels Active</div>
                 </div>
             </div>
             <div class="stat-card" onclick="openDetail('prearrivals')" role="button" tabindex="0">
-                <div class="stat-icon amber">📋</div>
+                <div class="stat-icon amber" aria-hidden="true"><svg class="app-icon" viewBox="0 0 24 24"><use href="#icon-checklist"/></svg></div>
                 <div>
                     <div class="stat-value" style="color:var(--amber)">3</div>
                     <div class="stat-label">Pre-Arrivals Pending</div>
                 </div>
             </div>
             <div class="stat-card" onclick="openDetail('cargo')" role="button" tabindex="0">
-                <div class="stat-icon green">⚓</div>
+                <div class="stat-icon green" aria-hidden="true"><svg class="app-icon" viewBox="0 0 24 24"><use href="#icon-barrel"/></svg></div>
                 <div>
                     <div class="stat-value" style="color:var(--success)">2</div>
                     <div class="stat-label">Cargo Ops Running</div>
                 </div>
             </div>
             <div class="stat-card" onclick="openDetail('documents')" role="button" tabindex="0">
-                <div class="stat-icon blue">📄</div>
+                <div class="stat-icon blue" aria-hidden="true"><svg class="app-icon" viewBox="0 0 24 24"><use href="#icon-document"/></svg></div>
                 <div>
                     <div class="stat-value" style="color:var(--blue)">18</div>
                     <div class="stat-label">Documents This Month</div>
@@ -589,7 +676,7 @@
         <!-- LIVE WEATHER STRIP -->
         <div class="weather-strip">
             <div class="wx-card" id="wx-rotterdam">
-                <div class="wx-icon">🌊</div>
+                <div class="wx-icon rotterdam" aria-hidden="true"><svg class="app-icon" viewBox="0 0 24 24"><use href="#icon-rotterdam"/></svg></div>
                 <div>
                     <div class="wx-port">Rotterdam</div>
                     <div class="wx-local-time" id="wx-rotterdam-time">--:--:-- <span class="wx-tz">CET</span></div>
@@ -599,7 +686,7 @@
                 </div>
             </div>
             <div class="wx-card" id="wx-houston">
-                <div class="wx-icon">⚓</div>
+                <div class="wx-icon houston" aria-hidden="true"><svg class="app-icon" viewBox="0 0 24 24"><use href="#icon-houston"/></svg></div>
                 <div>
                     <div class="wx-port">Houston Ship Channel</div>
                     <div class="wx-local-time" id="wx-houston-time">--:--:-- <span class="wx-tz">CDT</span></div>
@@ -609,7 +696,7 @@
                 </div>
             </div>
             <div class="wx-card" id="wx-singapore">
-                <div class="wx-icon">🌏</div>
+                <div class="wx-icon singapore" aria-hidden="true"><svg class="app-icon" viewBox="0 0 24 24"><use href="#icon-singapore"/></svg></div>
                 <div>
                     <div class="wx-port">Singapore</div>
                     <div class="wx-local-time" id="wx-singapore-time">--:--:-- <span class="wx-tz">SGT</span></div>
@@ -744,7 +831,7 @@
                     <div class="progress-bar"><div class="progress-fill" style="width:100%; background: var(--success)"></div></div>
                     <div class="cargo-meta">
                         <span>12,800 / 12,800 MT</span>
-                        <span style="color:var(--success)">✓ Complete — Departure 22:00</span>
+                        <span style="color:var(--success)">Complete · Departure 22:00</span>
                     </div>
                 </div>
             </div>
@@ -803,7 +890,7 @@
             </div>
             <div class="panel-body">
                 <div class="doc-item">
-                    <div class="doc-icon">📋</div>
+                    <div class="doc-icon" aria-hidden="true"><svg class="app-icon" viewBox="0 0 24 24"><use href="#icon-checklist"/></svg></div>
                     <div>
                         <div class="doc-name">CBP Form 1303 — Gulf Carrier</div>
                         <div class="doc-meta">Pre-Arrival · Apr 5, 2026</div>
@@ -811,7 +898,7 @@
                     <button class="doc-btn">Open</button>
                 </div>
                 <div class="doc-item">
-                    <div class="doc-icon">⚓</div>
+                    <div class="doc-icon blue" aria-hidden="true"><svg class="app-icon" viewBox="0 0 24 24"><use href="#icon-document"/></svg></div>
                     <div>
                         <div class="doc-name">SOF — Atlantic Chemical</div>
                         <div class="doc-meta">Statement of Facts · Apr 4, 2026</div>
@@ -819,7 +906,7 @@
                     <button class="doc-btn">Open</button>
                 </div>
                 <div class="doc-item">
-                    <div class="doc-icon">📊</div>
+                    <div class="doc-icon green" aria-hidden="true"><svg class="app-icon" viewBox="0 0 24 24"><use href="#icon-chart"/></svg></div>
                     <div>
                         <div class="doc-name">Port Log — Nauti Star</div>
                         <div class="doc-meta">Port Log · Apr 4, 2026</div>
@@ -827,7 +914,7 @@
                     <button class="doc-btn">Open</button>
                 </div>
                 <div class="doc-item">
-                    <div class="doc-icon">📋</div>
+                    <div class="doc-icon" aria-hidden="true"><svg class="app-icon" viewBox="0 0 24 24"><use href="#icon-chart"/></svg></div>
                     <div>
                         <div class="doc-name">Vessel Metrics Report — April</div>
                         <div class="doc-meta">Analytics · Apr 1, 2026</div>
@@ -1003,6 +1090,8 @@
     updatePortTimes();
     setInterval(updatePortTimes, 1000);
 
+    const icon = (name) => `<svg class="app-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#${name}"/></svg>`;
+
     // ── DETAIL MODAL ──
     const DETAIL_CONTENT = {
         vessels: {
@@ -1095,7 +1184,7 @@
             sub: '2 active · Live progress',
             html: `
                 <div class="modal-mini-row" style="align-items: stretch;">
-                    <div class="modal-mini-icon" style="background: rgba(0,217,126,0.1); border-color: rgba(0,217,126,0.3);">⚓</div>
+                    <div class="modal-mini-icon green">${icon('icon-barrel')}</div>
                     <div style="flex:1;">
                         <div style="display:flex; justify-content:space-between;">
                             <div>
@@ -1112,7 +1201,7 @@
                     </div>
                 </div>
                 <div class="modal-mini-row" style="align-items: stretch;">
-                    <div class="modal-mini-icon">⚓</div>
+                    <div class="modal-mini-icon">${icon('icon-barrel')}</div>
                     <div style="flex:1;">
                         <div style="display:flex; justify-content:space-between;">
                             <div>
@@ -1139,7 +1228,7 @@
             sub: '18 total · 6 shown · April 2026',
             html: `
                 <div class="modal-mini-row">
-                    <div class="modal-mini-icon">📄</div>
+                    <div class="modal-mini-icon blue">${icon('icon-document')}</div>
                     <div style="flex:1;">
                         <div style="font-weight:600; font-size:0.9rem;">Statement of Facts — CHEM NAVIGATOR</div>
                         <div style="font-size:0.72rem; color: var(--text-muted);">Signed · Apr 19 · 3 pages</div>
@@ -1147,7 +1236,7 @@
                     <div class="mono" style="font-size:0.72rem; color: var(--amber);">SOF</div>
                 </div>
                 <div class="modal-mini-row">
-                    <div class="modal-mini-icon">📋</div>
+                    <div class="modal-mini-icon">${icon('icon-checklist')}</div>
                     <div style="flex:1;">
                         <div style="font-weight:600; font-size:0.9rem;">Notice of Readiness — ATLANTIC CHEMICAL</div>
                         <div style="font-size:0.72rem; color: var(--text-muted);">Tendered · Apr 18 · Berth 12</div>
@@ -1155,7 +1244,7 @@
                     <div class="mono" style="font-size:0.72rem; color: var(--amber);">NOR</div>
                 </div>
                 <div class="modal-mini-row">
-                    <div class="modal-mini-icon">📦</div>
+                    <div class="modal-mini-icon">${icon('icon-box')}</div>
                     <div style="flex:1;">
                         <div style="font-weight:600; font-size:0.9rem;">Cargo Manifest — GULF CARRIER</div>
                         <div style="font-size:0.72rem; color: var(--text-muted);">Filed · Apr 17 · CBP cleared</div>
@@ -1163,7 +1252,7 @@
                     <div class="mono" style="font-size:0.72rem; color: var(--amber);">CM</div>
                 </div>
                 <div class="modal-mini-row">
-                    <div class="modal-mini-icon">🧪</div>
+                    <div class="modal-mini-icon">${icon('icon-flask')}</div>
                     <div style="flex:1;">
                         <div style="font-weight:600; font-size:0.9rem;">Tank Inspection Report — GULF CARRIER</div>
                         <div style="font-size:0.72rem; color: var(--text-muted);">Complete · Apr 16 · Clean</div>
@@ -1171,7 +1260,7 @@
                     <div class="mono" style="font-size:0.72rem; color: var(--amber);">TIR</div>
                 </div>
                 <div class="modal-mini-row">
-                    <div class="modal-mini-icon">⚓</div>
+                    <div class="modal-mini-icon">${icon('icon-anchor')}</div>
                     <div style="flex:1;">
                         <div style="font-weight:600; font-size:0.9rem;">Pilot Dispatch Confirmation — NAUTI STAR</div>
                         <div style="font-size:0.72rem; color: var(--text-muted);">Confirmed · Apr 15 · 22:00 ETD</div>
@@ -1179,7 +1268,7 @@
                     <div class="mono" style="font-size:0.72rem; color: var(--amber);">PDC</div>
                 </div>
                 <div class="modal-mini-row">
-                    <div class="modal-mini-icon">💸</div>
+                    <div class="modal-mini-icon">${icon('icon-ledger')}</div>
                     <div style="flex:1;">
                         <div style="font-weight:600; font-size:0.9rem;">Owner's Disbursement Account — ATLANTIC CHEMICAL</div>
                         <div style="font-size:0.72rem; color: var(--text-muted);">Issued · Apr 14 · Draft</div>
@@ -1230,13 +1319,13 @@
     ];
 
     const WX_CODE = {
-        0:'Clear ☀️', 1:'Mostly Clear', 2:'Partly Cloudy ⛅', 3:'Overcast ☁️',
-        45:'Fog 🌫️', 48:'Icy Fog 🌫️',
-        51:'Light Drizzle', 53:'Drizzle 🌦️', 55:'Heavy Drizzle',
-        61:'Light Rain 🌧️', 63:'Rain 🌧️', 65:'Heavy Rain',
-        71:'Light Snow ❄️', 73:'Snow ❄️', 75:'Heavy Snow',
-        80:'Showers 🌦️', 81:'Heavy Showers', 82:'Violent Showers',
-        95:'Thunderstorm ⛈️', 96:'T-Storm w/Hail', 99:'Severe T-Storm ⛈️',
+        0:'Clear', 1:'Mostly Clear', 2:'Partly Cloudy', 3:'Overcast',
+        45:'Fog', 48:'Icy Fog',
+        51:'Light Drizzle', 53:'Drizzle', 55:'Heavy Drizzle',
+        61:'Light Rain', 63:'Rain', 65:'Heavy Rain',
+        71:'Light Snow', 73:'Snow', 75:'Heavy Snow',
+        80:'Showers', 81:'Heavy Showers', 82:'Violent Showers',
+        95:'Thunderstorm', 96:'Thunderstorm with Hail', 99:'Severe Thunderstorm',
     };
 
     function beaufort(kn) {
@@ -1264,7 +1353,7 @@
                 const desc = WX_CODE[c.weather_code] || `Code ${c.weather_code}`;
                 document.getElementById(`wx-${p.id}-temp`).textContent = `${temp}°C`;
                 document.getElementById(`wx-${p.id}-temp`).classList.remove('wx-loading');
-                document.getElementById(`wx-${p.id}-wind`).textContent = `💨 ${wind} kn — ${beaufort(wind)}`;
+                document.getElementById(`wx-${p.id}-wind`).textContent = `${wind} kn — ${beaufort(wind)}`;
                 document.getElementById(`wx-${p.id}-desc`).textContent = desc;
             } catch(e) {
                 document.getElementById(`wx-${p.id}-temp`).textContent = 'Offline';
