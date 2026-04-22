@@ -1,0 +1,927 @@
+<!-- Copyright (c) 2026 Nauti-Labs LLC. All rights reserved. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glaucus — Maritime Operations</title>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#0077ff">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Glaucus">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --blue:        #0077ff;
+            --blue-glow:   rgba(0, 119, 255, 0.45);
+            --blue-dim:    rgba(0, 119, 255, 0.08);
+            --amber:       #ffaa00;
+            --amber-glow:  rgba(255, 170, 0, 0.45);
+            --amber-dim:   rgba(255, 170, 0, 0.08);
+            --bg:          #06090f;
+            --bg2:         #0b1018;
+            --bg3:         #101722;
+            --glass:       rgba(0, 119, 255, 0.05);
+            --border:      rgba(0, 119, 255, 0.15);
+            --border-amber:rgba(255, 170, 0, 0.2);
+            --text:        #e0f0ff;
+            --text-muted:  rgba(200, 225, 255, 0.45);
+            --success:     #00d97e;
+            --warning:     #ffaa00;
+            --danger:      #ff4757;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            background-image:
+                radial-gradient(ellipse at 20% 80%, rgba(0,119,255,0.07) 0%, transparent 55%),
+                radial-gradient(ellipse at 80% 20%, rgba(255,170,0,0.04) 0%, transparent 55%);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ── SCAN EFFECT (bottom → top, ocean blue) ── */
+        @keyframes scanSweep {
+            0%   { transform: translateY(100vh); opacity: 0; }
+            5%   { opacity: 1; }
+            95%  { opacity: 1; }
+            100% { transform: translateY(-100vh); opacity: 0; }
+        }
+        .scan-overlay {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100vh;
+            pointer-events: none; z-index: 9999; overflow: hidden;
+        }
+        .scan-beam {
+            position: absolute; bottom: 0; left: 0;
+            width: 100%; height: 120px;
+            background: linear-gradient(to top,
+                transparent 0%,
+                rgba(0,119,255,0.03) 20%,
+                rgba(0,119,255,0.10) 45%,
+                rgba(0,119,255,0.18) 50%,
+                rgba(0,119,255,0.10) 55%,
+                rgba(0,119,255,0.03) 80%,
+                transparent 100%
+            );
+            animation: scanSweep 4.5s ease-in-out infinite;
+            animation-delay: 0.5s;
+        }
+        .scan-beam::after {
+            content: '';
+            position: absolute; bottom: 50%; left: 0;
+            width: 100%; height: 1px;
+            background: rgba(0,119,255,0.40);
+            box-shadow: 0 0 8px 2px rgba(0,119,255,0.25);
+        }
+
+        /* ── LAYOUT ── */
+        .page { display: grid; grid-template-rows: auto 1fr; min-height: 100vh; }
+
+        /* ── HEADER ── */
+        header {
+            padding: 1.5rem 2rem;
+            background: linear-gradient(180deg, var(--bg2) 0%, transparent 100%);
+            border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .brand { display: flex; align-items: center; gap: 14px; }
+        .wheel-mark {
+            width: 44px; height: 44px;
+            filter: drop-shadow(0 0 8px var(--blue-glow));
+        }
+        .brand-name {
+            font-size: 1.7rem; font-weight: 800; letter-spacing: -0.02em;
+            background: linear-gradient(135deg, var(--blue) 0%, #40aaff 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .brand-sub {
+            font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em;
+            color: var(--amber); text-transform: uppercase; opacity: 0.85;
+        }
+        .header-status { display: flex; align-items: center; gap: 1.5rem; }
+        .status-pill {
+            display: flex; align-items: center; gap: 0.5rem;
+            padding: 0.4rem 0.9rem;
+            background: var(--glass); border: 1px solid var(--border);
+            border-radius: 50px; font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+        }
+        .dot {
+            width: 7px; height: 7px; border-radius: 50%;
+            background: var(--success);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+        .time-badge {
+            font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        /* ── MAIN GRID ── */
+        main {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: auto auto 1fr;
+            gap: 1.25rem;
+            padding: 1.5rem 2rem 2rem;
+        }
+
+        /* ── STAT CARDS ── */
+        .stats-row {
+            grid-column: 1 / -1;
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;
+        }
+        .stat-card {
+            background: var(--bg2); border: 1px solid var(--border);
+            border-radius: 12px; padding: 1.2rem 1.4rem;
+            display: flex; align-items: center; gap: 1rem;
+            transition: border-color 0.2s;
+        }
+        .stat-card:hover { border-color: var(--blue); }
+        .stat-icon {
+            width: 44px; height: 44px; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.3rem; flex-shrink: 0;
+        }
+        .stat-icon.blue  { background: var(--blue-dim); }
+        .stat-icon.amber { background: var(--amber-dim); }
+        .stat-icon.green { background: rgba(0,217,126,0.1); }
+        .stat-icon.red   { background: rgba(255,71,87,0.1); }
+        .stat-value { font-size: 1.8rem; font-weight: 800; line-height: 1; }
+        .stat-label { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.2rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; }
+
+        /* ── PANELS ── */
+        .panel {
+            background: var(--bg2); border: 1px solid var(--border);
+            border-radius: 14px; overflow: hidden;
+            display: flex; flex-direction: column;
+        }
+        .panel-header {
+            padding: 1rem 1.4rem;
+            border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .panel-title {
+            font-size: 0.82rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.1em; color: var(--blue);
+        }
+        .panel-badge {
+            font-family: 'JetBrains Mono', monospace; font-size: 0.72rem;
+            padding: 0.2rem 0.6rem; border-radius: 20px;
+            background: var(--blue-dim); color: var(--blue); border: 1px solid var(--border);
+        }
+        .panel-badge.amber {
+            background: var(--amber-dim); color: var(--amber); border-color: var(--border-amber);
+        }
+        .panel-body { padding: 1.2rem 1.4rem; flex: 1; overflow-y: auto; }
+
+        /* span columns */
+        .col-2 { grid-column: span 2; }
+        .col-3 { grid-column: span 3; }
+        .col-1 { grid-column: span 1; }
+
+        /* ── VESSEL LIST ── */
+        .vessel-item {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0.85rem 0; border-bottom: 1px solid rgba(0,119,255,0.08);
+        }
+        .vessel-item:last-child { border-bottom: none; }
+        .vessel-name { font-weight: 700; font-size: 0.9rem; letter-spacing: 0.02em; }
+        .vessel-meta { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.15rem; }
+        .vessel-right { text-align: right; }
+        .vessel-berth {
+            font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;
+            color: var(--amber); margin-bottom: 0.3rem;
+        }
+        .status-tag {
+            display: inline-block; font-size: 0.68rem; font-weight: 700;
+            padding: 0.2rem 0.6rem; border-radius: 20px;
+            text-transform: uppercase; letter-spacing: 0.06em;
+        }
+        .tag-arriving   { background: rgba(0,119,255,0.15); color: #40aaff; }
+        .tag-loading    { background: rgba(0,217,126,0.15); color: var(--success); }
+        .tag-discharging{ background: rgba(255,170,0,0.15); color: var(--amber); }
+        .tag-departing  { background: rgba(160,80,255,0.15); color: #c080ff; }
+        .tag-berthed    { background: rgba(255,170,0,0.15); color: var(--amber); }
+        .alert-dot {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 18px; height: 18px; border-radius: 50%;
+            background: rgba(255,71,87,0.2); color: var(--danger);
+            font-size: 0.65rem; font-weight: 800; margin-left: 0.4rem;
+        }
+
+        /* ── PRE-ARRIVAL QUEUE ── */
+        .pa-item {
+            display: flex; align-items: center; gap: 0.9rem;
+            padding: 0.75rem 0; border-bottom: 1px solid rgba(0,119,255,0.08);
+        }
+        .pa-item:last-child { border-bottom: none; }
+        .pa-num {
+            width: 28px; height: 28px; border-radius: 8px;
+            background: var(--blue-dim); border: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+            color: var(--blue); flex-shrink: 0;
+        }
+        .pa-vessel { font-weight: 600; font-size: 0.85rem; }
+        .pa-detail { font-size: 0.73rem; color: var(--text-muted); }
+        .pa-eta {
+            margin-left: auto; text-align: right;
+            font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--amber);
+        }
+        .pa-action {
+            background: var(--blue-dim); border: 1px solid var(--border);
+            color: var(--blue); font-size: 0.7rem; font-weight: 700;
+            padding: 0.25rem 0.65rem; border-radius: 6px; cursor: pointer;
+            text-transform: uppercase; letter-spacing: 0.05em;
+            transition: background 0.2s;
+        }
+        .pa-action:hover { background: rgba(0,119,255,0.2); }
+
+        /* ── CARGO OPS ── */
+        .cargo-item { padding: 0.9rem 0; border-bottom: 1px solid rgba(0,119,255,0.08); }
+        .cargo-item:last-child { border-bottom: none; }
+        .cargo-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.5rem; }
+        .cargo-name { font-weight: 600; font-size: 0.85rem; }
+        .cargo-pct  { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: var(--amber); }
+        .progress-bar { height: 5px; background: var(--bg3); border-radius: 99px; overflow: hidden; }
+        .progress-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--blue), var(--amber)); }
+        .cargo-meta { display: flex; justify-content: space-between; margin-top: 0.4rem; }
+        .cargo-meta span { font-size: 0.72rem; color: var(--text-muted); }
+
+        /* ── PORT COORDINATION ── */
+        .port-item {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0.7rem 0; border-bottom: 1px solid rgba(0,119,255,0.08);
+        }
+        .port-item:last-child { border-bottom: none; }
+        .port-service { font-size: 0.82rem; font-weight: 600; }
+        .port-detail  { font-size: 0.72rem; color: var(--text-muted); }
+        .port-status  { font-size: 0.72rem; font-weight: 700; }
+        .port-status.ok     { color: var(--success); }
+        .port-status.sched  { color: var(--amber); }
+        .port-status.wait   { color: #40aaff; }
+
+        /* ── DOCUMENTS ── */
+        .doc-item {
+            display: flex; align-items: center; gap: 0.9rem;
+            padding: 0.65rem 0; border-bottom: 1px solid rgba(0,119,255,0.08);
+        }
+        .doc-item:last-child { border-bottom: none; }
+        .doc-icon {
+            width: 32px; height: 32px; border-radius: 8px;
+            background: var(--amber-dim); border: 1px solid var(--border-amber);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.95rem; flex-shrink: 0;
+        }
+        .doc-name { font-size: 0.82rem; font-weight: 600; }
+        .doc-meta { font-size: 0.7rem; color: var(--text-muted); }
+        .doc-btn {
+            margin-left: auto; background: none; border: 1px solid var(--border-amber);
+            color: var(--amber); font-size: 0.68rem; font-weight: 700;
+            padding: 0.2rem 0.6rem; border-radius: 6px; cursor: pointer;
+            text-transform: uppercase; letter-spacing: 0.05em;
+            transition: background 0.2s;
+        }
+        .doc-btn:hover { background: var(--amber-dim); }
+
+        /* ── ACTIVITY FEED ── */
+        .feed-item {
+            display: flex; gap: 0.9rem;
+            padding: 0.65rem 0; border-bottom: 1px solid rgba(0,119,255,0.08);
+        }
+        .feed-item:last-child { border-bottom: none; }
+        .feed-dot {
+            width: 8px; height: 8px; border-radius: 50%; margin-top: 5px; flex-shrink: 0;
+        }
+        .feed-dot.blue  { background: var(--blue); }
+        .feed-dot.amber { background: var(--amber); }
+        .feed-dot.green { background: var(--success); }
+        .feed-dot.red   { background: var(--danger); }
+        .feed-text  { font-size: 0.8rem; line-height: 1.5; }
+        .feed-time  { font-size: 0.68rem; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; }
+
+        /* ── WEATHER STRIP ── */
+        .weather-strip {
+            grid-column: 1 / -1;
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        .wx-card {
+            background: var(--bg2); border: 1px solid var(--border);
+            border-radius: 12px; padding: 1rem 1.2rem;
+            display: flex; align-items: center; gap: 1rem;
+            position: relative; overflow: hidden;
+        }
+        .wx-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, var(--blue), transparent);
+        }
+        .wx-icon { font-size: 1.8rem; flex-shrink: 0; }
+        .wx-port { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); }
+        .wx-temp { font-family: 'JetBrains Mono', monospace; font-size: 1.4rem; font-weight: 700; color: var(--text); }
+        .wx-wind { font-size: 0.72rem; color: var(--amber); font-family: 'JetBrains Mono', monospace; }
+        .wx-desc { font-size: 0.72rem; color: var(--text-muted); }
+        .wx-loading { color: var(--text-muted); font-size: 0.75rem; }
+
+        /* ── MARKET PULSE ── */
+        .market-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0.65rem 0; border-bottom: 1px solid rgba(0,119,255,0.08);
+        }
+        .market-item:last-child { border-bottom: none; }
+        .market-name { font-size: 0.82rem; font-weight: 600; }
+        .market-sub  { font-size: 0.68rem; color: var(--text-muted); }
+        .market-val  { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; font-weight: 700; }
+        .market-chg  { font-size: 0.7rem; }
+        .chg-up   { color: var(--success); }
+        .chg-down { color: var(--danger); }
+        .chg-flat { color: var(--text-muted); }
+
+        /* ── SCROLLBAR ── */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 1100px) {
+            main { grid-template-columns: 1fr 1fr; }
+            .col-2 { grid-column: span 2; }
+            .col-3 { grid-column: span 2; }
+            .stats-row { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 700px) {
+            main { grid-template-columns: 1fr; padding: 1rem; }
+            .col-2, .col-3 { grid-column: span 1; }
+            header { padding: 1rem; flex-direction: column; gap: 1rem; align-items: flex-start; }
+            .stats-row { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Scan overlay -->
+<div class="scan-overlay"><div class="scan-beam"></div></div>
+
+<div class="page">
+
+    <!-- ── HEADER ── -->
+    <header>
+        <div class="brand">
+            <svg class="wheel-mark" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Outer rim -->
+                <circle cx="22" cy="22" r="18" stroke="#0077ff" stroke-width="2.2" fill="none"/>
+                <!-- Hub -->
+                <circle cx="22" cy="22" r="4.5" stroke="#0077ff" stroke-width="2" fill="none"/>
+                <circle cx="22" cy="22" r="2" fill="#ffaa00"/>
+                <!-- 8 spokes -->
+                <line x1="22" y1="17.5" x2="22" y2="4"   stroke="#0077ff" stroke-width="2" stroke-linecap="round"/>
+                <line x1="22" y1="26.5" x2="22" y2="40"  stroke="#0077ff" stroke-width="2" stroke-linecap="round"/>
+                <line x1="17.5" y1="22" x2="4"  y2="22"  stroke="#0077ff" stroke-width="2" stroke-linecap="round"/>
+                <line x1="26.5" y1="22" x2="40" y2="22"  stroke="#0077ff" stroke-width="2" stroke-linecap="round"/>
+                <line x1="19.5" y1="19.5" x2="9.5" y2="9.5"   stroke="#ffaa00" stroke-width="1.8" stroke-linecap="round"/>
+                <line x1="24.5" y1="24.5" x2="34.5" y2="34.5" stroke="#ffaa00" stroke-width="1.8" stroke-linecap="round"/>
+                <line x1="24.5" y1="19.5" x2="34.5" y2="9.5"  stroke="#ffaa00" stroke-width="1.8" stroke-linecap="round"/>
+                <line x1="19.5" y1="24.5" x2="9.5"  y2="34.5" stroke="#ffaa00" stroke-width="1.8" stroke-linecap="round"/>
+                <!-- Subtle glow ring -->
+                <circle cx="22" cy="22" r="18" stroke="#0077ff" stroke-width="0.4" opacity="0.25"/>
+            </svg>
+            <div>
+                <div class="brand-name">GLAUCUS</div>
+                <div class="brand-sub">Maritime Operations Platform</div>
+            </div>
+        </div>
+        <div class="header-status">
+            <div class="status-pill"><span class="dot"></span> All Systems Operational</div>
+            <div class="time-badge" id="clock">--:--:--</div>
+        </div>
+    </header>
+
+    <!-- ── MAIN ── -->
+    <main>
+
+        <!-- STAT CARDS -->
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-icon blue">🚢</div>
+                <div>
+                    <div class="stat-value" style="color:var(--blue)">4</div>
+                    <div class="stat-label">Vessels Active</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon amber">📋</div>
+                <div>
+                    <div class="stat-value" style="color:var(--amber)">3</div>
+                    <div class="stat-label">Pre-Arrivals Pending</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon green">⚓</div>
+                <div>
+                    <div class="stat-value" style="color:var(--success)">2</div>
+                    <div class="stat-label">Cargo Ops Running</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon blue">📄</div>
+                <div>
+                    <div class="stat-value" style="color:var(--blue)">18</div>
+                    <div class="stat-label">Documents This Month</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LIVE WEATHER STRIP -->
+        <div class="weather-strip">
+            <div class="wx-card" id="wx-rotterdam">
+                <div class="wx-icon">🌊</div>
+                <div>
+                    <div class="wx-port">Rotterdam</div>
+                    <div class="wx-temp wx-loading" id="wx-rotterdam-temp">Loading…</div>
+                    <div class="wx-wind" id="wx-rotterdam-wind"></div>
+                    <div class="wx-desc" id="wx-rotterdam-desc"></div>
+                </div>
+            </div>
+            <div class="wx-card" id="wx-houston">
+                <div class="wx-icon">⚓</div>
+                <div>
+                    <div class="wx-port">Houston Ship Channel</div>
+                    <div class="wx-temp wx-loading" id="wx-houston-temp">Loading…</div>
+                    <div class="wx-wind" id="wx-houston-wind"></div>
+                    <div class="wx-desc" id="wx-houston-desc"></div>
+                </div>
+            </div>
+            <div class="wx-card" id="wx-singapore">
+                <div class="wx-icon">🌏</div>
+                <div>
+                    <div class="wx-port">Singapore</div>
+                    <div class="wx-temp wx-loading" id="wx-singapore-temp">Loading…</div>
+                    <div class="wx-wind" id="wx-singapore-wind"></div>
+                    <div class="wx-desc" id="wx-singapore-desc"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VESSEL STATUS -->
+        <div class="panel col-2">
+            <div class="panel-header">
+                <span class="panel-title">Vessel Status</span>
+                <span class="panel-badge">4 Active</span>
+            </div>
+            <div class="panel-body">
+                <div class="vessel-item">
+                    <div>
+                        <div class="vessel-name">CHEM NAVIGATOR <span class="alert-dot">2</span></div>
+                        <div class="vessel-meta">Methanol · IMO 9741230 · ETA 08:00</div>
+                    </div>
+                    <div class="vessel-right">
+                        <div class="vessel-berth">Inbound</div>
+                        <span class="status-tag tag-arriving">Arriving</span>
+                    </div>
+                </div>
+                <div class="vessel-item">
+                    <div>
+                        <div class="vessel-name">ATLANTIC CHEMICAL</div>
+                        <div class="vessel-meta">Ethylene Glycol · IMO 9654012 · Berth 12</div>
+                    </div>
+                    <div class="vessel-right">
+                        <div class="vessel-berth">Berth 12</div>
+                        <span class="status-tag tag-loading">Loading</span>
+                    </div>
+                </div>
+                <div class="vessel-item">
+                    <div>
+                        <div class="vessel-name">GULF CARRIER <span class="alert-dot">1</span></div>
+                        <div class="vessel-meta">Benzene · IMO 9523887 · Berth 8</div>
+                    </div>
+                    <div class="vessel-right">
+                        <div class="vessel-berth">Berth 8</div>
+                        <span class="status-tag tag-discharging">Discharging</span>
+                    </div>
+                </div>
+                <div class="vessel-item">
+                    <div>
+                        <div class="vessel-name">NAUTI STAR</div>
+                        <div class="vessel-meta">Acetone · IMO 9312045 · ETD 22:00</div>
+                    </div>
+                    <div class="vessel-right">
+                        <div class="vessel-berth">Berth 3</div>
+                        <span class="status-tag tag-departing">Departing</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PRE-ARRIVAL QUEUE -->
+        <div class="panel col-1">
+            <div class="panel-header">
+                <span class="panel-title">Pre-Arrival Queue</span>
+                <span class="panel-badge amber">3 Pending</span>
+            </div>
+            <div class="panel-body">
+                <div class="pa-item">
+                    <div class="pa-num">01</div>
+                    <div>
+                        <div class="pa-vessel">OCEAN ZENITH</div>
+                        <div class="pa-detail">Toluene · 22,400 MT</div>
+                    </div>
+                    <div class="pa-eta">ETA Apr 7<br>06:30</div>
+                    <button class="pa-action">Review</button>
+                </div>
+                <div class="pa-item">
+                    <div class="pa-num">02</div>
+                    <div>
+                        <div class="pa-vessel">MARE NOSTRUM</div>
+                        <div class="pa-detail">Styrene · 18,100 MT</div>
+                    </div>
+                    <div class="pa-eta">ETA Apr 8<br>14:00</div>
+                    <button class="pa-action">Review</button>
+                </div>
+                <div class="pa-item">
+                    <div class="pa-num">03</div>
+                    <div>
+                        <div class="pa-vessel">BLUE HORIZON</div>
+                        <div class="pa-detail">MEG · 31,000 MT</div>
+                    </div>
+                    <div class="pa-eta">ETA Apr 9<br>09:15</div>
+                    <button class="pa-action">Review</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- CARGO OPERATIONS -->
+        <div class="panel col-2">
+            <div class="panel-header">
+                <span class="panel-title">Cargo Operations</span>
+                <span class="panel-badge">2 In Progress</span>
+            </div>
+            <div class="panel-body">
+                <div class="cargo-item">
+                    <div class="cargo-top">
+                        <span class="cargo-name">ATLANTIC CHEMICAL — Ethylene Glycol Loading</span>
+                        <span class="cargo-pct">67%</span>
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill" style="width:67%"></div></div>
+                    <div class="cargo-meta">
+                        <span>13,400 / 20,000 MT</span>
+                        <span>Est. completion: 04:30</span>
+                    </div>
+                </div>
+                <div class="cargo-item">
+                    <div class="cargo-top">
+                        <span class="cargo-name">GULF CARRIER — Benzene Discharge</span>
+                        <span class="cargo-pct">41%</span>
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill" style="width:41%"></div></div>
+                    <div class="cargo-meta">
+                        <span>7,380 / 18,000 MT</span>
+                        <span>Est. completion: 09:00</span>
+                    </div>
+                </div>
+                <div class="cargo-item">
+                    <div class="cargo-top">
+                        <span class="cargo-name">NAUTI STAR — Acetone Load Complete</span>
+                        <span class="cargo-pct" style="color:var(--success)">100%</span>
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill" style="width:100%; background: var(--success)"></div></div>
+                    <div class="cargo-meta">
+                        <span>12,800 / 12,800 MT</span>
+                        <span style="color:var(--success)">✓ Complete — Departure 22:00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PORT COORDINATION -->
+        <div class="panel col-1">
+            <div class="panel-header">
+                <span class="panel-title">Port Coordination</span>
+                <span class="panel-badge">Live</span>
+            </div>
+            <div class="panel-body">
+                <div class="port-item">
+                    <div>
+                        <div class="port-service">Pilot Station</div>
+                        <div class="port-detail">CHEM NAVIGATOR inbound — ETA 06:00</div>
+                    </div>
+                    <span class="port-status sched">Scheduled</span>
+                </div>
+                <div class="port-item">
+                    <div>
+                        <div class="port-service">Tug Services</div>
+                        <div class="port-detail">2x tugs assigned — Berth 12</div>
+                    </div>
+                    <span class="port-status ok">Confirmed</span>
+                </div>
+                <div class="port-item">
+                    <div>
+                        <div class="port-service">Customs (CBP)</div>
+                        <div class="port-detail">Form 1303 — GULF CARRIER</div>
+                    </div>
+                    <span class="port-status wait">In Review</span>
+                </div>
+                <div class="port-item">
+                    <div>
+                        <div class="port-service">Harbor Master</div>
+                        <div class="port-detail">Berth 3 clearance — NAUTI STAR</div>
+                    </div>
+                    <span class="port-status ok">Approved</span>
+                </div>
+                <div class="port-item">
+                    <div>
+                        <div class="port-service">Berth 5 & 9</div>
+                        <div class="port-detail">Available — No vessel assigned</div>
+                    </div>
+                    <span class="port-status ok">Available</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- DOCUMENTS -->
+        <div class="panel col-1">
+            <div class="panel-header">
+                <span class="panel-title">Documents</span>
+                <span class="panel-badge amber">Recent</span>
+            </div>
+            <div class="panel-body">
+                <div class="doc-item">
+                    <div class="doc-icon">📋</div>
+                    <div>
+                        <div class="doc-name">CBP Form 1303 — Gulf Carrier</div>
+                        <div class="doc-meta">Pre-Arrival · Apr 5, 2026</div>
+                    </div>
+                    <button class="doc-btn">Open</button>
+                </div>
+                <div class="doc-item">
+                    <div class="doc-icon">⚓</div>
+                    <div>
+                        <div class="doc-name">SOF — Atlantic Chemical</div>
+                        <div class="doc-meta">Statement of Facts · Apr 4, 2026</div>
+                    </div>
+                    <button class="doc-btn">Open</button>
+                </div>
+                <div class="doc-item">
+                    <div class="doc-icon">📊</div>
+                    <div>
+                        <div class="doc-name">Port Log — Nauti Star</div>
+                        <div class="doc-meta">Port Log · Apr 4, 2026</div>
+                    </div>
+                    <button class="doc-btn">Open</button>
+                </div>
+                <div class="doc-item">
+                    <div class="doc-icon">📋</div>
+                    <div>
+                        <div class="doc-name">Vessel Metrics Report — April</div>
+                        <div class="doc-meta">Analytics · Apr 1, 2026</div>
+                    </div>
+                    <button class="doc-btn">Open</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MARKET PULSE -->
+        <div class="panel col-1">
+            <div class="panel-header">
+                <span class="panel-title">Market Pulse</span>
+                <span class="panel-badge" id="market-updated">Live</span>
+            </div>
+            <div class="panel-body">
+                <div class="market-item">
+                    <div>
+                        <div class="market-name">Crude Oil (WTI)</div>
+                        <div class="market-sub">NYMEX Front Month</div>
+                    </div>
+                    <div style="text-align:right">
+                        <div class="market-val" id="crude-price">—</div>
+                        <div class="market-chg" id="crude-chg">—</div>
+                    </div>
+                </div>
+                <div class="market-item">
+                    <div>
+                        <div class="market-name">Brent Crude</div>
+                        <div class="market-sub">ICE Front Month</div>
+                    </div>
+                    <div style="text-align:right">
+                        <div class="market-val" id="brent-price">—</div>
+                        <div class="market-chg" id="brent-chg">—</div>
+                    </div>
+                </div>
+                <div class="market-item">
+                    <div>
+                        <div class="market-name">BDTI</div>
+                        <div class="market-sub">Baltic Dirty Tanker Index</div>
+                    </div>
+                    <div style="text-align:right">
+                        <div class="market-val" id="bdti-price">—</div>
+                        <div class="market-chg chg-flat" id="bdti-chg" style="font-size:0.65rem">Paid feed req'd</div>
+                    </div>
+                </div>
+                <div class="market-item">
+                    <div>
+                        <div class="market-name">BCTI</div>
+                        <div class="market-sub">Baltic Clean Tanker Index</div>
+                    </div>
+                    <div style="text-align:right">
+                        <div class="market-val" id="bcti-price">—</div>
+                        <div class="market-chg chg-flat" id="bcti-chg" style="font-size:0.65rem">Paid feed req'd</div>
+                    </div>
+                </div>
+                <div class="market-item">
+                    <div>
+                        <div class="market-name">USD/EUR</div>
+                        <div class="market-sub">FX Rate</div>
+                    </div>
+                    <div style="text-align:right">
+                        <div class="market-val" id="fx-price">—</div>
+                        <div class="market-chg" id="fx-chg">—</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ACTIVITY FEED -->
+        <div class="panel col-2">
+            <div class="panel-header">
+                <span class="panel-title">Activity Feed</span>
+                <span class="panel-badge">Live</span>
+            </div>
+            <div class="panel-body">
+                <div class="feed-item">
+                    <div class="feed-dot green"></div>
+                    <div>
+                        <div class="feed-text">Nauti Star — Load complete. 12,800 MT acetone. Departure cleared for 22:00.</div>
+                        <div class="feed-time">Today 15:42</div>
+                    </div>
+                </div>
+                <div class="feed-item">
+                    <div class="feed-dot amber"></div>
+                    <div>
+                        <div class="feed-text">Pre-arrival received for BLUE HORIZON — MEG, 31,000 MT. ETA Apr 9.</div>
+                        <div class="feed-time">Today 14:20</div>
+                    </div>
+                </div>
+                <div class="feed-item">
+                    <div class="feed-dot blue"></div>
+                    <div>
+                        <div class="feed-text">Tug services confirmed for CHEM NAVIGATOR arrival at Berth 12.</div>
+                        <div class="feed-time">Today 13:05</div>
+                    </div>
+                </div>
+                <div class="feed-item">
+                    <div class="feed-dot red"></div>
+                    <div>
+                        <div class="feed-text">Alert: CHEM NAVIGATOR — Cargo manifest discrepancy. 2 items flagged for review.</div>
+                        <div class="feed-time">Today 11:33</div>
+                    </div>
+                </div>
+                <div class="feed-item">
+                    <div class="feed-dot green"></div>
+                    <div>
+                        <div class="feed-text">CBP Form 1304 approved — Gulf Carrier. Discharge operations authorized.</div>
+                        <div class="feed-time">Today 10:18</div>
+                    </div>
+                </div>
+                <div class="feed-item">
+                    <div class="feed-dot blue"></div>
+                    <div>
+                        <div class="feed-text">Pilot boarded Atlantic Chemical. Loading commenced Berth 12 at 08:45.</div>
+                        <div class="feed-time">Today 08:45</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+<script>
+    // ── LIVE CLOCK (UTC) ──
+    function updateClock() {
+        const now = new Date();
+        const utc = now.toISOString().split('T')[1].substring(0, 8);
+        document.getElementById('clock').textContent = utc + ' UTC';
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    // ── WEATHER (Open-Meteo — free, no key) ──
+    const WX_PORTS = [
+        { id: 'rotterdam', name: 'Rotterdam',          lat: 51.9225,  lon: 4.4792  },
+        { id: 'houston',   name: 'Houston Ship Channel', lat: 29.7369, lon: -95.0233 },
+        { id: 'singapore', name: 'Singapore',          lat: 1.2897,   lon: 103.8501 },
+    ];
+
+    const WX_CODE = {
+        0:'Clear ☀️', 1:'Mostly Clear', 2:'Partly Cloudy ⛅', 3:'Overcast ☁️',
+        45:'Fog 🌫️', 48:'Icy Fog 🌫️',
+        51:'Light Drizzle', 53:'Drizzle 🌦️', 55:'Heavy Drizzle',
+        61:'Light Rain 🌧️', 63:'Rain 🌧️', 65:'Heavy Rain',
+        71:'Light Snow ❄️', 73:'Snow ❄️', 75:'Heavy Snow',
+        80:'Showers 🌦️', 81:'Heavy Showers', 82:'Violent Showers',
+        95:'Thunderstorm ⛈️', 96:'T-Storm w/Hail', 99:'Severe T-Storm ⛈️',
+    };
+
+    function beaufort(kn) {
+        if (kn < 1) return 'Calm';
+        if (kn < 4) return 'Light Air';
+        if (kn < 7) return 'Light Breeze';
+        if (kn < 11) return 'Gentle';
+        if (kn < 17) return 'Moderate';
+        if (kn < 22) return 'Fresh';
+        if (kn < 28) return 'Strong';
+        if (kn < 34) return 'Near Gale';
+        return 'Gale+';
+    }
+
+    async function fetchWeather() {
+        for (const p of WX_PORTS) {
+            try {
+                const url = `https://api.open-meteo.com/v1/forecast?latitude=${p.lat}&longitude=${p.lon}` +
+                    `&current=temperature_2m,wind_speed_10m,weather_code&wind_speed_unit=kn&timeformat=unixtime`;
+                const r = await fetch(url);
+                const d = await r.json();
+                const c = d.current;
+                const temp = Math.round(c.temperature_2m);
+                const wind = Math.round(c.wind_speed_10m);
+                const desc = WX_CODE[c.weather_code] || `Code ${c.weather_code}`;
+                document.getElementById(`wx-${p.id}-temp`).textContent = `${temp}°C`;
+                document.getElementById(`wx-${p.id}-temp`).classList.remove('wx-loading');
+                document.getElementById(`wx-${p.id}-wind`).textContent = `💨 ${wind} kn — ${beaufort(wind)}`;
+                document.getElementById(`wx-${p.id}-desc`).textContent = desc;
+            } catch(e) {
+                document.getElementById(`wx-${p.id}-temp`).textContent = 'Offline';
+            }
+        }
+    }
+    fetchWeather();
+    setInterval(fetchWeather, 10 * 60 * 1000); // refresh every 10 min
+
+    // ── MARKET DATA (Yahoo Finance via allorigins proxy) ──
+    async function fetchQuote(symbol) {
+        const url = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1d&range=2d`;
+        const proxy = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+        const r = await fetch(proxy);
+        const wrapper = await r.json();
+        const data = JSON.parse(wrapper.contents);
+        const result = data.chart.result[0];
+        const meta = result.meta;
+        const price = meta.regularMarketPrice;
+        const prev  = meta.chartPreviousClose;
+        const chg   = price - prev;
+        const pct   = ((chg / prev) * 100).toFixed(2);
+        return { price, chg, pct };
+    }
+
+    async function fetchMarket() {
+        try {
+            const [wti, brent, fx] = await Promise.all([
+                fetchQuote('CL=F'),
+                fetchQuote('BZ=F'),
+                fetchQuote('EURUSD=X'),
+            ]);
+
+            const fmt = (v, sym='$') => `${sym}${v.toFixed(2)}`;
+            const chgHtml = (q) => {
+                const cls = q.chg >= 0 ? 'chg-up' : 'chg-down';
+                const sign = q.chg >= 0 ? '+' : '';
+                return `<span class="market-chg ${cls}">${sign}${q.chg.toFixed(2)} (${sign}${q.pct}%)</span>`;
+            };
+
+            document.getElementById('crude-price').textContent = fmt(wti.price);
+            document.getElementById('crude-chg').innerHTML   = chgHtml(wti);
+            document.getElementById('brent-price').textContent = fmt(brent.price);
+            document.getElementById('brent-chg').innerHTML   = chgHtml(brent);
+            document.getElementById('fx-price').textContent  = fx.price.toFixed(4);
+            document.getElementById('fx-chg').innerHTML      = chgHtml(fx);
+
+            const now = new Date().toLocaleTimeString('en-US', {hour12:false});
+            document.getElementById('market-updated').textContent = `Updated ${now}`;
+        } catch(e) {
+            document.getElementById('market-updated').textContent = 'Market offline';
+        }
+    }
+    fetchMarket();
+    setInterval(fetchMarket, 5 * 60 * 1000); // refresh every 5 min
+
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js')
+      .then(r => console.log('SW registered'))
+      .catch(e => console.log('SW failed:', e));
+  });
+}
+</script>
+</body>
+</html>
