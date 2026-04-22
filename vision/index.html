@@ -1,0 +1,1013 @@
+<!-- Copyright (c) 2026 Nauti-Labs LLC. All rights reserved. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nauti-Vision — Houston Ship Channel Live Intel</title>
+    <meta name="description" content="Live AIS vessel tracking and tide data for the Houston Ship Channel. Built by Nauti-Labs in Mont Belvieu, TX.">
+    <meta name="theme-color" content="#0077ff">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+    <style>
+        :root {
+            --blue:        #0077ff;
+            --blue-glow:   rgba(0, 119, 255, 0.45);
+            --blue-dim:    rgba(0, 119, 255, 0.08);
+            --amber:       #ffaa00;
+            --amber-glow:  rgba(255, 170, 0, 0.45);
+            --amber-dim:   rgba(255, 170, 0, 0.08);
+            --bg:          #06090f;
+            --bg2:         #0b1018;
+            --bg3:         #101722;
+            --glass:       rgba(0, 119, 255, 0.05);
+            --border:      rgba(0, 119, 255, 0.15);
+            --border-amber:rgba(255, 170, 0, 0.2);
+            --text:        #e0f0ff;
+            --text-muted:  rgba(200, 225, 255, 0.45);
+            --success:     #00d97e;
+            --warning:     #ffaa00;
+            --danger:      #ff4757;
+            --tanker:      #ff9a3c;
+            --cargo:       #40aaff;
+            --passenger:   #00d97e;
+            --tug:         #ff4757;
+            --other:       #8897a8;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { height: 100%; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            background-image:
+                radial-gradient(ellipse at 20% 80%, rgba(0,119,255,0.07) 0%, transparent 55%),
+                radial-gradient(ellipse at 80% 20%, rgba(255,170,0,0.04) 0%, transparent 55%);
+            color: var(--text);
+            overflow: hidden;
+        }
+        a { color: var(--blue); text-decoration: none; }
+        a:hover { color: var(--amber); }
+
+        .page { display: grid; grid-template-rows: auto 1fr; height: 100vh; }
+
+        /* ── HEADER ── */
+        header {
+            padding: 1rem 1.5rem;
+            background: linear-gradient(180deg, var(--bg2) 0%, transparent 100%);
+            border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: space-between;
+            z-index: 10;
+        }
+        .brand { display: flex; align-items: center; gap: 14px; }
+        .wheel-mark {
+            width: 38px; height: 38px;
+            filter: drop-shadow(0 0 8px var(--blue-glow));
+        }
+        .brand-txt { display: flex; flex-direction: column; line-height: 1; }
+        .brand-name {
+            font-size: 1.4rem; font-weight: 800; letter-spacing: -0.02em;
+            background: linear-gradient(135deg, var(--blue) 0%, #40aaff 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .brand-sub {
+            font-size: 0.65rem; font-weight: 600; letter-spacing: 0.16em;
+            color: var(--amber); text-transform: uppercase; opacity: 0.85;
+            margin-top: 4px;
+        }
+        .header-right { display: flex; align-items: center; gap: 1rem; }
+        .status-pill {
+            display: flex; align-items: center; gap: 0.5rem;
+            padding: 0.4rem 0.9rem;
+            background: var(--glass); border: 1px solid var(--border);
+            border-radius: 50px; font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em;
+        }
+        .dot {
+            width: 7px; height: 7px; border-radius: 50%;
+            background: var(--text-muted); transition: background 0.3s;
+        }
+        .dot.live { background: var(--success); animation: pulse 2s infinite; }
+        .dot.warn { background: var(--warning); }
+        .dot.dead { background: var(--danger); }
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.35} }
+        .time-badge {
+            font-family: 'JetBrains Mono', monospace; font-size: 0.72rem;
+            color: var(--text-muted);
+        }
+        .back-link {
+            font-size: 0.78rem; color: var(--text-muted);
+            padding: 0.4rem 0.8rem; border-radius: 6px;
+            border: 1px solid transparent; transition: all 0.2s;
+        }
+        .back-link:hover {
+            color: var(--blue); border-color: var(--border);
+        }
+
+        /* ── MAIN LAYOUT ── */
+        main {
+            display: grid;
+            grid-template-columns: 340px 1fr 320px;
+            gap: 0;
+            overflow: hidden;
+        }
+
+        /* ── PANELS ── */
+        .panel {
+            background: var(--bg2);
+            border-right: 1px solid var(--border);
+            display: flex; flex-direction: column;
+            overflow: hidden;
+        }
+        .panel.right { border-right: none; border-left: 1px solid var(--border); }
+        .panel-header {
+            padding: 1rem 1.2rem 0.8rem;
+            border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .panel-title {
+            font-size: 0.72rem; font-weight: 700; letter-spacing: 0.15em;
+            text-transform: uppercase; color: var(--amber);
+        }
+        .panel-count {
+            font-family: 'JetBrains Mono', monospace; font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+        .panel-body { flex: 1; overflow-y: auto; }
+        .panel-body::-webkit-scrollbar { width: 6px; }
+        .panel-body::-webkit-scrollbar-track { background: var(--bg); }
+        .panel-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+        /* ── STATS STRIP ── */
+        .stats-strip {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1px;
+            background: var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+        .stat-chip {
+            padding: 0.75rem 0.6rem;
+            background: var(--bg2);
+            display: flex; flex-direction: column; gap: 2px;
+            text-align: center;
+        }
+        .stat-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.3rem; font-weight: 700;
+            color: var(--text);
+        }
+        .stat-value.amber { color: var(--amber); }
+        .stat-label {
+            font-size: 0.6rem; font-weight: 600;
+            letter-spacing: 0.1em; text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        /* ── VESSEL LIST ── */
+        .vessel-filters {
+            padding: 0.6rem 1rem;
+            display: flex; gap: 0.4rem; flex-wrap: wrap;
+            border-bottom: 1px solid var(--border);
+        }
+        .filter-pill {
+            padding: 0.3rem 0.7rem;
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            font-size: 0.68rem; font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer; transition: all 0.15s;
+            font-family: 'JetBrains Mono', monospace;
+            letter-spacing: 0.05em;
+        }
+        .filter-pill:hover { color: var(--text); border-color: var(--blue); }
+        .filter-pill.active {
+            background: var(--blue-dim); border-color: var(--blue);
+            color: var(--blue);
+        }
+        .vessel {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer; transition: background 0.15s;
+            display: grid;
+            grid-template-columns: 4px 1fr auto;
+            gap: 0.8rem; align-items: center;
+        }
+        .vessel:hover { background: var(--bg3); }
+        .vessel.active { background: var(--blue-dim); }
+        .vessel-stripe {
+            width: 3px; height: 100%; min-height: 36px;
+            border-radius: 2px;
+            background: var(--other);
+        }
+        .vessel-stripe.tanker   { background: var(--tanker); }
+        .vessel-stripe.cargo    { background: var(--cargo); }
+        .vessel-stripe.passenger{ background: var(--passenger); }
+        .vessel-stripe.tug      { background: var(--tug); }
+        .vessel-info { min-width: 0; }
+        .vessel-name {
+            font-size: 0.85rem; font-weight: 600;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .vessel-meta {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.68rem; color: var(--text-muted);
+            margin-top: 2px;
+        }
+        .vessel-speed {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem; font-weight: 600;
+            color: var(--amber); text-align: right;
+        }
+        .vessel-speed .unit {
+            font-size: 0.6rem; color: var(--text-muted); font-weight: 400;
+            margin-left: 2px;
+        }
+
+        .empty-state {
+            padding: 3rem 1.5rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+        .empty-state .big {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2rem; color: var(--border);
+            display: block; margin-bottom: 0.8rem;
+        }
+
+        /* ── MAP ── */
+        #map {
+            height: 100%;
+            background: #000a14;
+        }
+        .leaflet-container { background: #000a14; font-family: 'Inter', sans-serif; }
+        .leaflet-control-attribution {
+            background: rgba(6,9,15,0.7) !important;
+            color: var(--text-muted) !important;
+            font-size: 0.65rem !important;
+            border: 1px solid var(--border);
+        }
+        .leaflet-control-attribution a { color: var(--blue) !important; }
+        .leaflet-popup-content-wrapper {
+            background: var(--bg2);
+            color: var(--text);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+        .leaflet-popup-content {
+            margin: 0.8rem 1rem; font-size: 0.85rem;
+        }
+        .leaflet-popup-tip { background: var(--bg2); border: 1px solid var(--border); }
+        .popup-title {
+            font-weight: 700; margin-bottom: 6px; color: var(--amber);
+        }
+        .popup-meta {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem; color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* Custom vessel marker */
+        .vessel-marker {
+            width: 14px; height: 14px;
+            border: 2px solid var(--bg);
+            border-radius: 50%;
+            box-shadow: 0 0 8px currentColor, 0 0 2px rgba(0,0,0,0.8);
+            transition: transform 0.2s;
+        }
+        .vessel-marker:hover { transform: scale(1.4); }
+        .vessel-marker.tanker    { background: var(--tanker);    color: var(--tanker); }
+        .vessel-marker.cargo     { background: var(--cargo);     color: var(--cargo); }
+        .vessel-marker.passenger { background: var(--passenger); color: var(--passenger); }
+        .vessel-marker.tug       { background: var(--tug);       color: var(--tug); }
+        .vessel-marker.other     { background: var(--other);     color: var(--other); }
+
+        /* Moving tanker pulse */
+        .vessel-marker.moving::after {
+            content: ''; position: absolute;
+            top: -4px; left: -4px; right: -4px; bottom: -4px;
+            border-radius: 50%; border: 1px solid currentColor;
+            opacity: 0; animation: ripple 2s infinite;
+        }
+        @keyframes ripple {
+            0% { transform: scale(1); opacity: 0.6; }
+            100% { transform: scale(2.5); opacity: 0; }
+        }
+
+        /* ── RIGHT PANEL ── */
+        .widget {
+            padding: 1rem 1.2rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .widget-label {
+            font-size: 0.65rem; font-weight: 700; letter-spacing: 0.15em;
+            text-transform: uppercase; color: var(--amber);
+            margin-bottom: 0.6rem;
+        }
+        .tide-display {
+            display: flex; align-items: baseline; gap: 0.6rem;
+        }
+        .tide-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2rem; font-weight: 700;
+            color: var(--blue);
+        }
+        .tide-unit { color: var(--text-muted); font-size: 0.8rem; }
+        .tide-meta {
+            margin-top: 0.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem; color: var(--text-muted);
+        }
+        .tide-trend {
+            display: inline-block; margin-left: 0.4rem;
+            font-weight: 600;
+        }
+        .tide-trend.rising { color: var(--success); }
+        .tide-trend.falling { color: var(--danger); }
+
+        .upsell {
+            background: linear-gradient(135deg, var(--amber-dim) 0%, var(--blue-dim) 100%);
+            border: 1px solid var(--border-amber);
+            margin: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+        }
+        .upsell h3 {
+            font-size: 0.85rem; font-weight: 700;
+            color: var(--amber); margin-bottom: 0.4rem;
+        }
+        .upsell p {
+            font-size: 0.78rem; color: var(--text);
+            line-height: 1.5; margin-bottom: 0.8rem;
+        }
+        .upsell-cta {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: var(--amber); color: var(--bg);
+            font-size: 0.75rem; font-weight: 700;
+            border-radius: 6px;
+            text-transform: uppercase; letter-spacing: 0.08em;
+            transition: all 0.2s;
+        }
+        .upsell-cta:hover {
+            background: var(--blue); color: var(--text);
+            transform: translateY(-1px);
+        }
+
+        /* ── API KEY MODAL ── */
+        .modal-veil {
+            position: fixed; inset: 0;
+            background: rgba(6,9,15,0.92);
+            backdrop-filter: blur(6px);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 1000;
+        }
+        .modal {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 480px; width: 90%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 40px rgba(0,119,255,0.1);
+        }
+        .modal h2 {
+            font-size: 1.3rem; font-weight: 700;
+            margin-bottom: 0.4rem;
+            background: linear-gradient(135deg, var(--blue) 0%, #40aaff 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .modal p {
+            font-size: 0.88rem; color: var(--text-muted);
+            margin-bottom: 1.4rem; line-height: 1.5;
+        }
+        .modal input {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+            transition: border-color 0.2s;
+        }
+        .modal input:focus {
+            outline: none; border-color: var(--blue);
+            box-shadow: 0 0 0 3px var(--blue-dim);
+        }
+        .modal-actions { display: flex; gap: 0.6rem; justify-content: flex-end; }
+        .btn {
+            padding: 0.7rem 1.2rem;
+            border-radius: 6px; border: none;
+            font-size: 0.8rem; font-weight: 700;
+            cursor: pointer; transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: 0.05em;
+        }
+        .btn.primary { background: var(--blue); color: var(--text); }
+        .btn.primary:hover { background: var(--amber); color: var(--bg); }
+        .btn.ghost {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+        }
+        .btn.ghost:hover { color: var(--text); border-color: var(--blue); }
+        .modal-hint {
+            margin-top: 1rem;
+            padding: 0.8rem;
+            background: var(--bg);
+            border-left: 3px solid var(--amber);
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+        .modal-hint code {
+            color: var(--amber);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* ── FOOTER STRIP ── */
+        .footer-strip {
+            position: absolute; bottom: 0; left: 340px; right: 320px;
+            padding: 0.5rem 1rem;
+            background: rgba(11,16,24,0.85);
+            border-top: 1px solid var(--border);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.68rem; color: var(--text-muted);
+            display: flex; justify-content: space-between; align-items: center;
+            backdrop-filter: blur(6px);
+            z-index: 400;
+        }
+        .footer-strip .source { color: var(--blue); }
+
+        @media (max-width: 1100px) {
+            main { grid-template-columns: 1fr; grid-template-rows: auto 1fr auto; }
+            .panel { max-height: 240px; }
+            .footer-strip { left: 0; right: 0; }
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+
+    <header>
+        <div class="brand">
+            <svg class="wheel-mark" viewBox="0 0 44 44">
+                <circle cx="22" cy="22" r="19" fill="none" stroke="#0077ff" stroke-width="2.2"/>
+                <circle cx="22" cy="22" r="3" fill="#ffaa00"/>
+                <g stroke="#0077ff" stroke-width="2" stroke-linecap="round">
+                    <line x1="22" y1="6"  x2="22" y2="13"/>
+                    <line x1="22" y1="31" x2="22" y2="38"/>
+                    <line x1="6"  y1="22" x2="13" y2="22"/>
+                    <line x1="31" y1="22" x2="38" y2="22"/>
+                </g>
+                <g stroke="#ffaa00" stroke-width="1.5" stroke-linecap="round" opacity="0.8">
+                    <line x1="10.3" y1="10.3" x2="15.2" y2="15.2"/>
+                    <line x1="28.8" y1="28.8" x2="33.7" y2="33.7"/>
+                    <line x1="33.7" y1="10.3" x2="28.8" y2="15.2"/>
+                    <line x1="15.2" y1="28.8" x2="10.3" y2="33.7"/>
+                </g>
+            </svg>
+            <div class="brand-txt">
+                <div class="brand-name">Nauti-Vision</div>
+                <div class="brand-sub">Houston Ship Channel · Live Intel</div>
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="status-pill">
+                <span class="dot" id="ws-dot"></span>
+                <span id="ws-status">Connecting</span>
+            </div>
+            <div class="time-badge" id="clock">--:--:--</div>
+            <a class="back-link" href="/">← Nauti-Ops</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- LEFT PANEL: VESSEL LIST -->
+        <aside class="panel">
+            <div class="stats-strip">
+                <div class="stat-chip">
+                    <div class="stat-value" id="s-total">0</div>
+                    <div class="stat-label">Total</div>
+                </div>
+                <div class="stat-chip">
+                    <div class="stat-value amber" id="s-tanker">0</div>
+                    <div class="stat-label">Tanker</div>
+                </div>
+                <div class="stat-chip">
+                    <div class="stat-value" id="s-cargo">0</div>
+                    <div class="stat-label">Cargo</div>
+                </div>
+                <div class="stat-chip">
+                    <div class="stat-value" id="s-moving">0</div>
+                    <div class="stat-label">Moving</div>
+                </div>
+            </div>
+            <div class="panel-header">
+                <div class="panel-title">Vessels in Channel</div>
+                <div class="panel-count" id="v-count">—</div>
+            </div>
+            <div class="vessel-filters" id="filters">
+                <div class="filter-pill active" data-filter="all">All</div>
+                <div class="filter-pill" data-filter="tanker">Tanker</div>
+                <div class="filter-pill" data-filter="cargo">Cargo</div>
+                <div class="filter-pill" data-filter="tug">Tug</div>
+                <div class="filter-pill" data-filter="moving">Moving</div>
+            </div>
+            <div class="panel-body" id="vessel-list">
+                <div class="empty-state">
+                    <span class="big">◌</span>
+                    Waiting for AIS stream…<br>
+                    First vessels appear within seconds of connection.
+                </div>
+            </div>
+        </aside>
+
+        <!-- CENTER: MAP -->
+        <div style="position: relative;">
+            <div id="map"></div>
+            <div class="footer-strip">
+                <div>
+                    AIS via <span class="source">aisstream.io</span> ·
+                    Tides via <span class="source">NOAA CO-OPS</span> ·
+                    Map <span class="source">OpenStreetMap</span>
+                </div>
+                <div id="last-update">—</div>
+            </div>
+        </div>
+
+        <!-- RIGHT PANEL: TIDES + UPSELL -->
+        <aside class="panel right">
+            <div class="panel-header">
+                <div class="panel-title">Conditions</div>
+                <div class="panel-count">Morgan's Pt</div>
+            </div>
+
+            <div class="widget">
+                <div class="widget-label">Water Level (MLLW)</div>
+                <div class="tide-display">
+                    <span class="tide-value" id="tide-val">—</span>
+                    <span class="tide-unit">ft</span>
+                    <span class="tide-trend" id="tide-trend"></span>
+                </div>
+                <div class="tide-meta" id="tide-time">Loading…</div>
+            </div>
+
+            <div class="widget">
+                <div class="widget-label">Channel Activity</div>
+                <div class="tide-meta" style="line-height: 1.8;">
+                    <div>Inbound: <span id="act-in" style="color:var(--success);font-weight:600;">0</span></div>
+                    <div>Outbound: <span id="act-out" style="color:var(--warning);font-weight:600;">0</span></div>
+                    <div>Anchored: <span id="act-anchor" style="color:var(--text);font-weight:600;">0</span></div>
+                    <div>Dead slow: <span id="act-slow" style="color:var(--text-muted);font-weight:600;">0</span></div>
+                </div>
+            </div>
+
+            <div class="widget">
+                <div class="widget-label">Legend</div>
+                <div style="display: grid; gap: 0.4rem; margin-top: 0.3rem;">
+                    <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.75rem;">
+                        <span style="width:10px;height:10px;border-radius:50%;background:var(--tanker);"></span>
+                        Tanker (chem / oil / LPG)
+                    </div>
+                    <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.75rem;">
+                        <span style="width:10px;height:10px;border-radius:50%;background:var(--cargo);"></span>
+                        Cargo
+                    </div>
+                    <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.75rem;">
+                        <span style="width:10px;height:10px;border-radius:50%;background:var(--tug);"></span>
+                        Tug / Pilot
+                    </div>
+                    <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.75rem;">
+                        <span style="width:10px;height:10px;border-radius:50%;background:var(--passenger);"></span>
+                        Passenger
+                    </div>
+                    <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.75rem;">
+                        <span style="width:10px;height:10px;border-radius:50%;background:var(--other);"></span>
+                        Other / Unclassified
+                    </div>
+                </div>
+            </div>
+
+            <div class="upsell">
+                <h3>Want it in your inbox?</h3>
+                <p>Nauti-Letter delivers a daily Houston Ship Channel digest at 6am CT — vessels, tides, anomalies. Built by a Mont Belvieu local who used to run these calls.</p>
+                <a class="upsell-cta" href="/letter/">Subscribe →</a>
+            </div>
+        </aside>
+    </main>
+</div>
+
+<!-- API KEY MODAL -->
+<div class="modal-veil" id="modal" style="display:none;">
+    <div class="modal">
+        <h2>Connect to the channel</h2>
+        <p>Nauti-Vision pulls live AIS vessel data from <a href="https://aisstream.io/" target="_blank" rel="noopener">aisstream.io</a> — a free service. Paste your API key to start streaming.</p>
+        <input type="text" id="key-input" placeholder="aisstream.io API key" autocomplete="off" spellcheck="false">
+        <div class="modal-actions">
+            <button class="btn ghost" id="key-skip">Demo mode</button>
+            <button class="btn primary" id="key-save">Connect</button>
+        </div>
+        <div class="modal-hint">
+            Don't have one? Sign up free at <code>aisstream.io</code>. Your key stays on this device — we never send it to Nauti-Labs servers.
+        </div>
+    </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+/* =========================================================================
+ * NAUTI-VISION — Houston Ship Channel Live Intel
+ * AIS via aisstream.io · Tides via NOAA CO-OPS · Map OpenStreetMap
+ * ========================================================================= */
+
+// Houston Ship Channel + Galveston Bay bounding box
+// [SW lat, SW lon], [NE lat, NE lon]
+const HSC_BBOX = [[29.20, -95.30], [29.85, -94.70]];
+const NOAA_STATION = '8770613'; // Morgan's Point, TX
+
+// AIS ship type categorization (per ITU-R M.1371)
+function classifyType(t) {
+    if (!t || t === 0) return 'other';
+    if (t >= 80 && t <= 89) return 'tanker';
+    if (t >= 70 && t <= 79) return 'cargo';
+    if (t >= 60 && t <= 69) return 'passenger';
+    if (t === 31 || t === 32 || t === 52 || t === 53 || t === 55) return 'tug';
+    return 'other';
+}
+
+function typeLabel(t) {
+    if (!t) return 'Unknown';
+    if (t === 80) return 'Tanker';
+    if (t === 81) return 'Tanker (Cat A — gas)';
+    if (t === 82) return 'Tanker (Cat B — chem)';
+    if (t === 83) return 'Tanker (Cat C)';
+    if (t === 84) return 'Tanker (Cat D)';
+    if (t === 89) return 'Tanker (other)';
+    if (t >= 70 && t <= 79) return 'Cargo';
+    if (t === 52) return 'Tug';
+    if (t === 53) return 'Port Tender';
+    if (t === 50) return 'Pilot Vessel';
+    if (t >= 60 && t <= 69) return 'Passenger';
+    if (t >= 30 && t <= 39) return 'Fishing';
+    return `Type ${t}`;
+}
+
+// ── STATE ──────────────────────────────────────────────────────────────
+const vessels = new Map(); // mmsi -> { mmsi, name, type, lat, lon, sog, cog, heading, dest, lastSeen }
+let activeFilter = 'all';
+let activeVessel = null;
+let ws = null;
+let reconnectTimer = null;
+
+// ── MAP ────────────────────────────────────────────────────────────────
+const map = L.map('map', {
+    zoomControl: true,
+    attributionControl: true,
+    preferCanvas: true,
+}).setView([29.55, -94.98], 11);
+
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    attribution: '© OpenStreetMap · © CARTO',
+    subdomains: 'abcd',
+    maxZoom: 19,
+}).addTo(map);
+
+// Ship Channel corridor overlay (hint rectangle)
+L.rectangle(HSC_BBOX, {
+    color: '#0077ff', weight: 1, opacity: 0.3,
+    fillOpacity: 0, dashArray: '4,6',
+}).addTo(map);
+
+const markers = new Map(); // mmsi -> L.marker
+
+function upsertMarker(v) {
+    const cls = classifyType(v.type);
+    const moving = (v.sog || 0) > 0.5 ? 'moving' : '';
+    const html = `<div class="vessel-marker ${cls} ${moving}"></div>`;
+    const icon = L.divIcon({
+        html, className: '',
+        iconSize: [14, 14], iconAnchor: [7, 7],
+    });
+
+    if (markers.has(v.mmsi)) {
+        const m = markers.get(v.mmsi);
+        m.setLatLng([v.lat, v.lon]);
+        m.setIcon(icon);
+        m.setPopupContent(popupHtml(v));
+    } else {
+        const m = L.marker([v.lat, v.lon], { icon }).addTo(map);
+        m.bindPopup(popupHtml(v));
+        m.on('click', () => {
+            activeVessel = v.mmsi;
+            renderList();
+        });
+        markers.set(v.mmsi, m);
+    }
+}
+
+function popupHtml(v) {
+    const name = v.name || `MMSI ${v.mmsi}`;
+    const dest = v.dest ? `→ ${v.dest}` : '';
+    return `
+        <div class="popup-title">${escapeHtml(name)}</div>
+        <div class="popup-meta">
+            ${typeLabel(v.type)}<br>
+            MMSI ${v.mmsi}<br>
+            Speed ${fmtSpeed(v.sog)} · COG ${Math.round(v.cog || 0)}°<br>
+            ${dest ? escapeHtml(dest) + '<br>' : ''}
+            ${v.lat.toFixed(4)}, ${v.lon.toFixed(4)}
+        </div>`;
+}
+
+// ── VESSEL LIST RENDER ─────────────────────────────────────────────────
+const listEl = document.getElementById('vessel-list');
+
+function renderList() {
+    let items = Array.from(vessels.values());
+    if (activeFilter === 'tanker') items = items.filter(v => classifyType(v.type) === 'tanker');
+    else if (activeFilter === 'cargo') items = items.filter(v => classifyType(v.type) === 'cargo');
+    else if (activeFilter === 'tug')   items = items.filter(v => classifyType(v.type) === 'tug');
+    else if (activeFilter === 'moving')items = items.filter(v => (v.sog || 0) > 0.5);
+
+    items.sort((a, b) => (b.sog || 0) - (a.sog || 0));
+
+    document.getElementById('v-count').textContent = items.length;
+
+    if (items.length === 0) {
+        listEl.innerHTML = `<div class="empty-state">
+            <span class="big">◌</span>
+            No vessels match this filter yet.
+        </div>`;
+        return;
+    }
+
+    const html = items.map(v => {
+        const cls = classifyType(v.type);
+        const active = v.mmsi === activeVessel ? 'active' : '';
+        const name = v.name || `MMSI ${v.mmsi}`;
+        return `
+            <div class="vessel ${active}" data-mmsi="${v.mmsi}">
+                <div class="vessel-stripe ${cls}"></div>
+                <div class="vessel-info">
+                    <div class="vessel-name">${escapeHtml(name)}</div>
+                    <div class="vessel-meta">${typeLabel(v.type)} · ${v.dest ? escapeHtml(v.dest) : 'dest unk'}</div>
+                </div>
+                <div class="vessel-speed">${fmtSpeed(v.sog, true)}<span class="unit">kts</span></div>
+            </div>`;
+    }).join('');
+    listEl.innerHTML = html;
+
+    listEl.querySelectorAll('.vessel').forEach(el => {
+        el.addEventListener('click', () => {
+            const mmsi = Number(el.dataset.mmsi);
+            activeVessel = mmsi;
+            const v = vessels.get(mmsi);
+            if (v && markers.has(mmsi)) {
+                map.setView([v.lat, v.lon], 13);
+                markers.get(mmsi).openPopup();
+            }
+            renderList();
+        });
+    });
+}
+
+// ── STATS ──────────────────────────────────────────────────────────────
+function updateStats() {
+    const all = Array.from(vessels.values());
+    const tanker = all.filter(v => classifyType(v.type) === 'tanker').length;
+    const cargo  = all.filter(v => classifyType(v.type) === 'cargo').length;
+    const moving = all.filter(v => (v.sog || 0) > 0.5).length;
+
+    document.getElementById('s-total').textContent  = all.length;
+    document.getElementById('s-tanker').textContent = tanker;
+    document.getElementById('s-cargo').textContent  = cargo;
+    document.getElementById('s-moving').textContent = moving;
+
+    // Directionality heuristics by COG (very rough)
+    // Inbound to HSC = generally NW (270-360); outbound = SE (90-180)
+    const inbound  = all.filter(v => (v.sog || 0) > 2 && v.cog >= 270 && v.cog <= 360).length;
+    const outbound = all.filter(v => (v.sog || 0) > 2 && v.cog >= 90  && v.cog <= 180).length;
+    const anchored = all.filter(v => (v.sog || 0) < 0.3).length;
+    const slow     = all.filter(v => (v.sog || 0) >= 0.3 && (v.sog || 0) <= 2).length;
+
+    document.getElementById('act-in').textContent     = inbound;
+    document.getElementById('act-out').textContent    = outbound;
+    document.getElementById('act-anchor').textContent = anchored;
+    document.getElementById('act-slow').textContent   = slow;
+}
+
+// ── FILTERS ────────────────────────────────────────────────────────────
+document.querySelectorAll('.filter-pill').forEach(p => {
+    p.addEventListener('click', () => {
+        document.querySelectorAll('.filter-pill').forEach(x => x.classList.remove('active'));
+        p.classList.add('active');
+        activeFilter = p.dataset.filter;
+        renderList();
+    });
+});
+
+// ── WEBSOCKET (aisstream.io) ───────────────────────────────────────────
+function setStatus(state, label) {
+    const dot = document.getElementById('ws-dot');
+    const txt = document.getElementById('ws-status');
+    dot.classList.remove('live', 'warn', 'dead');
+    if (state) dot.classList.add(state);
+    txt.textContent = label;
+}
+
+function connect(apiKey) {
+    if (!apiKey) return;
+    setStatus('warn', 'Connecting');
+
+    try {
+        ws = new WebSocket('wss://stream.aisstream.io/v0/stream');
+    } catch (e) {
+        setStatus('dead', 'WS blocked');
+        return;
+    }
+
+    ws.onopen = () => {
+        const sub = {
+            APIKey: apiKey,
+            BoundingBoxes: [HSC_BBOX],
+            FilterMessageTypes: ['PositionReport', 'ShipStaticData']
+        };
+        ws.send(JSON.stringify(sub));
+        setStatus('live', 'Streaming');
+    };
+
+    ws.onmessage = (ev) => {
+        try {
+            const msg = JSON.parse(ev.data);
+            handleAisMessage(msg);
+        } catch (e) { /* ignore malformed */ }
+    };
+
+    ws.onerror = () => setStatus('dead', 'Error');
+
+    ws.onclose = () => {
+        setStatus('warn', 'Reconnecting');
+        clearTimeout(reconnectTimer);
+        reconnectTimer = setTimeout(() => connect(apiKey), 5000);
+    };
+}
+
+function handleAisMessage(msg) {
+    const t = msg.MessageType;
+    const meta = msg.MetaData || {};
+    const mmsi = meta.MMSI || meta.mmsi;
+    if (!mmsi) return;
+
+    let v = vessels.get(mmsi) || { mmsi };
+
+    if (t === 'PositionReport' && msg.Message && msg.Message.PositionReport) {
+        const p = msg.Message.PositionReport;
+        v.lat = p.Latitude;
+        v.lon = p.Longitude;
+        v.sog = p.Sog;
+        v.cog = p.Cog;
+        v.heading = p.TrueHeading;
+        if (!v.name && meta.ShipName) v.name = meta.ShipName.trim();
+    } else if (t === 'ShipStaticData' && msg.Message && msg.Message.ShipStaticData) {
+        const s = msg.Message.ShipStaticData;
+        v.name = (s.Name || s.ShipName || meta.ShipName || '').trim();
+        v.type = s.Type;
+        v.dest = (s.Destination || '').trim();
+    } else {
+        return;
+    }
+
+    v.lastSeen = Date.now();
+    vessels.set(mmsi, v);
+
+    if (typeof v.lat === 'number' && typeof v.lon === 'number') {
+        upsertMarker(v);
+    }
+
+    document.getElementById('last-update').textContent =
+        'Last msg: ' + new Date().toLocaleTimeString();
+
+    scheduleRender();
+}
+
+let renderTimer = null;
+function scheduleRender() {
+    if (renderTimer) return;
+    renderTimer = setTimeout(() => {
+        renderTimer = null;
+        renderList();
+        updateStats();
+    }, 400);
+}
+
+// Prune vessels we haven't seen in 20 min
+setInterval(() => {
+    const cutoff = Date.now() - 20 * 60 * 1000;
+    for (const [mmsi, v] of vessels) {
+        if (v.lastSeen < cutoff) {
+            vessels.delete(mmsi);
+            if (markers.has(mmsi)) {
+                map.removeLayer(markers.get(mmsi));
+                markers.delete(mmsi);
+            }
+        }
+    }
+    renderList();
+    updateStats();
+}, 60 * 1000);
+
+// ── NOAA TIDES ─────────────────────────────────────────────────────────
+async function loadTides() {
+    const url = `https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?` +
+        `product=water_level&station=${NOAA_STATION}&date=latest&datum=MLLW&` +
+        `units=english&time_zone=lst_ldt&application=nauti_labs&format=json`;
+    try {
+        const r = await fetch(url);
+        const data = await r.json();
+        if (data.data && data.data.length) {
+            const pt = data.data[data.data.length - 1];
+            document.getElementById('tide-val').textContent = Number(pt.v).toFixed(2);
+            document.getElementById('tide-time').textContent = `As of ${pt.t} · Station ${NOAA_STATION}`;
+
+            if (data.data.length >= 2) {
+                const prev = data.data[data.data.length - 2];
+                const rising = Number(pt.v) > Number(prev.v);
+                const trendEl = document.getElementById('tide-trend');
+                trendEl.textContent = rising ? '▲ rising' : '▼ falling';
+                trendEl.className = 'tide-trend ' + (rising ? 'rising' : 'falling');
+            }
+        }
+    } catch (e) {
+        document.getElementById('tide-time').textContent = 'NOAA fetch failed';
+    }
+}
+
+// ── CLOCK ──────────────────────────────────────────────────────────────
+function tickClock() {
+    const now = new Date();
+    const pad = n => String(n).padStart(2, '0');
+    document.getElementById('clock').textContent =
+        `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())} CT`;
+}
+setInterval(tickClock, 1000); tickClock();
+
+// ── HELPERS ────────────────────────────────────────────────────────────
+function fmtSpeed(sog, short) {
+    if (sog == null || isNaN(sog)) return short ? '—' : '— kts';
+    return (Math.round(sog * 10) / 10).toFixed(1);
+}
+function escapeHtml(s) {
+    if (s == null) return '';
+    return String(s).replace(/[&<>"']/g, c => ({
+        '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+    })[c]);
+}
+
+// ── BOOT ───────────────────────────────────────────────────────────────
+function boot() {
+    const stored = localStorage.getItem('nauti-vision-ais-key');
+    if (stored) {
+        connect(stored);
+    } else {
+        document.getElementById('modal').style.display = 'flex';
+    }
+    loadTides();
+    setInterval(loadTides, 6 * 60 * 1000); // refresh tides every 6 min
+}
+
+document.getElementById('key-save').addEventListener('click', () => {
+    const val = document.getElementById('key-input').value.trim();
+    if (!val) return;
+    localStorage.setItem('nauti-vision-ais-key', val);
+    document.getElementById('modal').style.display = 'none';
+    connect(val);
+});
+document.getElementById('key-skip').addEventListener('click', () => {
+    document.getElementById('modal').style.display = 'none';
+    setStatus('dead', 'Demo (no stream)');
+    // Seed a few demo vessels so the UI isn't empty
+    const demo = [
+        { mmsi: 1, name: 'ULTRA HOUSTON',     type: 84, lat: 29.72, lon: -94.98, sog: 8.4,  cog: 320, dest: 'HOU' },
+        { mmsi: 2, name: 'STOLT TAURUS',      type: 82, lat: 29.47, lon: -94.87, sog: 11.2, cog: 300, dest: 'BAYPORT' },
+        { mmsi: 3, name: 'MOL CELEBRATION',   type: 70, lat: 29.61, lon: -95.01, sog: 0.1,  cog: 0,   dest: 'HOU' },
+        { mmsi: 4, name: 'ENTERPRISE LPG 3',  type: 81, lat: 29.38, lon: -94.76, sog: 12.7, cog: 120, dest: 'SEA' },
+        { mmsi: 5, name: 'SAN JACINTO TUG',   type: 52, lat: 29.68, lon: -95.05, sog: 6.8,  cog: 90,  dest: '' },
+        { mmsi: 6, name: 'CHEM VENTURE',      type: 82, lat: 29.55, lon: -94.92, sog: 0.0,  cog: 0,   dest: 'ANCHOR' },
+    ];
+    demo.forEach(v => { v.lastSeen = Date.now(); vessels.set(v.mmsi, v); upsertMarker(v); });
+    renderList(); updateStats();
+});
+
+boot();
+</script>
+</body>
+</html>

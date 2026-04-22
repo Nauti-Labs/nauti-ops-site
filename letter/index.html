@@ -1,0 +1,565 @@
+<!-- Copyright (c) 2026 Nauti-Labs LLC. All rights reserved. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nauti-Letter — Houston Ship Channel Daily Digest</title>
+    <meta name="description" content="The daily Houston Ship Channel intelligence digest. Vessels, tides, anomalies — delivered at 6am CT. Built by a Mont Belvieu local.">
+    <meta name="theme-color" content="#0077ff">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --blue:        #0077ff;
+            --blue-glow:   rgba(0, 119, 255, 0.45);
+            --blue-dim:    rgba(0, 119, 255, 0.08);
+            --amber:       #ffaa00;
+            --amber-glow:  rgba(255, 170, 0, 0.45);
+            --amber-dim:   rgba(255, 170, 0, 0.08);
+            --bg:          #06090f;
+            --bg2:         #0b1018;
+            --bg3:         #101722;
+            --glass:       rgba(0, 119, 255, 0.05);
+            --border:      rgba(0, 119, 255, 0.15);
+            --border-amber:rgba(255, 170, 0, 0.2);
+            --text:        #e0f0ff;
+            --text-muted:  rgba(200, 225, 255, 0.45);
+            --success:     #00d97e;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            background-image:
+                radial-gradient(ellipse at 20% 10%, rgba(0,119,255,0.07) 0%, transparent 55%),
+                radial-gradient(ellipse at 80% 90%, rgba(255,170,0,0.04) 0%, transparent 55%);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        a { color: var(--blue); text-decoration: none; transition: color 0.2s; }
+        a:hover { color: var(--amber); }
+
+        /* ── HEADER ── */
+        header {
+            padding: 1.2rem 2rem;
+            background: linear-gradient(180deg, var(--bg2) 0%, transparent 100%);
+            border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: space-between;
+            position: sticky; top: 0; backdrop-filter: blur(8px); z-index: 10;
+        }
+        .brand { display: flex; align-items: center; gap: 14px; }
+        .wheel-mark {
+            width: 38px; height: 38px;
+            filter: drop-shadow(0 0 8px var(--blue-glow));
+        }
+        .brand-txt { display: flex; flex-direction: column; line-height: 1; }
+        .brand-name {
+            font-size: 1.4rem; font-weight: 800; letter-spacing: -0.02em;
+            background: linear-gradient(135deg, var(--blue) 0%, #40aaff 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .brand-sub {
+            font-size: 0.65rem; font-weight: 600; letter-spacing: 0.16em;
+            color: var(--amber); text-transform: uppercase; opacity: 0.85;
+            margin-top: 4px;
+        }
+        .nav-links { display: flex; gap: 1.5rem; align-items: center; }
+        .nav-links a {
+            font-size: 0.82rem; font-weight: 500;
+            color: var(--text-muted);
+        }
+        .nav-links a:hover { color: var(--blue); }
+
+        /* ── HERO ── */
+        .hero {
+            padding: 5rem 2rem 4rem;
+            max-width: 960px; margin: 0 auto;
+            text-align: center;
+        }
+        .eyebrow {
+            display: inline-block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem; font-weight: 600;
+            color: var(--amber);
+            text-transform: uppercase; letter-spacing: 0.2em;
+            padding: 0.4rem 1rem;
+            background: var(--amber-dim);
+            border: 1px solid var(--border-amber);
+            border-radius: 50px;
+            margin-bottom: 1.5rem;
+        }
+        h1 {
+            font-size: clamp(2.2rem, 5vw, 3.6rem);
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            line-height: 1.05;
+            margin-bottom: 1.2rem;
+        }
+        h1 .accent {
+            background: linear-gradient(135deg, var(--blue) 0%, #40aaff 60%, var(--amber) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .hero-sub {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            max-width: 620px; margin: 0 auto 2.5rem;
+        }
+        .hero-cta { display: flex; gap: 0.8rem; justify-content: center; flex-wrap: wrap; }
+
+        /* ── BUTTONS ── */
+        .btn {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            padding: 0.95rem 1.8rem;
+            font-size: 0.92rem; font-weight: 700;
+            border-radius: 8px; border: none;
+            cursor: pointer; transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: 0.02em;
+        }
+        .btn.primary {
+            background: var(--amber); color: var(--bg);
+            box-shadow: 0 4px 20px rgba(255,170,0,0.25);
+        }
+        .btn.primary:hover {
+            background: #ffb82e;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 28px rgba(255,170,0,0.35);
+        }
+        .btn.ghost {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+        .btn.ghost:hover {
+            border-color: var(--blue); color: var(--blue);
+        }
+
+        /* ── SAMPLE DIGEST CARD ── */
+        .digest-section {
+            padding: 2rem 2rem 4rem;
+            max-width: 860px; margin: 0 auto;
+        }
+        .digest-card {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+        }
+        .digest-header {
+            background: var(--bg3);
+            padding: 1.2rem 1.6rem;
+            border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .digest-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem; font-weight: 600;
+            color: var(--amber);
+            text-transform: uppercase; letter-spacing: 0.15em;
+        }
+        .digest-date {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem; color: var(--text-muted);
+        }
+        .digest-body { padding: 2rem; }
+        .digest-body h2 {
+            font-size: 1.5rem; font-weight: 800;
+            margin-bottom: 0.4rem;
+        }
+        .digest-body h3 {
+            font-size: 0.78rem; font-weight: 700;
+            letter-spacing: 0.15em; text-transform: uppercase;
+            color: var(--amber);
+            margin: 1.8rem 0 0.8rem;
+        }
+        .digest-body p { color: var(--text); margin-bottom: 1rem; }
+        .digest-body .sub { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
+        .digest-body ul { list-style: none; padding: 0; }
+        .digest-body li {
+            padding: 0.7rem 0;
+            border-bottom: 1px solid var(--border);
+            display: grid;
+            grid-template-columns: 90px 1fr auto;
+            gap: 1rem; align-items: center;
+            font-size: 0.92rem;
+        }
+        .digest-body li:last-child { border-bottom: none; }
+        .tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem; font-weight: 600;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            text-align: center;
+        }
+        .tag.in  { background: rgba(0,217,126,0.15); color: var(--success); }
+        .tag.out { background: var(--amber-dim); color: var(--amber); }
+        .tag.anc { background: var(--blue-dim); color: var(--blue); }
+        .digest-body .val {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem; color: var(--text-muted);
+        }
+        .digest-preview-note {
+            margin-top: 1rem; text-align: center;
+            font-size: 0.82rem; color: var(--text-muted);
+            font-style: italic;
+        }
+
+        /* ── PRICING ── */
+        .pricing-section {
+            padding: 4rem 2rem;
+            max-width: 1100px; margin: 0 auto;
+        }
+        .section-head { text-align: center; margin-bottom: 3rem; }
+        .section-head h2 {
+            font-size: 2rem; font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.5rem;
+        }
+        .section-head p { color: var(--text-muted); font-size: 1rem; }
+        .tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
+        @media (max-width: 900px) { .tiers { grid-template-columns: 1fr; } }
+        .tier {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem 1.6rem;
+            transition: all 0.2s;
+            display: flex; flex-direction: column;
+        }
+        .tier:hover { border-color: var(--blue); transform: translateY(-3px); }
+        .tier.featured {
+            border-color: var(--amber);
+            box-shadow: 0 0 0 1px var(--amber), 0 20px 60px rgba(255,170,0,0.15);
+        }
+        .tier-name {
+            font-size: 0.75rem; font-weight: 700;
+            letter-spacing: 0.2em; text-transform: uppercase;
+            color: var(--amber);
+            margin-bottom: 0.5rem;
+        }
+        .tier-price {
+            font-size: 2.2rem; font-weight: 900;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.2rem;
+        }
+        .tier-price .per {
+            font-size: 0.9rem; font-weight: 500;
+            color: var(--text-muted);
+        }
+        .tier-tag {
+            font-size: 0.82rem; color: var(--text-muted);
+            margin-bottom: 1.5rem; min-height: 2.5rem;
+        }
+        .tier-features {
+            list-style: none;
+            margin-bottom: 2rem; flex: 1;
+        }
+        .tier-features li {
+            padding: 0.55rem 0;
+            font-size: 0.88rem;
+            display: flex; align-items: flex-start; gap: 0.6rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .tier-features li::before {
+            content: '◆';
+            color: var(--blue);
+            font-size: 0.7rem;
+            margin-top: 3px;
+        }
+        .tier.featured .tier-features li::before { color: var(--amber); }
+        .tier-features li:last-child { border-bottom: none; }
+        .tier .btn { width: 100%; justify-content: center; }
+
+        /* ── WHY SECTION ── */
+        .why-section {
+            padding: 4rem 2rem;
+            background: linear-gradient(180deg, transparent 0%, var(--bg2) 50%, transparent 100%);
+        }
+        .why-wrap {
+            max-width: 780px; margin: 0 auto;
+            text-align: center;
+        }
+        .why-wrap h2 {
+            font-size: 1.8rem; font-weight: 800;
+            letter-spacing: -0.02em; margin-bottom: 1.5rem;
+        }
+        .why-wrap p {
+            font-size: 1.05rem;
+            color: var(--text);
+            margin-bottom: 1rem;
+        }
+        .signature {
+            margin-top: 2rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.88rem;
+            color: var(--amber);
+        }
+
+        /* ── FAQ ── */
+        .faq-section {
+            padding: 3rem 2rem 5rem;
+            max-width: 780px; margin: 0 auto;
+        }
+        .faq {
+            padding: 1.2rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .faq:last-child { border-bottom: none; }
+        .faq-q {
+            font-size: 1rem; font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--amber);
+        }
+        .faq-a { color: var(--text-muted); font-size: 0.92rem; line-height: 1.6; }
+
+        /* ── EMAIL CAPTURE ── */
+        .capture {
+            background: linear-gradient(135deg, var(--bg2) 0%, var(--bg3) 100%);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 2.5rem 2rem;
+            max-width: 640px; margin: 0 auto 4rem;
+            text-align: center;
+        }
+        .capture h3 {
+            font-size: 1.3rem; font-weight: 800;
+            margin-bottom: 0.6rem;
+        }
+        .capture p {
+            font-size: 0.92rem; color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+        .capture form {
+            display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center;
+        }
+        .capture input {
+            flex: 1; min-width: 240px;
+            padding: 0.9rem 1rem;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 0.95rem;
+            font-family: 'Inter', sans-serif;
+        }
+        .capture input:focus {
+            outline: none; border-color: var(--blue);
+            box-shadow: 0 0 0 3px var(--blue-dim);
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 2rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.82rem;
+        }
+        footer a { color: var(--text-muted); }
+        footer a:hover { color: var(--blue); }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="/" class="brand">
+        <svg class="wheel-mark" viewBox="0 0 44 44">
+            <circle cx="22" cy="22" r="19" fill="none" stroke="#0077ff" stroke-width="2.2"/>
+            <circle cx="22" cy="22" r="3" fill="#ffaa00"/>
+            <g stroke="#0077ff" stroke-width="2" stroke-linecap="round">
+                <line x1="22" y1="6"  x2="22" y2="13"/>
+                <line x1="22" y1="31" x2="22" y2="38"/>
+                <line x1="6"  y1="22" x2="13" y2="22"/>
+                <line x1="31" y1="22" x2="38" y2="22"/>
+            </g>
+            <g stroke="#ffaa00" stroke-width="1.5" stroke-linecap="round" opacity="0.8">
+                <line x1="10.3" y1="10.3" x2="15.2" y2="15.2"/>
+                <line x1="28.8" y1="28.8" x2="33.7" y2="33.7"/>
+                <line x1="33.7" y1="10.3" x2="28.8" y2="15.2"/>
+                <line x1="15.2" y1="28.8" x2="10.3" y2="33.7"/>
+            </g>
+        </svg>
+        <div class="brand-txt">
+            <div class="brand-name">Nauti-Letter</div>
+            <div class="brand-sub">Houston Ship Channel · Daily Digest</div>
+        </div>
+    </a>
+    <nav class="nav-links">
+        <a href="/vision/">Live Dashboard</a>
+        <a href="/">Nauti-Ops</a>
+        <a href="#subscribe">Subscribe</a>
+    </nav>
+</header>
+
+<section class="hero">
+    <div class="eyebrow">6:00 AM CT · Monday to Friday</div>
+    <h1>
+        The Houston Ship Channel,<br>
+        <span class="accent">in your inbox.</span>
+    </h1>
+    <p class="hero-sub">
+        Daily intel on vessel movements, tide windows, and channel anomalies —
+        written for agents, brokers, and terminal ops who don't have time
+        to stare at AIS maps all morning.
+    </p>
+    <div class="hero-cta">
+        <a href="#subscribe" class="btn primary">See Pricing →</a>
+        <a href="/vision/" class="btn ghost">Try the Live Dashboard</a>
+    </div>
+</section>
+
+<section class="digest-section">
+    <div class="digest-card">
+        <div class="digest-header">
+            <div class="digest-label">Sample Digest · Preview</div>
+            <div class="digest-date">Tue · 22 Apr · 06:00 CT</div>
+        </div>
+        <div class="digest-body">
+            <h2>47 vessels in the channel. 12 tankers working.</h2>
+            <p class="sub">Morgan's Point tide 1.24 ft rising to +1.8 by noon. Light fog cleared at 0430. No active USCG advisories. Clean morning.</p>
+
+            <h3>Inbound (7)</h3>
+            <ul>
+                <li><span class="tag in">INBOUND</span><span>ULTRA HOUSTON · Chem tanker · dest: HOU</span><span class="val">ETA 08:15</span></li>
+                <li><span class="tag in">INBOUND</span><span>STOLT TAURUS · Chem tanker · dest: BAYPORT</span><span class="val">ETA 09:40</span></li>
+                <li><span class="tag in">INBOUND</span><span>MOL CELEBRATION · Container · dest: HOU</span><span class="val">ETA 10:25</span></li>
+                <li><span class="tag in">INBOUND</span><span>ENTERPRISE LPG 3 · LPG · dest: SEABROOK</span><span class="val">ETA 11:10</span></li>
+            </ul>
+
+            <h3>Outbound (5)</h3>
+            <ul>
+                <li><span class="tag out">OUTBOUND</span><span>CHEM VENTURE · Chem tanker · last: OILTANKING 2</span><span class="val">departed 05:40</span></li>
+                <li><span class="tag out">OUTBOUND</span><span>GULF PIONEER · Crude · last: KINDER PUB</span><span class="val">departed 04:55</span></li>
+            </ul>
+
+            <h3>At Anchor (9)</h3>
+            <ul>
+                <li><span class="tag anc">ANCHOR</span><span>3 tankers holding at Bolivar</span><span class="val">avg 14h</span></li>
+                <li><span class="tag anc">ANCHOR</span><span>2 chem tankers awaiting berth at Bayport</span><span class="val">avg 8h</span></li>
+            </ul>
+
+            <h3>Watch Items</h3>
+            <p>• MOL CELEBRATION showing draft increase — possible cargo discrepancy, confirm with agent.<br>
+               • Bayport congestion: 4 vessels waiting, normal is 1–2. Surge may delay scheduled calls.<br>
+               • Pilot boat traffic 18% above 7-day average — confirms the inbound surge.</p>
+        </div>
+    </div>
+    <p class="digest-preview-note">This is a mock. Real digests pull live from AIS, NOAA, and USCG feeds. Sent weekdays at 6am CT.</p>
+</section>
+
+<section class="pricing-section" id="subscribe">
+    <div class="section-head">
+        <h2>Built by someone who used to run these calls.</h2>
+        <p>Three tiers. Start free, upgrade when you've seen the value.</p>
+    </div>
+
+    <div class="tiers">
+        <div class="tier">
+            <div class="tier-name">Free Digest</div>
+            <div class="tier-price">$0<span class="per">/mo</span></div>
+            <div class="tier-tag">The morning email. No card required.</div>
+            <ul class="tier-features">
+                <li>Daily 6am CT digest (weekdays)</li>
+                <li>Top 10 vessel movements</li>
+                <li>Tide window summary</li>
+                <li>USCG advisory callouts</li>
+                <li>Best-effort send, community support</li>
+            </ul>
+            <a href="#subscribe-form" class="btn ghost">Join Free →</a>
+        </div>
+
+        <div class="tier featured">
+            <div class="tier-name">Pro</div>
+            <div class="tier-price">$99<span class="per">/mo</span></div>
+            <div class="tier-tag">Full digest + live dashboard + vessel alerts.</div>
+            <ul class="tier-features">
+                <li>Everything in Free</li>
+                <li>Complete vessel manifest (not just top 10)</li>
+                <li>Live dashboard access (Nauti-Vision)</li>
+                <li>Custom vessel watchlist + email alerts</li>
+                <li>Historical lookback (30 days)</li>
+                <li>Agent-ready CSV export</li>
+                <li>Priority support (direct email)</li>
+            </ul>
+            <a href="#contact" class="btn primary">Start Pro →</a>
+        </div>
+
+        <div class="tier">
+            <div class="tier-name">Pilot</div>
+            <div class="tier-price">$499<span class="per">/mo</span></div>
+            <div class="tier-tag">Pilot-grade scheduling. The real one.</div>
+            <ul class="tier-features">
+                <li>Everything in Pro</li>
+                <li>Live pilot assignments (via PortXchange PilotTracker)</li>
+                <li>True ETA confidence intervals</li>
+                <li>Berth availability forecasting</li>
+                <li>Custom reports for your terminal / fleet</li>
+                <li>Slack / Teams integration</li>
+                <li>Direct line to the builder</li>
+            </ul>
+            <a href="#contact" class="btn ghost">Talk to us →</a>
+        </div>
+    </div>
+</section>
+
+<section class="why-section">
+    <div class="why-wrap">
+        <h2>Why this exists.</h2>
+        <p>I ran chemical tanker calls on the Houston Ship Channel. I know what it feels like to start the morning blind — waiting on emails from agents, guessing at berth availability, refreshing five different dashboards.</p>
+        <p>This is the briefing I always wanted. Now I build it for you.</p>
+        <div class="signature">— Justin LeBlanc · Nauti-Labs · Mont Belvieu, TX</div>
+    </div>
+</section>
+
+<section class="faq-section">
+    <div class="section-head">
+        <h2>FAQ</h2>
+    </div>
+
+    <div class="faq">
+        <div class="faq-q">Where does the data come from?</div>
+        <div class="faq-a">AIS vessel positions from aisstream.io, tides and currents from NOAA CO-OPS, and USCG Local Notice to Mariners. The Pro tier adds our own fusion layer. The Pilot tier adds PortXchange PilotTracker for real pilot schedules.</div>
+    </div>
+    <div class="faq">
+        <div class="faq-q">Who is this for?</div>
+        <div class="faq-a">Vessel agents, ship brokers, terminal ops, P&I clubs, commodity traders with Gulf exposure, and anyone who needs Houston Ship Channel situational awareness without building it themselves.</div>
+    </div>
+    <div class="faq">
+        <div class="faq-q">Can I cancel?</div>
+        <div class="faq-a">Anytime. Month-to-month. No phone trees, no retention calls. Email Justin, done.</div>
+    </div>
+    <div class="faq">
+        <div class="faq-q">Do you cover Galveston / Texas City / Freeport?</div>
+        <div class="faq-a">Houston Ship Channel and Galveston Bay out to Bolivar today. Texas City coming. Freeport / Corpus by Q3. Custom port coverage available on Pilot tier.</div>
+    </div>
+    <div class="faq">
+        <div class="faq-q">Is this affiliated with Houston Pilots or the Port Bureau?</div>
+        <div class="faq-a">No. Nauti-Labs is independent. We use public data feeds (AIS, NOAA, USCG) on Free/Pro. The Pilot tier integrates PortXchange PilotTracker, which is a separately-licensed partnership product.</div>
+    </div>
+</section>
+
+<section class="capture" id="subscribe-form">
+    <h3>Get the next digest.</h3>
+    <p>Drop your email — first one hits your inbox tomorrow morning. Unsubscribe with one click.</p>
+    <form id="signup" action="mailto:justin@nauti-labs.com" method="POST" enctype="text/plain">
+        <input type="email" name="email" placeholder="you@company.com" required>
+        <button type="submit" class="btn primary">Subscribe Free</button>
+    </form>
+    <p style="margin-top: 1rem; font-size: 0.78rem; color: var(--text-muted);">
+        No spam. No selling your address. Built in Mont Belvieu, TX.
+    </p>
+</section>
+
+<footer>
+    © 2026 Nauti-Labs LLC · Mont Belvieu, TX ·
+    <a href="/">Nauti-Ops</a> ·
+    <a href="/vision/">Live Dashboard</a> ·
+    <a href="mailto:justin@nauti-labs.com">justin@nauti-labs.com</a>
+</footer>
+
+</body>
+</html>
