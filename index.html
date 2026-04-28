@@ -3653,7 +3653,7 @@
       case 'dashboard': renderDashboard(); break;
       case 'voyages':   isPinUnlocked('voyages') ? renderVoyages(id) : renderPinWall('voyages', 'Voyages'); break;
       case 'voyage':    isPinUnlocked('voyages') ? renderVoyage(id) : renderPinWall('voyages', 'Voyages');  break;
-      case 'vessels':   renderVessels();   break;
+      case 'vessels':   isPinUnlocked('vessels') ? renderVessels() : renderPinWall('vessels', 'Vessels');   break;
       case 'vessel':    renderVessel(id);  break;
       case 'people':    isPinUnlocked('directory') ? renderPeople() : renderPinWall('directory', 'People');    break;
       case 'person':    isPinUnlocked('directory') ? renderPerson(id) : renderPinWall('directory', 'People');  break;
