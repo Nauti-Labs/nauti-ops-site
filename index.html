@@ -1251,18 +1251,18 @@
     <div class="sidebar-brand">
       <div class="brand-mark" aria-hidden="true">
         <svg class="brand-svg" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
-          <circle cx="22" cy="22" r="18" stroke="#0077ff" stroke-width="2.2" fill="none"/>
-          <circle cx="22" cy="22" r="4.5" stroke="#0077ff" stroke-width="2" fill="none"/>
-          <circle cx="22" cy="22" r="2" fill="#ffaa00"/>
-          <line x1="22" y1="17.5" x2="22" y2="4"   stroke="#0077ff" stroke-width="2" stroke-linecap="round"/>
-          <line x1="22" y1="26.5" x2="22" y2="40"  stroke="#0077ff" stroke-width="2" stroke-linecap="round"/>
-          <line x1="17.5" y1="22" x2="4"  y2="22"  stroke="#0077ff" stroke-width="2" stroke-linecap="round"/>
-          <line x1="26.5" y1="22" x2="40" y2="22"  stroke="#0077ff" stroke-width="2" stroke-linecap="round"/>
-          <line x1="19.5" y1="19.5" x2="9.5" y2="9.5"   stroke="#ffaa00" stroke-width="1.8" stroke-linecap="round"/>
-          <line x1="24.5" y1="24.5" x2="34.5" y2="34.5" stroke="#ffaa00" stroke-width="1.8" stroke-linecap="round"/>
-          <line x1="24.5" y1="19.5" x2="34.5" y2="9.5"  stroke="#ffaa00" stroke-width="1.8" stroke-linecap="round"/>
-          <line x1="19.5" y1="24.5" x2="9.5"  y2="34.5" stroke="#ffaa00" stroke-width="1.8" stroke-linecap="round"/>
-          <circle cx="22" cy="22" r="18" stroke="#0077ff" stroke-width="0.4" opacity="0.25"/>
+          <circle class="wm-rim"   cx="22" cy="22" r="18" stroke-width="2.2" fill="none"/>
+          <circle class="wm-hub"   cx="22" cy="22" r="4.5" stroke-width="2" fill="none"/>
+          <circle class="wm-dot"   cx="22" cy="22" r="2"/>
+          <line   class="wm-spokeA" x1="22" y1="17.5" x2="22" y2="4"   stroke-width="2" stroke-linecap="round"/>
+          <line   class="wm-spokeA" x1="22" y1="26.5" x2="22" y2="40"  stroke-width="2" stroke-linecap="round"/>
+          <line   class="wm-spokeA" x1="17.5" y1="22" x2="4"  y2="22"  stroke-width="2" stroke-linecap="round"/>
+          <line   class="wm-spokeA" x1="26.5" y1="22" x2="40" y2="22"  stroke-width="2" stroke-linecap="round"/>
+          <line   class="wm-spokeB" x1="19.5" y1="19.5" x2="9.5" y2="9.5"   stroke-width="1.8" stroke-linecap="round"/>
+          <line   class="wm-spokeB" x1="24.5" y1="24.5" x2="34.5" y2="34.5" stroke-width="1.8" stroke-linecap="round"/>
+          <line   class="wm-spokeB" x1="24.5" y1="19.5" x2="34.5" y2="9.5"  stroke-width="1.8" stroke-linecap="round"/>
+          <line   class="wm-spokeB" x1="19.5" y1="24.5" x2="9.5"  y2="34.5" stroke-width="1.8" stroke-linecap="round"/>
+          <circle class="wm-rim"   cx="22" cy="22" r="18" stroke-width="0.4" opacity="0.25"/>
         </svg>
       </div>
       <div>
@@ -1327,7 +1327,14 @@
         <kbd>⌘K</kbd>
       </div>
       <div class="topbar-actions">
-        <span class="env-pill">demo · v0.4</span>
+        <span class="env-pill">demo · v0.5</span>
+        <button class="cb-toggle" id="cb-toggle" title="Color Bomb · change theme" aria-label="Open Color Bomb panel">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="8.5" cy="9" r="5" fill="var(--blue)" opacity="0.85"/>
+            <circle cx="15" cy="11" r="4.5" fill="var(--amber)" opacity="0.85"/>
+            <circle cx="11.5" cy="16" r="4" fill="var(--status-active)" opacity="0.85"/>
+          </svg>
+        </button>
         <button class="icon-btn" title="Notifications">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
           <span class="dot-indicator"></span>
@@ -2939,17 +2946,17 @@
       <div class="sof-page">
         <div class="sof-header">
           <svg class="sof-logo" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:60px;height:60px;flex:0 0 60px">
-            <circle cx="22" cy="22" r="18" stroke="#0077ff" stroke-width="2.2" fill="none"/>
-            <circle cx="22" cy="22" r="4.5" stroke="#0077ff" stroke-width="2" fill="none"/>
-            <circle cx="22" cy="22" r="2" fill="#ffaa00"/>
-            <line x1="22" y1="17.5" x2="22" y2="4"   stroke="#0077ff" stroke-width="2" stroke-linecap="round"/>
-            <line x1="22" y1="26.5" x2="22" y2="40"  stroke="#0077ff" stroke-width="2" stroke-linecap="round"/>
-            <line x1="17.5" y1="22" x2="4"  y2="22"  stroke="#0077ff" stroke-width="2" stroke-linecap="round"/>
-            <line x1="26.5" y1="22" x2="40" y2="22"  stroke="#0077ff" stroke-width="2" stroke-linecap="round"/>
-            <line x1="19.5" y1="19.5" x2="9.5" y2="9.5"   stroke="#ffaa00" stroke-width="1.8" stroke-linecap="round"/>
-            <line x1="24.5" y1="24.5" x2="34.5" y2="34.5" stroke="#ffaa00" stroke-width="1.8" stroke-linecap="round"/>
-            <line x1="24.5" y1="19.5" x2="34.5" y2="9.5"  stroke="#ffaa00" stroke-width="1.8" stroke-linecap="round"/>
-            <line x1="19.5" y1="24.5" x2="9.5"  y2="34.5" stroke="#ffaa00" stroke-width="1.8" stroke-linecap="round"/>
+            <circle class="wm-rim"   cx="22" cy="22" r="18" stroke-width="2.2" fill="none"/>
+            <circle class="wm-hub"   cx="22" cy="22" r="4.5" stroke-width="2" fill="none"/>
+            <circle class="wm-dot"   cx="22" cy="22" r="2"/>
+            <line   class="wm-spokeA" x1="22" y1="17.5" x2="22" y2="4"   stroke-width="2" stroke-linecap="round"/>
+            <line   class="wm-spokeA" x1="22" y1="26.5" x2="22" y2="40"  stroke-width="2" stroke-linecap="round"/>
+            <line   class="wm-spokeA" x1="17.5" y1="22" x2="4"  y2="22"  stroke-width="2" stroke-linecap="round"/>
+            <line   class="wm-spokeA" x1="26.5" y1="22" x2="40" y2="22"  stroke-width="2" stroke-linecap="round"/>
+            <line   class="wm-spokeB" x1="19.5" y1="19.5" x2="9.5" y2="9.5"   stroke-width="1.8" stroke-linecap="round"/>
+            <line   class="wm-spokeB" x1="24.5" y1="24.5" x2="34.5" y2="34.5" stroke-width="1.8" stroke-linecap="round"/>
+            <line   class="wm-spokeB" x1="24.5" y1="19.5" x2="34.5" y2="9.5"  stroke-width="1.8" stroke-linecap="round"/>
+            <line   class="wm-spokeB" x1="19.5" y1="24.5" x2="9.5"  y2="34.5" stroke-width="1.8" stroke-linecap="round"/>
           </svg>
           <div class="sof-letterhead">
             <h2>Nauti-Ops Demo Agency, LLC</h2>
@@ -3740,7 +3747,208 @@
   window.addEventListener('hashchange', route);
   route();
   captainChat.init();
+
+  // ─── COLOR BOMB ───
+  const CB_PRESETS = {
+    'deep-ocean': {
+      name: 'Deep Ocean',
+      desc: 'Nauti default · blue + amber',
+      swatches: ['#0077ff', '#ffaa00', '#06090f'],
+      vars: {
+        '--blue': '#0077ff', '--blue-glow': 'rgba(0, 119, 255, 0.45)', '--blue-dim': 'rgba(0, 119, 255, 0.08)',
+        '--amber': '#ffaa00', '--amber-glow': 'rgba(255, 170, 0, 0.45)', '--amber-dim': 'rgba(255, 170, 0, 0.08)',
+        '--brand-primary': '#0077ff', '--brand-primary-2': '#4099ff',
+        '--brand-accent': '#ffaa00', '--brand-accent-2': '#ffcc4d',
+        '--bg': '#06090f', '--bg-elev': '#0b1018', '--bg-sunk': '#101722',
+        '--line': 'rgba(0, 119, 255, 0.15)', '--line-strong': 'rgba(0, 119, 255, 0.30)',
+        '--status-active': '#00d97e', '--status-active-bg': 'rgba(0,217,126,0.12)',
+        '--status-eta': '#ffaa00', '--status-eta-bg': 'rgba(255,170,0,0.12)',
+        '--status-done': '#4099ff', '--status-done-bg': 'rgba(64,153,255,0.14)',
+      }
+    },
+    'sunrise-berth': {
+      name: 'Sunrise Berth',
+      desc: 'Warm coral + golden hour',
+      swatches: ['#ff6b35', '#ffd23f', '#1a1208'],
+      vars: {
+        '--blue': '#ff6b35', '--blue-glow': 'rgba(255, 107, 53, 0.50)', '--blue-dim': 'rgba(255, 107, 53, 0.08)',
+        '--amber': '#ffd23f', '--amber-glow': 'rgba(255, 210, 63, 0.50)', '--amber-dim': 'rgba(255, 210, 63, 0.08)',
+        '--brand-primary': '#ff6b35', '--brand-primary-2': '#ff9264',
+        '--brand-accent': '#ffd23f', '--brand-accent-2': '#ffe082',
+        '--bg': '#1a1208', '--bg-elev': '#241910', '--bg-sunk': '#2e2017',
+        '--line': 'rgba(255, 107, 53, 0.18)', '--line-strong': 'rgba(255, 107, 53, 0.40)',
+        '--status-active': '#a3e635', '--status-active-bg': 'rgba(163,230,53,0.16)',
+        '--status-eta': '#ffd23f', '--status-eta-bg': 'rgba(255,210,63,0.16)',
+        '--status-done': '#fb923c', '--status-done-bg': 'rgba(251,146,60,0.16)',
+      }
+    },
+    'safety-first': {
+      name: 'Safety First',
+      desc: 'Hi-vis green + safety yellow',
+      swatches: ['#22c55e', '#fde047', '#0c1611'],
+      vars: {
+        '--blue': '#22c55e', '--blue-glow': 'rgba(34, 197, 94, 0.55)', '--blue-dim': 'rgba(34, 197, 94, 0.10)',
+        '--amber': '#fde047', '--amber-glow': 'rgba(253, 224, 71, 0.55)', '--amber-dim': 'rgba(253, 224, 71, 0.10)',
+        '--brand-primary': '#22c55e', '--brand-primary-2': '#4ade80',
+        '--brand-accent': '#fde047', '--brand-accent-2': '#fef08a',
+        '--bg': '#0c1611', '--bg-elev': '#13201b', '--bg-sunk': '#1a2b25',
+        '--line': 'rgba(34, 197, 94, 0.22)', '--line-strong': 'rgba(34, 197, 94, 0.45)',
+        '--status-active': '#22c55e', '--status-active-bg': 'rgba(34,197,94,0.16)',
+        '--status-eta': '#fde047', '--status-eta-bg': 'rgba(253,224,71,0.16)',
+        '--status-done': '#10b981', '--status-done-bg': 'rgba(16,185,129,0.16)',
+      }
+    },
+    'night-watch': {
+      name: 'Night Watch',
+      desc: 'Deep navy + neon accents',
+      swatches: ['#00ffea', '#ff2dd2', '#01020a'],
+      vars: {
+        '--blue': '#00ffea', '--blue-glow': 'rgba(0, 255, 234, 0.55)', '--blue-dim': 'rgba(0, 255, 234, 0.10)',
+        '--amber': '#ff2dd2', '--amber-glow': 'rgba(255, 45, 210, 0.55)', '--amber-dim': 'rgba(255, 45, 210, 0.10)',
+        '--brand-primary': '#00ffea', '--brand-primary-2': '#5cffe6',
+        '--brand-accent': '#ff2dd2', '--brand-accent-2': '#ff66e0',
+        '--bg': '#01020a', '--bg-elev': '#06090f', '--bg-sunk': '#0d1018',
+        '--line': 'rgba(0, 255, 234, 0.20)', '--line-strong': 'rgba(0, 255, 234, 0.45)',
+        '--status-active': '#00ffea', '--status-active-bg': 'rgba(0,255,234,0.14)',
+        '--status-eta': '#ff2dd2', '--status-eta-bg': 'rgba(255,45,210,0.14)',
+        '--status-done': '#a855f7', '--status-done-bg': 'rgba(168,85,247,0.14)',
+      }
+    },
+    'random': {
+      name: 'Random Bomb',
+      desc: 'Surprise · always accessible',
+      swatches: ['#7c3aed', '#fbbf24', '#0a0612'], // placeholder, regenerated on apply
+      vars: null, // generated each click
+    },
+  };
+
+  function _hsl(h, s, l, a) { return a == null ? `hsl(${h}, ${s}%, ${l}%)` : `hsla(${h}, ${s}%, ${l}%, ${a})`; }
+  function generateRandomBombVars() {
+    // Two complementary-ish hues, both bright + saturated for accessibility on dark
+    const h1 = Math.floor(Math.random() * 360);
+    const h2 = (h1 + 110 + Math.floor(Math.random() * 140)) % 360;
+    const primary = _hsl(h1, 85, 60);
+    const accent  = _hsl(h2, 85, 62);
+    return {
+      '--blue': primary, '--blue-glow': _hsl(h1, 85, 60, 0.50), '--blue-dim': _hsl(h1, 85, 60, 0.10),
+      '--amber': accent, '--amber-glow': _hsl(h2, 85, 62, 0.50), '--amber-dim': _hsl(h2, 85, 62, 0.10),
+      '--brand-primary': primary, '--brand-primary-2': _hsl(h1, 80, 70),
+      '--brand-accent': accent, '--brand-accent-2': _hsl(h2, 80, 72),
+      '--bg': _hsl(h1, 25, 5), '--bg-elev': _hsl(h1, 22, 8), '--bg-sunk': _hsl(h1, 20, 11),
+      '--line': _hsl(h1, 80, 60, 0.20), '--line-strong': _hsl(h1, 80, 60, 0.42),
+      '--status-active': '#00d97e', '--status-active-bg': 'rgba(0,217,126,0.12)',
+      '--status-eta': accent, '--status-eta-bg': _hsl(h2, 85, 62, 0.14),
+      '--status-done': primary, '--status-done-bg': _hsl(h1, 85, 60, 0.14),
+      '_swatches': [primary, accent, _hsl(h1, 25, 5)],
+    };
+  }
+
+  function cbApply(presetKey) {
+    let preset = CB_PRESETS[presetKey];
+    if (!preset) return;
+    let vars = preset.vars;
+    let swatches = preset.swatches;
+    if (presetKey === 'random') {
+      vars = generateRandomBombVars();
+      swatches = vars._swatches;
+      delete vars._swatches;
+      // Update random preview swatches
+      const randomCard = document.querySelector('[data-preset="random"] .cb-swatches');
+      if (randomCard) {
+        randomCard.innerHTML = swatches.map(c => `<div class="cb-sw" style="background:${c}"></div>`).join('');
+      }
+    }
+    Object.entries(vars).forEach(([k, v]) => document.documentElement.style.setProperty(k, v));
+    localStorage.setItem('nauti-ops-theme', presetKey);
+    document.querySelectorAll('.cb-preset').forEach(el => {
+      el.classList.toggle('active', el.dataset.preset === presetKey);
+    });
+    // burst effect
+    const burst = document.createElement('div');
+    burst.className = 'cb-explosion';
+    burst.innerHTML = '<div class="cb-explosion-burst"></div>';
+    document.body.appendChild(burst);
+    setTimeout(() => burst.remove(), 700);
+    if (window.showToast) showToast(`Theme: ${preset.name}`);
+  }
+
+  function cbBuildPanel() {
+    const wrap = document.getElementById('cb-presets');
+    if (!wrap) return;
+    wrap.innerHTML = Object.entries(CB_PRESETS).map(([k, p]) => `
+      <button class="cb-preset" data-preset="${k}" draggable="true">
+        <div class="cb-swatches">${p.swatches.map(c => `<div class="cb-sw" style="background:${c}"></div>`).join('')}</div>
+        <div class="cb-name">${p.name}</div>
+        <div class="cb-desc">${p.desc}</div>
+      </button>
+    `).join('');
+
+    wrap.querySelectorAll('.cb-preset').forEach(card => {
+      card.addEventListener('click', () => cbApply(card.dataset.preset));
+      card.addEventListener('dragstart', (e) => {
+        e.dataTransfer.setData('text/plain', card.dataset.preset);
+        e.dataTransfer.effectAllowed = 'copy';
+        document.body.classList.add('cb-dragging');
+      });
+      card.addEventListener('dragend', () => document.body.classList.remove('cb-dragging'));
+    });
+  }
+
+  function cbInit() {
+    cbBuildPanel();
+    const toggle = document.getElementById('cb-toggle');
+    const panel  = document.getElementById('cb-panel');
+    const close  = document.getElementById('cb-close');
+    if (toggle && panel) {
+      toggle.addEventListener('click', () => panel.classList.toggle('open'));
+    }
+    if (close) close.addEventListener('click', () => panel.classList.remove('open'));
+    // close panel when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!panel.contains(e.target) && !toggle.contains(e.target)) {
+        panel.classList.remove('open');
+      }
+    });
+    // drop target = whole document
+    document.addEventListener('dragover', (e) => { e.preventDefault(); e.dataTransfer.dropEffect = 'copy'; });
+    document.addEventListener('drop', (e) => {
+      e.preventDefault();
+      const preset = e.dataTransfer.getData('text/plain');
+      if (preset && CB_PRESETS[preset]) cbApply(preset);
+      document.body.classList.remove('cb-dragging');
+    });
+    // restore saved theme
+    const saved = localStorage.getItem('nauti-ops-theme');
+    if (saved && CB_PRESETS[saved]) {
+      // Apply WITHOUT the burst on restore
+      let preset = CB_PRESETS[saved];
+      let vars = preset.vars;
+      if (saved === 'random') vars = generateRandomBombVars();
+      if (vars) {
+        if (vars._swatches) delete vars._swatches;
+        Object.entries(vars).forEach(([k, v]) => document.documentElement.style.setProperty(k, v));
+      }
+      document.querySelectorAll('.cb-preset').forEach(el => el.classList.toggle('active', el.dataset.preset === saved));
+    } else {
+      document.querySelectorAll('.cb-preset[data-preset="deep-ocean"]').forEach(el => el.classList.add('active'));
+    }
+  }
+  cbInit();
+
+
 </script>
+
+<!-- ─── COLOR BOMB PANEL ─── -->
+<div class="cb-panel" id="cb-panel" role="dialog" aria-label="Color theme presets">
+  <div class="cb-head">
+    <h3>Color Bomb</h3>
+    <button class="cb-close" id="cb-close" aria-label="Close">×</button>
+  </div>
+  <div class="cb-body">
+    <div class="cb-hint"><b>Drag</b> a preset onto the page or just <b>click</b> to apply. Choice is remembered next visit.</div>
+    <div id="cb-presets"></div>
+  </div>
+</div>
 
 </body>
 </html>
