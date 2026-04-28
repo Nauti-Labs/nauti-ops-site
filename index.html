@@ -1719,6 +1719,129 @@
   const byId = (arr, id) => arr.find(x => x.id === id);
   const filterBy = (arr, key, val) => arr.filter(x => x[key] === val);
 
+  const NAUTI_PIN = '6353';
+  function isPinUnlocked(area = 'default') {
+    return sessionStorage.getItem('nauti-pin-' + area) === 'ok';
+  }
+  function unlockPinArea(area) {
+    const pin = document.getElementById('pin-entry')?.value || '';
+    if (pin === NAUTI_PIN) {
+      sessionStorage.setItem('nauti-pin-' + area, 'ok');
+      route();
+      showToast('Unlocked');
+    } else {
+      document.getElementById('pin-error').textContent = 'Wrong PIN. Try again.';
+    }
+  }
+  window.unlockPinArea = unlockPinArea;
+  function renderPinWall(area, label) {
+    setActiveNav(area === 'directory' ? 'companies' : 'voyages');
+    setBreadcrumbs([{ label }]);
+    $page.innerHTML = `
+      <div class="page-header">
+        <div class="page-title-block">
+          <h1>${escapeHtml(label)}</h1>
+          <div class="subtitle">Protected section. Enter the Nauti-Ops PIN to continue.</div>
+        </div>
+      </div>
+      <div class="card" style="max-width:520px">
+        <div class="card-header"><div class="card-title">PIN Required</div></div>
+        <div class="card-body">
+          <div class="form-field full">
+            <label>PIN</label>
+            <input id="pin-entry" type="password" inputmode="numeric" placeholder="Enter PIN" onkeydown="if(event.key==='Enter') unlockPinArea('${area}')" autofocus>
+            <div id="pin-error" class="hint" style="color:var(--status-alert);min-height:18px;margin-top:8px"></div>
+          </div>
+          <button class="btn primary" onclick="unlockPinArea('${area}')">Unlock</button>
+        </div>
+      </div>`;
+    setTimeout(() => document.getElementById('pin-entry')?.focus(), 50);
+  }
+
+  const MOCK_DASHBOARD_CALLS = [
+    { vessel: 'M/T Blue Heron', voyage: '0426A', customer: 'Sample Principal A', route: 'Houston -> Freeport', eta: hoursFromNow(7), berth: 'Sample Terminal Dock 2', status: 'Approaching', agent: 'JL', progress: 'Pilot ordered; awaiting berth window' },
+    { vessel: 'M/T Gulf Meridian', voyage: '1180B', customer: 'Sample Principal B', route: 'Texas City', eta: hoursFromNow(-14), berth: 'Mock Chemical Berth 6', status: 'In port', agent: 'JL', progress: 'Cargo operations in progress' },
+    { vessel: 'M/T Harbor Light', voyage: '2207C', customer: 'Sample Principal C', route: 'Corpus Christi -> Houston', eta: hoursFromNow(28), berth: 'Demo Liquids Pier 1', status: 'En route', agent: 'JL', progress: 'ETA holding steady' },
+    { vessel: 'M/T Copper Star', voyage: '3309D', customer: 'Sample Principal D', route: 'Freeport', eta: hoursFromNow(42), berth: 'Example Dock A', status: 'En route', agent: 'JL', progress: 'Terminal lineup pending' },
+    { vessel: 'M/T Bay Compass', voyage: '5102E', customer: 'Sample Principal E', route: 'Beaumont', eta: hoursFromNow(-36), berth: 'Sample River Dock', status: 'Closed', agent: 'JL', progress: 'Sailed; documents pending review' },
+  ];
+
+  function normalizePortName(city) {
+    const raw = String(city || '').split(',')[0].trim();
+    return raw || 'US Gulf';
+  }
+  function terminalProductList(t) {
+    return [...new Set((t.berths || []).flatMap(b => Array.isArray(b.products) ? b.products : []).filter(Boolean))].sort((a,b) => a.localeCompare(b));
+  }
+  function matchTerminalByName(name) {
+    const n = String(name || '').toLowerCase().trim();
+    if (!n) return null;
+    return TERMINALS.find(t => t.name.toLowerCase() === n)
+      || TERMINALS.find(t => n.includes(t.name.toLowerCase()) || t.name.toLowerCase().includes(n));
+  }
+  function syncTerminalProductsFromCargoGuide() {
+    CARGOS.forEach(c => {
+      c.terminalName = c.terminalName || c.stowage || terminalForVoyage(byId(VOYAGES, c.voyageId))?.name || 'Unassigned terminal';
+      const t = matchTerminalByName(c.terminalName) || terminalForVoyage(byId(VOYAGES, c.voyageId));
+      c.portName = c.portName || normalizePortName(t?.city || byId(VOYAGES, c.voyageId)?.ports?.[0]);
+      if (t) {
+        const berth = (t.berths && t.berths[0]) || (t.berths = [{ name: t.name, loa: '—', draft: '—', products: [] }])[0];
+        berth.products = Array.isArray(berth.products) ? berth.products : [];
+        if (c.grade && !berth.products.some(p => p.toLowerCase() === c.grade.toLowerCase())) berth.products.push(c.grade);
+      }
+    });
+  }
+  syncTerminalProductsFromCargoGuide();
+
+  function cargoGuideGroups() {
+    const groups = new Map();
+    CARGOS.forEach(c => {
+      const terminalName = c.terminalName || c.stowage || 'Unassigned terminal';
+      const t = matchTerminalByName(terminalName);
+      const portName = c.portName || normalizePortName(t?.city || byId(VOYAGES, c.voyageId)?.ports?.[0]);
+      const key = t?.id || terminalName;
+      if (!groups.has(key)) groups.set(key, { terminal: t, terminalName, portName, cargos: [] });
+      const g = groups.get(key);
+      if (!g.cargos.some(x => x.grade.toLowerCase() === String(c.grade).toLowerCase())) g.cargos.push(c);
+    });
+    TERMINALS.forEach(t => {
+      const products = terminalProductList(t);
+      if (products.length && !groups.has(t.id)) {
+        groups.set(t.id, { terminal: t, terminalName: t.name, portName: normalizePortName(t.city), cargos: products.map((grade, i) => ({ id: `${t.id}-product-${i}`, grade, terminalName: t.name, portName: normalizePortName(t.city) })) });
+      }
+    });
+    return [...groups.values()].sort((a,b) => a.terminalName.localeCompare(b.terminalName));
+  }
+
+  function addProductToTerminal(terminalId) {
+    const t = byId(TERMINALS, terminalId);
+    if (!t) return;
+    const grade = prompt(`Add cargo handled at ${t.name}`);
+    if (!grade || !grade.trim()) return;
+    const berth = (t.berths && t.berths[0]) || (t.berths = [{ name: t.name, loa: '—', draft: '—', products: [] }])[0];
+    berth.products = Array.isArray(berth.products) ? berth.products : [];
+    if (!berth.products.some(p => p.toLowerCase() === grade.trim().toLowerCase())) berth.products.push(grade.trim());
+    CARGOS.push({ id: 'c-guide-' + Date.now(), voyageId: VOYAGES[0]?.id, grade: grade.trim(), tons: 0, charterId: COMPANIES.find(c => c.type === 'Charterer')?.id || COMPANIES[0]?.id, parcels: 1, stowage: t.name, terminalName: t.name, portName: normalizePortName(t.city) });
+    route();
+    showToast(`Added ${grade.trim()} to ${t.name}`);
+  }
+  window.addProductToTerminal = addProductToTerminal;
+
+  function editTerminalProducts(terminalId) {
+    const t = byId(TERMINALS, terminalId);
+    if (!t) return;
+    const current = terminalProductList(t).join(', ');
+    const next = prompt(`Edit cargo list for ${t.name}`, current);
+    if (next === null) return;
+    const products = next.split(',').map(s => s.trim()).filter(Boolean);
+    if (!t.berths || !t.berths.length) t.berths = [{ name: t.name, loa: '—', draft: '—', products: [] }];
+    t.berths[0].products = products;
+    route();
+    showToast(`Updated products for ${t.name}`);
+  }
+  window.editTerminalProducts = editTerminalProducts;
+
+
   // ─── EMAIL SENT LOG (a few historical) ───
   const SENT = [
     { id: 's1', voyageId: 'vy-polaris-118',  sentAt: daysFromNow(-1), subject: 'Polaris Star V.0118 — Orders Berthing Prospects [Houston, TX, Rotterdam, NL]', recipients: ['p.vandamme@vertexsolvents.example'] },
@@ -1821,19 +1944,17 @@
     setActiveNav('dashboard');
     setBreadcrumbs([{label:'Dashboard'}]);
 
-    const av = activeVoyages();
-    const upcoming = inboundVoyages()
-      .sort((a,b) => a.eta - b.eta)
-      .slice(0, 6);
-    const inPort = inPortVoyages();
-    const todaysDrafts = av.length;
-    const ports = distinctActivePorts();
+    const calls = MOCK_DASHBOARD_CALLS;
+    const active = calls.filter(c => c.status !== 'Closed');
+    const inPort = calls.filter(c => c.status === 'In port');
+    const inbound = calls.filter(c => c.status === 'En route' || c.status === 'Approaching');
+    const ports = [...new Set(active.map(c => c.route.split('->')[0].trim()))];
 
     $page.innerHTML = `
       <div class="page-header">
         <div class="page-title-block">
           <h1>Good morning, Justin</h1>
-          <div class="subtitle">${TODAY.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })} · ${av.length} active voyages across ${ports.length} ports</div>
+          <div class="subtitle">${TODAY.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })} · mock operations board · real recovered seed lives in the protected modules</div>
         </div>
         <div class="page-actions">
           <button class="btn ghost">${ICON.download} Export daily report</button>
@@ -1842,190 +1963,64 @@
       </div>
 
       <div class="kpi-grid">
-        <div class="kpi accent clickable" data-link="voyages:active">
-          <div class="kpi-label">Active Voyages</div>
-          <div class="kpi-value">${av.length}</div>
-          <div class="kpi-delta">2 new since yesterday → click to view</div>
-          <div class="kpi-icon">${ICON.compass}</div>
-        </div>
-        <div class="kpi clickable" data-link="voyages:in-port">
-          <div class="kpi-label">Vessels in Port</div>
-          <div class="kpi-value">${vesselsInPort()}</div>
-          <div class="kpi-delta up">▲ Heron berthed 0345 today</div>
-          <div class="kpi-icon">${ICON.anchor}</div>
-        </div>
-        <div class="kpi clickable" data-link="voyages:inbound">
-          <div class="kpi-label">Inbound (next 72h)</div>
-          <div class="kpi-value">${pendingArrivals()}</div>
-          <div class="kpi-delta">Harmonics arriving in 8h</div>
-          <div class="kpi-icon">${ICON.ship}</div>
-        </div>
-        <div class="kpi clickable" data-link="updates">
-          <div class="kpi-label">Daily Updates Drafted</div>
-          <div class="kpi-value">${todaysDrafts}</div>
-          <div class="kpi-delta">Auto-drafted · 0700 + 1500 sends</div>
-          <div class="kpi-icon">${ICON.mail}</div>
-        </div>
+        <div class="kpi accent"><div class="kpi-label">Mock Active Calls</div><div class="kpi-value">${active.length}</div><div class="kpi-delta">Dashboard intentionally scrubbed</div><div class="kpi-icon">${ICON.compass}</div></div>
+        <div class="kpi"><div class="kpi-label">Mock Vessels in Port</div><div class="kpi-value">${inPort.length}</div><div class="kpi-delta up">▲ sample call alongside</div><div class="kpi-icon">${ICON.anchor}</div></div>
+        <div class="kpi"><div class="kpi-label">Mock Inbound</div><div class="kpi-value">${inbound.length}</div><div class="kpi-delta">sample ETAs only</div><div class="kpi-icon">${ICON.ship}</div></div>
+        <div class="kpi"><div class="kpi-label">Terminal Cargo Guide</div><div class="kpi-value">${cargoGuideGroups().length}</div><div class="kpi-delta">real seed, no voyage names</div><div class="kpi-icon">${ICON.flask}</div></div>
       </div>
 
       <div class="detail-grid">
         <div class="stack">
-
           <div class="card">
-            <div class="card-header">
-              <div>
-                <div class="card-title">Upcoming arrivals</div>
-                <div class="card-subtitle">Next 72 hours · sorted by ETA</div>
-              </div>
-              <button class="btn ghost text-sm" data-link="voyages">View all ${ICON.arrow}</button>
-            </div>
-            <div class="card-body flush">
-              <table class="tbl">
-                <thead>
-                  <tr><th>Vessel</th><th>Voyage</th><th>Customer</th><th>ETA</th><th>Berth Prospect</th><th>Status</th></tr>
-                </thead>
-                <tbody>
-                  ${upcoming.map(v => {
-                    const vessel = byId(VESSELS, v.vesselId);
-                    const cust = (v.customerIds || []).map(id => byId(COMPANIES, id)?.name).join(', ');
-                    const firstBerth = v.berthingProspects[0];
-                    return `<tr data-link="voyage:${v.id}">
-                      <td><div class="primary-text">${escapeHtml(vessel.name)}</div><div class="secondary-text">${escapeHtml(vessel.type)}</div></td>
-                      <td><span class="mono">V.${v.voyageNo}</span></td>
-                      <td>${escapeHtml(cust)}</td>
-                      <td><div class="primary-text mono">${fmtDateTime(v.eta)}</div><div class="secondary-text">${escapeHtml(v.etaLabel)}</div></td>
-                      <td>${escapeHtml(firstBerth.berth)}</td>
-                      <td>${statusPill(v.status)}</td>
-                    </tr>`;
-                  }).join('')}
-                </tbody>
-              </table>
-            </div>
+            <div class="card-header"><div><div class="card-title">Mock upcoming arrivals</div><div class="card-subtitle">Sample data only · no real vessel or voyage names</div></div></div>
+            <div class="card-body flush"><table class="tbl">
+              <thead><tr><th>Vessel</th><th>Voyage</th><th>Customer</th><th>ETA</th><th>Berth Prospect</th><th>Status</th></tr></thead>
+              <tbody>${calls.filter(c => c.status !== 'Closed').map(c => `<tr>
+                <td><div class="primary-text">${escapeHtml(c.vessel)}</div><div class="secondary-text">Mock chemical tanker</div></td>
+                <td><span class="mono">V.${escapeHtml(c.voyage)}</span></td>
+                <td>${escapeHtml(c.customer)}</td>
+                <td><div class="primary-text mono">${fmtDateTime(c.eta)}</div><div class="secondary-text">sample ETA</div></td>
+                <td>${escapeHtml(c.berth)}</td>
+                <td>${statusPill(c.status)}</td>
+              </tr>`).join('')}</tbody>
+            </table></div>
           </div>
 
           <div class="card">
-            <div class="card-header">
-              <div>
-                <div class="card-title">In port now</div>
-                <div class="card-subtitle">ETB · ETC · ETD progress for each active call</div>
-              </div>
-            </div>
-            <div class="card-body flush">
-              <table class="tbl">
-                <thead><tr><th>Vessel</th><th>Berth</th><th>Progress (ETB / ETC / ETD)</th><th>Agent</th></tr></thead>
-                <tbody>
-                  ${inPort.map(v => {
-                    const vessel = byId(VESSELS, v.vesselId);
-                    const agent = byId(PEOPLE, v.assignedAgentId);
-                    const bp = v.berthingProspects[0];
-                    const now = TODAY.getTime();
-                    const stages = [
-                      { label: 'ETB', t: v.etb, done: v.etb && v.etb.getTime() <= now },
-                      { label: 'ETC', t: v.etc, done: v.etc && v.etc.getTime() <= now },
-                      { label: 'ETD', t: v.etd, done: v.etd && v.etd.getTime() <= now },
-                    ];
-                    // mark "now" — first stage that's NOT done
-                    const nowIdx = stages.findIndex(s => !s.done);
-                    return `<tr data-link="voyage:${v.id}">
-                      <td><div class="primary-text">${escapeHtml(vessel.name)}</div><div class="secondary-text mono">V.${v.voyageNo}</div></td>
-                      <td>${escapeHtml(bp.berth)}<div class="secondary-text">${escapeHtml(bp.prospect)}</div></td>
-                      <td>
-                        <div class="voyage-progress">
-                          ${stages.map((s, i) => {
-                            const cls = s.done ? 'done' : (i === nowIdx ? 'now' : 'future');
-                            const t = s.t ? fmtDateTime(s.t) : '—';
-                            return `<div class="vp-step ${cls}"><div class="vp-label">${s.label}</div><div class="vp-time">${escapeHtml(t)}</div></div>`;
-                          }).join('')}
-                        </div>
-                      </td>
-                      <td><div class="row gap-sm"><span class="row-avatar circle" style="width:24px;height:24px;font-size:0.65rem">${escapeHtml(agent.initials)}</span> ${escapeHtml(agent.name.split(' ')[0])}</div></td>
-                    </tr>`;
-                  }).join('')}
-                </tbody>
-              </table>
-            </div>
+            <div class="card-header"><div><div class="card-title">Mock current calls</div><div class="card-subtitle">Scrubbed current-voyage board</div></div></div>
+            <div class="card-body flush"><table class="tbl">
+              <thead><tr><th>Vessel</th><th>Berth</th><th>Progress</th><th>Agent</th></tr></thead>
+              <tbody>${calls.map(c => `<tr>
+                <td><div class="primary-text">${escapeHtml(c.vessel)}</div><div class="secondary-text mono">V.${escapeHtml(c.voyage)}</div></td>
+                <td>${escapeHtml(c.berth)}<div class="secondary-text">${escapeHtml(c.route)}</div></td>
+                <td>${escapeHtml(c.progress)}</td>
+                <td><div class="row gap-sm"><span class="row-avatar circle" style="width:24px;height:24px;font-size:0.65rem">${escapeHtml(c.agent)}</span> Mock desk</div></td>
+              </tr>`).join('')}</tbody>
+            </table></div>
           </div>
         </div>
 
         <div class="stack">
-          <div class="card">
-            <div class="card-header"><div class="card-title">Port pulse</div><span class="text-xs text-muted">live · 3 active regions</span></div>
-            <div class="card-body">${renderPortPulse()}</div>
-          </div>
-
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">Today's outbound updates</div>
-              <span class="pill no-dot eta" style="background: rgba(245,184,0,0.15); color: var(--brand-primary);">AI auto-drafted</span>
-            </div>
-            <div class="card-body flush">
-              <div class="row-list">
-                ${av.slice(0, 5).map(v => {
-                  const vessel = byId(VESSELS, v.vesselId);
-                  const customers = (v.customerIds || []).map(id => byId(COMPANIES, id)?.name).join(', ');
-                  return `<div class="row-item" data-link="updates">
-                    <div class="row-avatar">${ICON.mail}</div>
-                    <div class="row-main">
-                      <div class="row-title">${escapeHtml(vessel.name)} V.${v.voyageNo}</div>
-                      <div class="row-sub">To · ${escapeHtml(customers)}</div>
-                    </div>
-                    <div class="row-meta">${statusPill('eta')}<div class="text-xs mt-1">draft</div></div>
-                  </div>`;
-                }).join('')}
-              </div>
-            </div>
-          </div>
-
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">Fleet snapshot</div>
-            </div>
+          <div class="card"><div class="card-header"><div class="card-title">Port pulse</div><span class="text-xs text-muted">live clocks</span></div><div class="card-body">${renderPortPulse()}</div></div>
+          <div class="card"><div class="card-header"><div class="card-title">Terminal cargo guide</div></div>
             <div class="card-body">
-              <div class="row mb-2 between">
-                <div class="text-muted text-sm">Tonnage tracked</div>
-                <div class="text-mono"><b>${VESSELS.reduce((s,v) => s + v.dwt, 0).toLocaleString()}</b> dwt</div>
-              </div>
-              <div class="row mb-2 between">
-                <div class="text-muted text-sm">Ports covered</div>
-                <div class="text-mono"><b>${TERMINALS.length}</b> terminals · 7 anchorages</div>
-              </div>
-              <div class="row mb-2 between">
-                <div class="text-muted text-sm">Cargos this voyage cycle</div>
-                <div class="text-mono"><b>${CARGOS.length}</b> parcels · ${CARGOS.reduce((s,c) => s + c.tons, 0).toLocaleString()} mt</div>
-              </div>
-              <div class="row between">
-                <div class="text-muted text-sm">Customers served</div>
-                <div class="text-mono"><b>${filterBy(COMPANIES,'type','Charterer').length}</b> active</div>
-              </div>
+              ${cargoGuideGroups().slice(0, 8).map(g => `<div class="row between mb-2"><div><div class="primary-text">${escapeHtml(g.terminalName)}</div><div class="text-muted text-sm">${escapeHtml(g.portName)}</div></div><div class="text-mono">${g.cargos.length}</div></div>`).join('')}
+              <button class="btn ghost text-sm" data-link="cargos">Open cargo guide ${ICON.arrow}</button>
             </div>
           </div>
-
-          <div class="card">
-            <div class="card-header"><div class="card-title">Daily update schedule</div><span class="text-xs text-muted">2 sends/day · more when ops are hot</span></div>
+          <div class="card"><div class="card-header"><div class="card-title">Seed snapshot</div></div>
             <div class="card-body">
-              <div class="schedule">
-                ${[-2,-1,0,1,2,3,4].map(off => {
-                  const d = daysFromNow(off);
-                  const today = off === 0;
-                  const past = off < 0;
-                  const totalActive = activeVoyages().length;
-                  return `<div class="schedule-day ${today?'today':''}">
-                    <div class="schedule-dow">${d.toLocaleDateString('en-US',{weekday:'short'})}</div>
-                    <div class="schedule-date">${d.getDate()}</div>
-                    <div class="schedule-slot ${past?'sent':'draft'}"><span class="slot-time">07:00</span><span class="slot-cnt">${past ? `✓ ${totalActive}` : (today ? `${totalActive}` : totalActive)}</span></div>
-                    <div class="schedule-slot ${past?'sent':'draft'}"><span class="slot-time">15:00</span><span class="slot-cnt">${past ? `✓ ${totalActive}` : (today ? `${totalActive}` : totalActive)}</span></div>
-                  </div>`;
-                }).join('')}
-              </div>
-              <div class="notice">Updates send <b>twice daily — 0700 + 1500 CT</b> from <b>updates@demo.nauti-labs.com</b>. Ad-hoc updates fire automatically on key events (NOR tendered, hose connect, ops complete, sailed). AI drafts pull live SOF, berthing prospects, and cargo status per voyage.</div>
+              <div class="row mb-2 between"><div class="text-muted text-sm">Vessels retained</div><div class="text-mono"><b>${VESSELS.length}</b></div></div>
+              <div class="row mb-2 between"><div class="text-muted text-sm">Terminals / locations</div><div class="text-mono"><b>${TERMINALS.length}</b></div></div>
+              <div class="row mb-2 between"><div class="text-muted text-sm">Cargo guide records</div><div class="text-mono"><b>${CARGOS.length}</b></div></div>
+              <div class="row between"><div class="text-muted text-sm">Protected directories</div><div class="text-mono"><b>PIN</b></div></div>
             </div>
           </div>
         </div>
-      </div>
-    `;
+      </div>`;
   }
 
-  // ─── VOYAGES LIST ───
+  // ─── VOYAGES LIST ───  // ─── VOYAGES LIST ───
   function renderVoyages(filter) {
     setActiveNav('voyages');
     const filterMap = {
@@ -2542,7 +2537,7 @@
           <h1>${escapeHtml(c.name)}</h1>
           <div class="hero-sub">${escapeHtml(c.type)} · ${escapeHtml(c.city || '')}${c.since ? ` · est. ${c.since}` : ''}</div>
         </div>
-        <div class="hero-actions"><button class="btn ghost">${ICON.edit} Edit</button></div>
+        <div class="hero-actions"><button class="btn ghost" onclick="editTerminalProducts('${t.id}')">${ICON.edit} Edit products</button><button class="btn primary" onclick="addProductToTerminal('${t.id}')">${ICON.plus} Add cargo</button></div>
       </div>
 
       <div class="detail-grid">
@@ -2636,12 +2631,11 @@
       <div class="filter-bar"><input placeholder="Search terminal, berth, product…"/></div>
 
       <div class="card"><div class="card-body flush"><table class="tbl">
-        <thead><tr><th>Terminal</th><th>Operator</th><th>City</th><th>Berths</th><th>Max draft (m)</th><th>Products</th><th>Calls (90d)</th></tr></thead>
+        <thead><tr><th>Terminal</th><th>Operator</th><th>City</th><th>Berths</th><th>Max draft (m)</th><th>Products</th><th></th></tr></thead>
         <tbody>
           ${TERMINALS.map(t => {
             const op = byId(COMPANIES, t.companyId);
             const allProducts = [...new Set(t.berths.flatMap(b => Array.isArray(b.products) ? b.products : []))];
-            const calls = VOYAGES.filter(vy => vy.berthingProspects.some(bp => bp.terminalId === t.id)).length;
             const maxD = maxDraftForTerminal(t);
             return `<tr data-link="terminal:${t.id}">
               <td><div class="primary-text">${escapeHtml(t.name)}</div></td>
@@ -2649,8 +2643,8 @@
               <td>${escapeHtml(t.city)}</td>
               <td><span class="mono">${t.berths.length}</span></td>
               <td><span class="mono">${maxD !== null ? maxD.toFixed(1) : '—'}</span></td>
-              <td><span class="text-sm text-muted">${escapeHtml(allProducts.slice(0,3).join(', '))}${allProducts.length > 3 ? '…' : ''}</span></td>
-              <td><span class="mono">${calls}</span></td>
+              <td><span class="text-sm text-muted">${escapeHtml(allProducts.slice(0,5).join(', '))}${allProducts.length > 5 ? '…' : ''}</span></td>
+              <td><button class="btn ghost text-sm" onclick="event.stopPropagation();addProductToTerminal('${t.id}')">${ICON.plus} Add cargo</button></td>
             </tr>`;
           }).join('')}
         </tbody></table></div></div>
@@ -2674,12 +2668,12 @@
           <h1>${escapeHtml(t.name)}</h1>
           <div class="hero-sub">${escapeHtml(t.city)} · ${op ? escapeHtml(op.name) : ''} · ${t.berths.length} berths · max draft ${maxDraftForTerminal(t) !== null ? maxDraftForTerminal(t).toFixed(1) + ' m' : '—'}</div>
         </div>
-        <div class="hero-actions"><button class="btn ghost">${ICON.edit} Edit</button></div>
+        <div class="hero-actions"><button class="btn ghost" onclick="editTerminalProducts('${t.id}')">${ICON.edit} Edit products</button><button class="btn primary" onclick="addProductToTerminal('${t.id}')">${ICON.plus} Add cargo</button></div>
       </div>
 
       <div class="detail-grid">
         <div class="stack">
-          <div class="card"><div class="card-header"><div class="card-title">Berths</div></div>
+          <div class="card"><div class="card-header"><div class="card-title">Berths & Products</div></div>
             <div class="card-body flush"><table class="tbl">
               <thead><tr><th>Berth</th><th>LOA (m)</th><th>Draft (m)</th><th>Products</th></tr></thead>
               <tbody>
@@ -2691,24 +2685,14 @@
                 </tr>`).join('')}
               </tbody></table></div></div>
 
-          <div class="card"><div class="card-header"><div class="card-title">Recent & upcoming calls</div></div>
+          <div class="card"><div class="card-header"><div class="card-title">Product guide</div><button class="btn ghost text-sm" onclick="addProductToTerminal('${t.id}')">${ICON.plus} Add cargo</button></div>
             <div class="card-body flush">
-              ${recentCalls.length === 0 ? `<div class="tbl-empty">No recent calls</div>` : `
               <table class="tbl">
-                <thead><tr><th>Vessel</th><th>Voyage</th><th>Berth</th><th>ETA / Now</th><th>Status</th></tr></thead>
+                <thead><tr><th>Cargo Name</th><th>Terminal Name</th><th>Port Name</th></tr></thead>
                 <tbody>
-                  ${recentCalls.map(vy => {
-                    const vs = byId(VESSELS, vy.vesselId);
-                    const bp = vy.berthingProspects.find(bp => bp.terminalId === t.id);
-                    return `<tr data-link="voyage:${vy.id}">
-                      <td><div class="primary-text">${escapeHtml(vs.name)}</div></td>
-                      <td><span class="mono">V.${vy.voyageNo}</span></td>
-                      <td>${escapeHtml(bp.berth)}</td>
-                      <td><span class="mono">${fmtDateTime(bp.eta)}</span></td>
-                      <td>${statusPill(bp.status)}</td>
-                    </tr>`;
-                  }).join('')}
-                </tbody></table>`}
+                  ${terminalProductList(t).map(product => `<tr><td><div class="primary-text">${escapeHtml(product)}</div></td><td>${escapeHtml(t.name)}</td><td>${escapeHtml(normalizePortName(t.city))}</td></tr>`).join('') || `<tr><td colspan="3" class="tbl-empty">No cargoes listed yet</td></tr>`}
+                </tbody>
+              </table>
             </div></div>
         </div>
 
@@ -2740,108 +2724,92 @@
   function renderCargos() {
     setActiveNav('cargos');
     setBreadcrumbs([{label:'Cargos'}]);
+    const groups = cargoGuideGroups();
+    const totalCargoes = groups.reduce((sum, g) => sum + g.cargos.length, 0);
 
     $page.innerHTML = `
       <div class="page-header">
         <div class="page-title-block">
-          <h1>Cargos</h1>
-          <div class="subtitle">${CARGOS.length} parcels · ${CARGOS.reduce((s,c) => s + (c.tons||0), 0).toLocaleString()} mt total</div>
+          <h1>Cargo Guide</h1>
+          <div class="subtitle">${totalCargoes} cargo entries grouped by ${groups.length} terminal docks · built for Captain AI lookup</div>
         </div>
-        <div class="page-actions"><button class="btn primary" onclick="openAddCargoModal()">${ICON.plus} New cargo</button></div>
+        <div class="page-actions"><button class="btn primary" onclick="openAddCargoModal()">${ICON.plus} Add cargo</button></div>
       </div>
 
-      <div class="filter-bar"><input placeholder="Search grade, charterer, vessel…"/></div>
+      <div class="filter-bar"><input placeholder="Search cargo, terminal, port…" oninput="filterCargoGuide(this.value)"/></div>
 
-      <div class="card"><div class="card-body flush"><table class="tbl">
-        <thead><tr><th>Grade</th><th>Vessel · Voyage</th><th>Charterer</th><th>Terminal (load/disch)</th><th>Tons</th><th>Stowage</th><th>Status</th></tr></thead>
-        <tbody>
-          ${CARGOS.map(c => {
-            const vy = byId(VOYAGES, c.voyageId);
-            const vs = byId(VESSELS, vy.vesselId);
-            const ch = byId(COMPANIES, c.charterId);
-            const term = terminalForVoyage(vy);
-            return `<tr data-link="cargo:${c.id}">
-              <td><div class="primary-text">${escapeHtml(c.grade)}</div></td>
-              <td>${escapeHtml(vs.name)} · <span class="mono">V.${vy.voyageNo}</span></td>
-              <td>${escapeHtml(ch.name)}</td>
-              <td>${term ? `<span class="clickable" data-link="terminal:${term.id}">${escapeHtml(term.name)}</span>` : '<span class="text-muted">—</span>'}</td>
-              <td><span class="mono">${(c.tons||0).toLocaleString()}</span></td>
-              <td><span class="text-mono text-sm">${escapeHtml(c.stowage)}</span></td>
-              <td>${statusPill(vy.status)}</td>
-            </tr>`;
-          }).join('')}
-        </tbody></table></div></div>
-    `;
+      <div class="stack" id="cargo-guide-list">
+        ${groups.map(g => `
+          <details class="card cargo-guide-card" data-search="${escapeHtml(`${g.terminalName} ${g.portName} ${g.cargos.map(c => c.grade).join(' ')}`.toLowerCase())}" open>
+            <summary class="card-header" style="cursor:pointer;list-style:none">
+              <div>
+                <div class="card-title">${escapeHtml(g.terminalName)}</div>
+                <div class="card-subtitle">${escapeHtml(g.portName)} · ${g.cargos.length} cargo${g.cargos.length === 1 ? '' : 'es'}</div>
+              </div>
+              <button class="btn ghost text-sm" onclick="event.preventDefault();event.stopPropagation();openAddCargoModal('${escapeHtml(g.terminal?.id || '')}', '${escapeHtml(g.terminalName)}', '${escapeHtml(g.portName)}')">${ICON.plus} Add cargo</button>
+            </summary>
+            <div class="card-body flush">
+              <table class="tbl">
+                <thead><tr><th>Cargo Name</th><th>Terminal Name</th><th>Port Name</th></tr></thead>
+                <tbody>
+                  ${g.cargos.sort((a,b) => String(a.grade).localeCompare(String(b.grade))).map(c => `<tr data-link="cargo:${escapeHtml(c.id)}">
+                    <td><div class="primary-text">${escapeHtml(c.grade)}</div></td>
+                    <td>${escapeHtml(g.terminalName)}</td>
+                    <td>${escapeHtml(c.portName || g.portName)}</td>
+                  </tr>`).join('')}
+                </tbody>
+              </table>
+            </div>
+          </details>`).join('')}
+      </div>`;
   }
+
+  function filterCargoGuide(value) {
+    const q = String(value || '').toLowerCase();
+    document.querySelectorAll('.cargo-guide-card').forEach(card => {
+      card.style.display = card.dataset.search.includes(q) ? '' : 'none';
+    });
+  }
+  window.filterCargoGuide = filterCargoGuide;
 
   // ─── CARGO DETAIL ───
   function renderCargo(id) {
     const c = byId(CARGOS, id);
     if (!c) return renderCargos();
     setActiveNav('cargos');
-    const vy = byId(VOYAGES, c.voyageId);
-    const vs = byId(VESSELS, vy.vesselId);
-    const ch = byId(COMPANIES, c.charterId);
-    const op = byId(COMPANIES, vy.operatorId);
-    setBreadcrumbs([{label:'Cargos', route:'cargos'},{label: c.grade}]);
-
-    // Synthesize ship/shore figures
-    const shipFigure = c.tons + Math.round(c.tons * 0.001);
-    const shoreFigure = c.tons - Math.round(c.tons * 0.0008);
+    const terminalName = c.terminalName || c.stowage || terminalForVoyage(byId(VOYAGES, c.voyageId))?.name || 'Unassigned terminal';
+    const t = matchTerminalByName(terminalName);
+    const portName = c.portName || normalizePortName(t?.city || byId(VOYAGES, c.voyageId)?.ports?.[0]);
+    setBreadcrumbs([{label:'Cargo Guide', route:'cargos'},{label: c.grade}]);
 
     $page.innerHTML = `
       <div class="detail-hero">
         <div class="hero-icon">${ICON.flask}</div>
         <div class="hero-meta">
           <h1>${escapeHtml(c.grade)}</h1>
-          <div class="hero-sub">${escapeHtml(vs.name)} V.${vy.voyageNo} · ${escapeHtml(ch.name)} · ${c.tons.toLocaleString()} mt · stowed ${escapeHtml(c.stowage)}</div>
+          <div class="hero-sub">${escapeHtml(terminalName)} · ${escapeHtml(portName)}</div>
         </div>
+        <div class="hero-actions">${t ? `<button class="btn ghost" data-link="terminal:${t.id}">${ICON.anchor} Open terminal</button>` : ''}</div>
       </div>
-
       <div class="detail-grid">
         <div class="stack">
-          <div class="card"><div class="card-header"><div class="card-title">Cargo summary</div></div>
-            <div class="card-body">
-              <div class="field-grid three">
-                <div class="field"><label>Grade</label><div class="value">${escapeHtml(c.grade)}</div></div>
-                <div class="field"><label>Quantity (BL)</label><div class="value mono">${c.tons.toLocaleString()} mt</div></div>
-                <div class="field"><label>Parcels</label><div class="value mono">${c.parcels}</div></div>
-                <div class="field"><label>Stowage</label><div class="value mono">${escapeHtml(c.stowage)}</div></div>
-                <div class="field"><label>Charterer</label><div class="value clickable" data-link="company:${ch.id}">${escapeHtml(ch.name)}</div></div>
-                <div class="field"><label>Operator</label><div class="value clickable" data-link="company:${op.id}">${escapeHtml(op.name)}</div></div>
-                <div class="field"><label>Ship's figures</label><div class="value mono">${shipFigure.toLocaleString()} mt</div></div>
-                <div class="field"><label>Shore figures</label><div class="value mono">${shoreFigure.toLocaleString()} mt</div></div>
-                <div class="field"><label>Diff</label><div class="value mono" style="color:var(--status-eta)">${(shipFigure - shoreFigure).toLocaleString()} mt (${(((shipFigure - shoreFigure)/c.tons)*100).toFixed(2)}%)</div></div>
-              </div>
+          <div class="card"><div class="card-header"><div class="card-title">Cargo guide record</div></div>
+            <div class="card-body"><div class="field-grid three">
+              <div class="field"><label>Cargo Name</label><div class="value">${escapeHtml(c.grade)}</div></div>
+              <div class="field"><label>Terminal Name</label><div class="value">${escapeHtml(terminalName)}</div></div>
+              <div class="field"><label>Port Name</label><div class="value">${escapeHtml(portName)}</div></div>
             </div></div>
-
-          <div class="card"><div class="card-header"><div class="card-title">On voyage</div></div>
-            <div class="card-body flush"><div class="row-list">
-              <div class="row-item" data-link="voyage:${vy.id}">
-                <div class="row-avatar">${ICON.compass}</div>
-                <div class="row-main">
-                  <div class="row-title">${escapeHtml(vs.name)} V.${vy.voyageNo}</div>
-                  <div class="row-sub">${escapeHtml(vy.ports.join(' → '))} · ${escapeHtml(vy.etaLabel)}</div>
-                </div>
-                <div class="row-meta">${statusPill(vy.status)}</div>
-              </div>
-            </div></div></div>
+          </div>
         </div>
-
         <div class="stack">
-          <div class="card"><div class="card-header"><div class="card-title">Documentation</div></div>
-            <div class="card-body">
-              <div class="row between mb-1"><span class="text-muted text-sm">Bill of Lading</span><span class="text-mono text-xs">BL-${vy.voyageNo}-${c.id.slice(-2).toUpperCase()}</span></div>
-              <div class="row between mb-1"><span class="text-muted text-sm">CoA on file</span><span class="pill active no-dot" style="background:var(--status-active-bg)">Yes</span></div>
-              <div class="row between mb-1"><span class="text-muted text-sm">SDS</span><span class="pill done no-dot" style="background:var(--status-done-bg)">Latest rev</span></div>
-              <div class="row between"><span class="text-muted text-sm">Letter of Protest</span><span class="text-sm">None filed</span></div>
-            </div></div>
+          <div class="card"><div class="card-header"><div class="card-title">Captain AI reference</div></div>
+            <div class="card-body"><p class="text-muted text-sm">Captain can answer cargo-location questions from this guide, for example: “Where does ${escapeHtml(c.grade)} load from?”</p></div>
+          </div>
         </div>
-      </div>
-    `;
+      </div>`;
   }
 
-  // ─── EMAIL STUDIO ───
+  // ─── EMAIL STUDIO ───  // ─── EMAIL STUDIO ───
   function buildEmailDraft(v) {
     const vessel = byId(VESSELS, v.vesselId);
     const op = byId(COMPANIES, v.operatorId);
@@ -3287,24 +3255,29 @@
   window.openAddTerminalModal = openAddTerminalModal;
 
   // ─── ADD CARGO ───
-  function openAddCargoModal() {
+  function openAddCargoModal(terminalId = '', terminalName = '', portName = '') {
+    const terminalOptions = TERMINALS.map(t => ({ value: t.id, label: `${t.name} - ${normalizePortName(t.city)}` }));
     openFormModal({
-      title: 'Add a cargo / parcel',
+      title: 'Add cargo to terminal guide',
       submitLabel: 'Save cargo',
-      infoNote: 'Tie a cargo parcel to an active voyage. Ship\'s and shore figures will be updated from survey reports as they come in.',
+      infoNote: 'This updates the terminal cargo guide used by Captain AI. No ship name, voyage, charterer, quantity, status, or stowage required.',
       fields: [
-        { key: 'grade',     label: 'Grade',     required: true, placeholder: 'Methanol (USP)', full: true },
-        { key: 'voyageId',  label: 'Voyage',    required: true, type: 'select',
-          options: activeVoyages().map(v => ({ value: v.id, label: `${byId(VESSELS, v.vesselId).name} V.${v.voyageNo} — ${v.ports.join(', ')}` })) },
-        { key: 'charterId', label: 'Charterer', required: true, type: 'select',
-          options: COMPANIES.filter(c => c.type === 'Charterer').map(c => ({ value: c.id, label: c.name })) },
-        { key: 'tons',      label: 'Quantity (mt)', required: true, type: 'number' },
-        { key: 'parcels',   label: 'Parcels',   required: true, type: 'number', placeholder: '1' },
-        { key: 'stowage',   label: 'Stowage',   required: true, placeholder: '1P/S, 2P/S, 7P/S', full: true },
+        { key: 'grade', label: 'Cargo name', required: true, placeholder: 'HMD / Methanol / MEG', full: true },
+        { key: 'terminalId', label: 'Terminal', required: !terminalName, type: 'select', options: terminalOptions, placeholder: terminalName || 'Select terminal' },
+        { key: 'terminalName', label: 'Terminal name', required: false, placeholder: terminalName || 'Terminal name if not listed', full: true },
+        { key: 'portName', label: 'Port name', required: false, placeholder: portName || 'Houston / Freeport / Texas City' },
       ],
     }, (data) => {
-      data.id = 'c-new-' + Date.now();
-      CARGOS.push(data);
+      const t = byId(TERMINALS, terminalId || data.terminalId);
+      const finalTerminalName = terminalName || t?.name || data.terminalName || 'Unassigned terminal';
+      const finalPortName = portName || data.portName || normalizePortName(t?.city);
+      const cargo = { id: 'c-guide-' + Date.now(), voyageId: VOYAGES[0]?.id, grade: data.grade, tons: 0, charterId: COMPANIES.find(c => c.type === 'Charterer')?.id || COMPANIES[0]?.id, parcels: 1, stowage: finalTerminalName, terminalName: finalTerminalName, portName: finalPortName };
+      CARGOS.push(cargo);
+      if (t) {
+        const berth = (t.berths && t.berths[0]) || (t.berths = [{ name: t.name, loa: '—', draft: '—', products: [] }])[0];
+        berth.products = Array.isArray(berth.products) ? berth.products : [];
+        if (!berth.products.some(p => p.toLowerCase() === data.grade.toLowerCase())) berth.products.push(data.grade);
+      }
       route();
       showToast(`Cargo saved: ${data.grade}`);
     });
@@ -3315,98 +3288,50 @@
   function renderUpdates(focusId) {
     setActiveNav('updates');
     setBreadcrumbs([{label:'Email Studio'}]);
-
-    const drafts = activeVoyages();
-    if (focusId && drafts.find(v => v.id === focusId)) _selectedDraftId = focusId;
-    if (!_selectedDraftId) _selectedDraftId = drafts[0]?.id;
-    const v = byId(VOYAGES, _selectedDraftId) || drafts[0];
-
-    const { subject, bodyHtml, recipients, vessel, customers } = buildEmailDraft(v);
+    const drafts = MOCK_DASHBOARD_CALLS.filter(c => c.status !== 'Closed');
+    const selected = drafts.find(d => d.voyage === focusId) || drafts[0];
+    const subject = `${selected.vessel} V.${selected.voyage} - Mock Daily Update [${selected.route}]`;
+    const bodyHtml = `
+      <p>Good day all,</p>
+      <p>This is a mock Nauti-Ops daily update using scrubbed vessel, voyage, and customer data.</p>
+      <table class="vp-table"><tbody>
+        <tr><td>Vessel</td><td><b>${escapeHtml(selected.vessel)}</b></td></tr>
+        <tr><td>Voyage</td><td>V.${escapeHtml(selected.voyage)}</td></tr>
+        <tr><td>Port / Route</td><td>${escapeHtml(selected.route)}</td></tr>
+        <tr><td>Berth</td><td>${escapeHtml(selected.berth)}</td></tr>
+        <tr><td>Status</td><td>${escapeHtml(selected.progress)}</td></tr>
+      </tbody></table>
+      <h3>Berthing Prospects</h3>
+      <table><thead><tr><th>Berth</th><th>Prospect</th><th>ETA</th></tr></thead><tbody>
+        <tr><td>${escapeHtml(selected.berth)}</td><td>${escapeHtml(selected.progress)}</td><td>${fmtDateTime(selected.eta)}</td></tr>
+      </tbody></table>
+      <p>Please reach out with any questions.</p>
+      <div class="email-signature"><strong>Mock Agent</strong><br>updates@demo.nauti-labs.com</div>`;
 
     $page.innerHTML = `
       <div class="page-header">
-        <div class="page-title-block">
-          <h1>Email Studio</h1>
-          <div class="subtitle">AI auto-drafts daily updates from operational data · sends 0700 CT from <b>updates@demo.nauti-labs.com</b></div>
-        </div>
-        <div class="page-actions">
-          <button class="btn ghost">${ICON.clock} Schedule</button>
-          <button class="btn ghost">${ICON.edit} Templates</button>
-          <button class="btn accent">${ICON.send} Send all approved (${drafts.length})</button>
-        </div>
+        <div class="page-title-block"><h1>Email Studio</h1><div class="subtitle">Mock data only · actual ship names and voyage info removed</div></div>
+        <div class="page-actions"><button class="btn ghost">${ICON.clock} Schedule</button><button class="btn ghost">${ICON.edit} Templates</button><button class="btn accent">${ICON.send} Send all approved (${drafts.length})</button></div>
       </div>
-
-      <div class="tabs mb-2">
-        <div class="tab active">Today's drafts <span class="text-mono text-xs">${drafts.length}</span></div>
-        <div class="tab">Scheduled <span class="text-mono text-xs">${drafts.length * 6}</span></div>
-        <div class="tab">Sent <span class="text-mono text-xs">${SENT.length}</span></div>
-        <div class="tab">Templates</div>
-      </div>
-
+      <div class="tabs mb-2"><div class="tab active">Mock drafts <span class="text-mono text-xs">${drafts.length}</span></div><div class="tab">Scheduled</div><div class="tab">Sent</div><div class="tab">Templates</div></div>
       <div class="studio">
-        <div class="card">
-          <div class="card-header">
-            <div class="card-title">Today · ${TODAY.toLocaleDateString('en-US',{month:'short',day:'numeric'})}</div>
-            <span class="text-xs text-muted">drafted 0612 CT</span>
-          </div>
-          <div class="draft-list">
-            ${drafts.map(d => {
-              const vs = byId(VESSELS, d.vesselId);
-              const sub = (() => {
-                if (d.status.startsWith('In port')) return `${d.berthingProspects[0].berth} · in-port update`;
-                if (d.status === 'Approaching') return `Imminent arrival ${d.ports[0]}`;
-                return `Berthing prospects · ${d.ports.join(', ')}`;
-              })();
-              const recipientChips = (d.customerIds || []).map(cid => byId(COMPANIES, cid)?.name);
-              return `<a class="draft-item ${d.id === _selectedDraftId ? 'active' : ''}" data-link="updates:${d.id}">
-                <div class="draft-item-head">
-                  <div class="draft-item-vessel">${escapeHtml(vs.name)} <span class="text-mono text-muted">V.${d.voyageNo}</span></div>
-                  <div class="draft-item-time">07:00</div>
-                </div>
-                <div class="draft-item-sub">${escapeHtml(sub)}</div>
-                <div class="draft-item-recipients">
-                  ${recipientChips.map(r => `<span class="chip">${escapeHtml(r)}</span>`).join('')}
-                </div>
-              </a>`;
-            }).join('')}
-          </div>
+        <div class="card"><div class="card-header"><div class="card-title">Today · ${TODAY.toLocaleDateString('en-US',{month:'short',day:'numeric'})}</div><span class="text-xs text-muted">mocked</span></div>
+          <div class="draft-list">${drafts.map(d => `<a class="draft-item ${d.voyage === selected.voyage ? 'active' : ''}" data-link="updates:${d.voyage}"><div class="draft-item-head"><div class="draft-item-vessel">${escapeHtml(d.vessel)} <span class="text-mono text-muted">V.${escapeHtml(d.voyage)}</span></div><div class="draft-item-time">07:00</div></div><div class="draft-item-sub">${escapeHtml(d.progress)}</div><div class="draft-item-recipients"><span class="chip">Mock Recipient</span></div></a>`).join('')}</div>
         </div>
-
         <div class="email-preview">
-          <div class="ai-banner">
-            <span class="dot"></span>
-            <span><b>Nauti-Ops AI</b> drafted this update from V.${v.voyageNo}'s SOF, berthing prospects, and cargo manifest. Edit any section before sending.</span>
-          </div>
+          <div class="ai-banner"><span class="dot"></span><span><b>Nauti-Ops AI</b> mock draft. Real vessel and voyage information has been scrubbed from Email Studio.</span></div>
           <div class="email-headers">
             <div class="email-header-row"><span class="label">From</span><span class="value text-mono">Nauti-Ops Demo Agency &lt;updates@demo.nauti-labs.com&gt;</span></div>
-            <div class="email-header-row"><span class="label">To</span>
-              <span class="value">
-                ${recipients.map(r => `<span class="chip">${escapeHtml(r.name)} &lt;${escapeHtml(r.email)}&gt; <span class="chip-x">×</span></span>`).join(' ')}
-              </span>
-            </div>
-            <div class="email-header-row"><span class="label">Cc</span>
-              <span class="value">
-                <span class="chip">Renee Holloway &lt;renee@demo.nauti-labs.com&gt; <span class="chip-x">×</span></span>
-                <span class="chip">${escapeHtml(byId(PEOPLE, v.assignedAgentId).name)} &lt;${escapeHtml(byId(PEOPLE, v.assignedAgentId).email)}&gt; <span class="chip-x">×</span></span>
-              </span>
-            </div>
+            <div class="email-header-row"><span class="label">To</span><span class="value"><span class="chip">Mock Recipient &lt;ops@example.com&gt;</span></span></div>
             <div class="email-header-row"><span class="label">Subject</span><span class="value"><b>${escapeHtml(subject)}</b></span></div>
           </div>
           <div class="email-body">${bodyHtml}</div>
-          <div class="preview-toolbar">
-            <button class="btn ghost">${ICON.edit} Edit</button>
-            <button class="btn ghost">${ICON.sparkle} Re-draft with AI</button>
-            <button class="btn ghost" onclick="openSampleModal('${v.id}')">${ICON.mail} Send sample to my inbox</button>
-            <span class="spacer"></span>
-            <button class="btn">Save draft</button>
-            <button class="btn primary">${ICON.send} Send now</button>
-          </div>
+          <div class="preview-toolbar"><button class="btn ghost">${ICON.edit} Edit</button><button class="btn ghost">${ICON.sparkle} Re-draft with AI</button><span class="spacer"></span><button class="btn">Save draft</button><button class="btn primary">${ICON.send} Send now</button></div>
         </div>
-      </div>
-    `;
+      </div>`;
   }
 
-  // ─── CAPTAIN AI CHATBOT ───
+  // ─── CAPTAIN AI CHATBOT ───  // ─── CAPTAIN AI CHATBOT ───
   const captainChat = {
     open: false,
     messages: [],
@@ -3726,14 +3651,14 @@
 
     switch (r) {
       case 'dashboard': renderDashboard(); break;
-      case 'voyages':   renderVoyages(id); break;
-      case 'voyage':    renderVoyage(id);  break;
+      case 'voyages':   isPinUnlocked('voyages') ? renderVoyages(id) : renderPinWall('voyages', 'Voyages'); break;
+      case 'voyage':    isPinUnlocked('voyages') ? renderVoyage(id) : renderPinWall('voyages', 'Voyages');  break;
       case 'vessels':   renderVessels();   break;
       case 'vessel':    renderVessel(id);  break;
-      case 'people':    renderPeople();    break;
-      case 'person':    renderPerson(id);  break;
-      case 'companies': renderCompanies(); break;
-      case 'company':   renderCompany(id); break;
+      case 'people':    isPinUnlocked('directory') ? renderPeople() : renderPinWall('directory', 'People');    break;
+      case 'person':    isPinUnlocked('directory') ? renderPerson(id) : renderPinWall('directory', 'People');  break;
+      case 'companies': isPinUnlocked('directory') ? renderCompanies() : renderPinWall('directory', 'Companies'); break;
+      case 'company':   isPinUnlocked('directory') ? renderCompany(id) : renderPinWall('directory', 'Companies'); break;
       case 'terminals': renderTerminals(); break;
       case 'terminal':  renderTerminal(id);break;
       case 'cargos':    renderCargos();    break;
@@ -3761,8 +3686,8 @@
   });
 
   // Sidebar badge counts
-  document.getElementById('nav-voyages-count').textContent = activeVoyages().length;
-  document.getElementById('nav-updates-count').textContent = activeVoyages().length;
+  document.getElementById('nav-voyages-count').textContent = 'PIN';
+  document.getElementById('nav-updates-count').textContent = MOCK_DASHBOARD_CALLS.filter(c => c.status !== 'Closed').length;
 
   window.addEventListener('hashchange', route);
   route();
