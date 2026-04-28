@@ -3895,12 +3895,28 @@
   }
 
   function cbInit() {
+    // Inject the panel into the DOM (must come before cbBuildPanel so #cb-presets exists)
+    document.body.insertAdjacentHTML('beforeend', `
+      <div class="cb-panel" id="cb-panel" role="dialog" aria-label="Color theme presets">
+        <div class="cb-head">
+          <h3>Color Bomb</h3>
+          <button class="cb-close" id="cb-close" aria-label="Close">×</button>
+        </div>
+        <div class="cb-body">
+          <div class="cb-hint"><b>Drag</b> a preset onto the page or just <b>click</b> to apply. Choice is remembered next visit.</div>
+          <div id="cb-presets"></div>
+        </div>
+      </div>
+    `);
     cbBuildPanel();
     const toggle = document.getElementById('cb-toggle');
     const panel  = document.getElementById('cb-panel');
     const close  = document.getElementById('cb-close');
     if (toggle && panel) {
-      toggle.addEventListener('click', () => panel.classList.toggle('open'));
+      toggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        panel.classList.toggle('open');
+      });
     }
     if (close) close.addEventListener('click', () => panel.classList.remove('open'));
     // close panel when clicking outside
@@ -3937,18 +3953,6 @@
 
 
 </script>
-
-<!-- ─── COLOR BOMB PANEL ─── -->
-<div class="cb-panel" id="cb-panel" role="dialog" aria-label="Color theme presets">
-  <div class="cb-head">
-    <h3>Color Bomb</h3>
-    <button class="cb-close" id="cb-close" aria-label="Close">×</button>
-  </div>
-  <div class="cb-body">
-    <div class="cb-hint"><b>Drag</b> a preset onto the page or just <b>click</b> to apply. Choice is remembered next visit.</div>
-    <div id="cb-presets"></div>
-  </div>
-</div>
 
 </body>
 </html>
