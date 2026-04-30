@@ -1013,6 +1013,339 @@
   .timeline-event .desc { color: var(--text); }
   .timeline-event .desc.faded { color: var(--text-muted); }
 
+  /* ─── OPS CALL SNAPSHOT MODAL ─── */
+  .ops-click-row {
+    cursor: pointer;
+  }
+  .ops-click-row:hover {
+    background: linear-gradient(90deg, var(--blue-dim), transparent);
+  }
+  .ops-click-row:focus-visible {
+    outline: 2px solid var(--brand-accent);
+    outline-offset: -2px;
+  }
+  .ops-open-cell {
+    text-align: right;
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    font-weight: 700;
+  }
+  .ops-click-row:hover .ops-open-cell {
+    color: var(--brand-accent);
+  }
+
+  .ops-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1120;
+    background: rgba(2,4,10,0.70);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 18px;
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    animation: fadeIn 0.15s ease;
+  }
+  .ops-modal {
+    width: min(1120px, 100%);
+    max-height: calc(100vh - 36px);
+    background:
+      linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0)),
+      var(--bg-elev);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 28px 80px rgba(0,0,0,0.62);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .ops-modal-head {
+    padding: 1rem 1.15rem;
+    border-bottom: 1px solid var(--line);
+    background:
+      linear-gradient(135deg, var(--blue-dim), transparent 48%),
+      linear-gradient(315deg, var(--amber-dim), transparent 52%);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .ops-modal-kicker {
+    color: var(--brand-accent);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0;
+    text-transform: uppercase;
+  }
+  .ops-modal-title {
+    margin-top: 2px;
+    color: #fff;
+    font-size: 1.35rem;
+    font-weight: 800;
+    line-height: 1.15;
+  }
+  .ops-modal-sub {
+    margin-top: 4px;
+    color: var(--text-muted);
+    font-size: 0.86rem;
+  }
+  .ops-modal-close {
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--line-strong);
+    border-radius: 8px;
+    color: var(--text-2);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 36px;
+    font-size: 1.25rem;
+    line-height: 1;
+  }
+  .ops-modal-close:hover {
+    color: #fff;
+    border-color: var(--brand-accent);
+    background: var(--amber-dim);
+  }
+  .ops-modal-body {
+    padding: 1rem;
+    overflow: auto;
+  }
+  .ops-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.65rem;
+    margin-bottom: 1rem;
+  }
+  .ops-summary-item {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--bg-sunk);
+    padding: 0.68rem 0.75rem;
+    min-width: 0;
+  }
+  .ops-summary-label {
+    color: var(--text-muted);
+    font-size: 0.66rem;
+    font-weight: 800;
+    letter-spacing: 0;
+    text-transform: uppercase;
+  }
+  .ops-summary-value {
+    margin-top: 3px;
+    color: var(--text);
+    font-weight: 700;
+    overflow-wrap: anywhere;
+  }
+  .ops-summary-value.mono {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.86rem;
+  }
+  .ops-modal-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(330px, 0.8fr);
+    gap: 1rem;
+    align-items: start;
+  }
+  .ops-panel {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: rgba(255,255,255,0.025);
+    overflow: hidden;
+  }
+  .ops-panel + .ops-panel {
+    margin-top: 1rem;
+  }
+  .ops-panel-head {
+    padding: 0.78rem 0.9rem;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+  }
+  .ops-panel-title {
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 800;
+  }
+  .ops-panel-sub {
+    color: var(--text-muted);
+    font-size: 0.76rem;
+  }
+  .ops-panel-body {
+    padding: 0.9rem;
+  }
+  .ops-schedule {
+    display: grid;
+    gap: 0.62rem;
+  }
+  .ops-schedule-item {
+    display: grid;
+    grid-template-columns: 120px minmax(0, 1fr) auto;
+    gap: 0.75rem;
+    align-items: center;
+    padding: 0.7rem 0.75rem;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--bg-sunk);
+  }
+  .ops-schedule-time {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text-2);
+    font-size: 0.78rem;
+    line-height: 1.35;
+  }
+  .ops-schedule-title {
+    color: var(--text);
+    font-weight: 800;
+  }
+  .ops-schedule-note {
+    margin-top: 2px;
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    line-height: 1.35;
+  }
+  .ops-state {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 78px;
+    padding: 3px 8px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: rgba(255,255,255,0.05);
+    color: var(--text-2);
+    font-size: 0.68rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .ops-state.done { color: var(--status-active); background: var(--status-active-bg); border-color: rgba(45,212,191,0.25); }
+  .ops-state.now { color: var(--brand-primary-3); background: var(--brand-accent); border-color: var(--brand-accent); }
+  .ops-state.pending { color: var(--status-eta); background: var(--status-eta-bg); border-color: rgba(255,170,0,0.25); }
+  .ops-state.alert { color: var(--status-alert); background: var(--status-alert-bg); border-color: rgba(255,71,87,0.25); }
+  .ops-cargo-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.65rem;
+  }
+  .ops-mini-field {
+    padding: 0.58rem 0.65rem;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--bg-sunk);
+  }
+  .ops-mini-label {
+    color: var(--text-muted);
+    font-size: 0.64rem;
+    font-weight: 800;
+    letter-spacing: 0;
+    text-transform: uppercase;
+  }
+  .ops-mini-value {
+    margin-top: 2px;
+    color: var(--text);
+    font-weight: 700;
+    overflow-wrap: anywhere;
+  }
+  .ops-checklist {
+    display: grid;
+    gap: 0.55rem;
+  }
+  .ops-check {
+    display: grid;
+    grid-template-columns: 18px minmax(0, 1fr) auto;
+    gap: 0.6rem;
+    align-items: start;
+    padding: 0.6rem 0.65rem;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--bg-sunk);
+  }
+  .ops-check-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-top: 5px;
+    background: var(--status-await);
+    box-shadow: 0 0 0 3px var(--status-await-bg);
+  }
+  .ops-check.ok .ops-check-dot { background: var(--status-active); box-shadow: 0 0 0 3px var(--status-active-bg); }
+  .ops-check.watch .ops-check-dot { background: var(--status-eta); box-shadow: 0 0 0 3px var(--status-eta-bg); }
+  .ops-check.alert .ops-check-dot { background: var(--status-alert); box-shadow: 0 0 0 3px var(--status-alert-bg); }
+  .ops-check-title {
+    color: var(--text);
+    font-weight: 800;
+  }
+  .ops-check-note {
+    margin-top: 2px;
+    color: var(--text-muted);
+    font-size: 0.76rem;
+    line-height: 1.35;
+  }
+  .ops-service-list {
+    display: grid;
+    gap: 0.58rem;
+  }
+  .ops-service {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.65rem;
+    padding: 0.68rem 0.72rem;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--bg-sunk);
+  }
+  .ops-service-title {
+    color: var(--text);
+    font-weight: 800;
+  }
+  .ops-service-meta {
+    margin-top: 2px;
+    color: var(--text-muted);
+    font-size: 0.76rem;
+    line-height: 1.35;
+  }
+  .ops-modal-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    padding: 0.85rem 1rem;
+    border-top: 1px solid var(--line);
+    background: var(--bg-sunk);
+  }
+  @media (max-width: 960px) {
+    .ops-summary-grid,
+    .ops-modal-grid {
+      grid-template-columns: 1fr;
+    }
+    .ops-schedule-item {
+      grid-template-columns: 1fr;
+    }
+    .ops-state {
+      justify-self: start;
+    }
+  }
+  @media (max-width: 560px) {
+    .ops-modal-backdrop {
+      padding: 0;
+      align-items: stretch;
+    }
+    .ops-modal {
+      max-height: 100vh;
+      border-radius: 0;
+      border-left: none;
+      border-right: none;
+    }
+    .ops-cargo-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
   /* ─── LIST ROW (people, companies) ─── */
   .row-list { display: flex; flex-direction: column; }
   .row-item {
@@ -2342,6 +2675,289 @@
     });
   }, 30000);
 
+  // ─── DASHBOARD CALL SNAPSHOT DATA ───
+  const MOCK_CALL_CARGO = {
+    '0426A': {
+      operation: 'Discharge',
+      grade: 'MEG sample blend',
+      quantity: '8,400 MT',
+      parcels: '2 parcels',
+      stowage: '1P/S, 2P/S',
+      classInfo: 'IMO III',
+      temperature: 'Ambient',
+      terminal: 'Sample Terminal Dock 2',
+      notes: 'Sample discharge parcel; shore tank and line displacement to be confirmed before hoses on.',
+    },
+    '1180B': {
+      operation: 'Load',
+      grade: 'Caustic Soda 50%',
+      quantity: '6,250 MT',
+      parcels: '1 parcel',
+      stowage: '4P/S, 5P/S',
+      classInfo: 'IMO III',
+      temperature: '95 F max',
+      terminal: 'Mock Chemical Berth 6',
+      notes: 'Cargo ops underway; keep density certificate and shore sample chain ready for file.',
+    },
+    '2207C': {
+      operation: 'Discharge',
+      grade: 'Base Oil 150N',
+      quantity: '4,900 MT',
+      parcels: '1 parcel',
+      stowage: '3C, 4C',
+      classInfo: 'Non-IMO sample',
+      temperature: 'Warm transfer',
+      terminal: 'Demo Liquids Pier 1',
+      notes: 'Tentative berth window pending; verify terminal hose set before pilot order is firmed.',
+    },
+    '3309D': {
+      operation: 'Load',
+      grade: 'Acrylate sample cargo',
+      quantity: '3,800 MT',
+      parcels: '2 parcels',
+      stowage: '6P/S, 7P/S',
+      classInfo: 'IMO II',
+      temperature: 'Inhibited',
+      terminal: 'Example Dock A',
+      notes: 'Terminal lineup pending; inhibitor certificate and nitrogen readiness are watch items.',
+    },
+    '5102E': {
+      operation: 'Closed',
+      grade: 'Finished lube oil',
+      quantity: '5,100 MT',
+      parcels: '1 parcel',
+      stowage: '2C, 3C',
+      classInfo: 'Non-IMO sample',
+      temperature: 'Ambient',
+      terminal: 'Sample River Dock',
+      notes: 'Call closed; final documents and service tickets are in review.',
+    },
+  };
+
+  function callDate(c, offsetHours) {
+    return new Date(c.eta.getTime() + offsetHours * 60 * 60 * 1000);
+  }
+  function callTimeWindow(c, startOffset, endOffset) {
+    return `${fmtDateTime(callDate(c, startOffset))} - ${callDate(c, endOffset).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false })}`;
+  }
+  function mockCallCargo(c) {
+    return MOCK_CALL_CARGO[c.voyage] || {
+      operation: 'TBD',
+      grade: 'Sample chemical cargo',
+      quantity: 'TBD',
+      parcels: 'TBD',
+      stowage: 'TBD',
+      classInfo: 'TBD',
+      temperature: 'TBD',
+      terminal: c.berth,
+      notes: 'Cargo plan is tentative until terminal lineup is confirmed.',
+    };
+  }
+  function mockCallSchedule(c) {
+    if (c.status === 'Closed') {
+      return [
+        { time: callTimeWindow(c, -46, -45), title: 'Pilot / arrival complete', note: 'Historical call event retained for audit.', state: 'done', label: 'Done' },
+        { time: callTimeWindow(c, -43, -42), title: 'All fast / safety conference', note: 'Terminal interface completed.', state: 'done', label: 'Done' },
+        { time: callTimeWindow(c, -38, -12), title: 'Cargo operation complete', note: 'Final figures under agency review.', state: 'done', label: 'Done' },
+        { time: callTimeWindow(c, -8, -6), title: 'Sailing and final launch', note: 'Launch ticket and port log ready for billing.', state: 'done', label: 'Closed' },
+      ];
+    }
+    if (c.status === 'In port') {
+      return [
+        { time: callTimeWindow(c, -2, -1), title: 'All fast alongside', note: 'Gangway landed; terminal safety conference complete.', state: 'done', label: 'Done' },
+        { time: callTimeWindow(c, 0, 1), title: 'Tank inspection / shore readiness', note: 'Manifold, certificates, and line-up under active watch.', state: 'done', label: 'Done' },
+        { time: callTimeWindow(c, 1, 19), title: 'Cargo operation window', note: c.progress, state: 'now', label: 'Now' },
+        { time: callTimeWindow(c, 20, 24), title: 'Documents / final sample dispatch', note: 'Prepare SOF, mate receipts, service tickets, and courier run.', state: 'pending', label: 'Next' },
+        { time: callTimeWindow(c, 26, 28), title: 'Pilot outbound / sailing', note: 'Tentative until terminal confirms hose disconnect.', state: 'pending', label: 'Tentative' },
+      ];
+    }
+    if (c.status === 'Approaching') {
+      return [
+        { time: callTimeWindow(c, -5, -4), title: 'Pre-arrival file check', note: 'Crew list, cargo docs, terminal nomination, and agency appointment.', state: 'done', label: 'Done' },
+        { time: callTimeWindow(c, -2, -1), title: 'Pilot order / launch standby', note: c.progress, state: 'now', label: 'Now' },
+        { time: callTimeWindow(c, 0, 1), title: 'Arrival and berth transit', note: `Proceed to ${c.berth} if berth remains available.`, state: 'pending', label: 'Next' },
+        { time: callTimeWindow(c, 2, 4), title: 'All fast / terminal safety conference', note: 'Confirm hose plan, MSDS, emergency shutdown, and communication channels.', state: 'pending', label: 'Tentative' },
+        { time: callTimeWindow(c, 5, 20), title: 'Cargo operation window', note: 'Subject to tanks passing and terminal readiness.', state: 'pending', label: 'Tentative' },
+      ];
+    }
+    return [
+      { time: callTimeWindow(c, -10, -9), title: '24h pre-arrival review', note: 'Agency checklist opened; verify latest ETA with master and terminal.', state: 'done', label: 'Done' },
+      { time: callTimeWindow(c, -4, -3), title: 'Pilot / berth confirmation', note: c.progress, state: 'pending', label: 'Pending' },
+      { time: callTimeWindow(c, 0, 1), title: 'Arrival window', note: `Tentative ETA into ${c.route.split('->')[0].trim()}.`, state: 'pending', label: 'Tentative' },
+      { time: callTimeWindow(c, 3, 5), title: 'Tank inspection and pre-transfer meeting', note: 'Cargo readiness starts once all fast and terminal boards.', state: 'pending', label: 'Tentative' },
+      { time: callTimeWindow(c, 6, 24), title: 'Cargo operation window', note: `Planned berth: ${c.berth}.`, state: 'pending', label: 'Tentative' },
+    ];
+  }
+  function mockTankInspection(c, cargo) {
+    const isChemical = /IMO|Caustic|Acrylate|MEG/i.test(`${cargo.classInfo} ${cargo.grade}`);
+    const underway = c.status === 'In port';
+    return [
+      { state: underway || c.status === 'Closed' ? 'ok' : 'watch', status: underway ? 'Ready' : 'Precheck', title: 'Tank cleanliness standard', note: isChemical ? 'Wall wash, visual dry, odor check, and previous cargo review required.' : 'Visual dry and previous cargo compatibility check required.' },
+      { state: isChemical ? 'watch' : 'ok', status: isChemical ? 'Watch' : 'Ready', title: 'Coating and prior cargo compatibility', note: `${cargo.stowage} to be checked against last-three cargo history before loading authority.` },
+      { state: c.status === 'Approaching' ? 'watch' : 'ok', status: c.status === 'Approaching' ? 'Pending' : 'Ready', title: 'Atmosphere / gas-free status', note: 'Oxygen, LEL, toxic vapor readings, and enclosed-space entry log verified by responsible officer.' },
+      { state: /Acrylate|Inhibited/i.test(`${cargo.grade} ${cargo.temperature}`) ? 'alert' : 'ok', status: /Acrylate|Inhibited/i.test(`${cargo.grade} ${cargo.temperature}`) ? 'Critical' : 'Ready', title: 'Special cargo criteria', note: /Acrylate|Inhibited/i.test(`${cargo.grade} ${cargo.temperature}`) ? 'Inhibitor certificate, nitrogen blanket, and temperature trend must be confirmed.' : 'No special inhibitor watch beyond terminal standard.' },
+    ];
+  }
+  function mockServices(c) {
+    const nextState = c.status === 'In port' ? 'now' : (c.status === 'Closed' ? 'done' : 'pending');
+    return [
+      { title: 'Launch service', window: c.status === 'Closed' ? callTimeWindow(c, -8, -6) : callTimeWindow(c, -2, 2), state: nextState, status: c.status === 'Closed' ? 'Closed' : (c.status === 'In port' ? 'Standing by' : 'Tentative'), note: 'Pilot, agent boarding, and final document run coverage.' },
+      { title: 'Stores / spares delivery', window: c.status === 'In port' ? callTimeWindow(c, 5, 9) : callTimeWindow(c, 3, 7), state: c.status === 'Closed' ? 'done' : 'pending', status: c.status === 'Closed' ? 'Completed' : 'Needs terminal gate slot', note: 'Coordinate truck arrival, gate list, and launch if dock access closes.' },
+      { title: 'Crew change', window: c.status === 'Approaching' ? callTimeWindow(c, 6, 10) : callTimeWindow(c, 10, 14), state: c.status === 'Closed' ? 'done' : 'pending', status: c.status === 'Closed' ? 'Closed' : 'Awaiting final names', note: 'CBP/immigration package, hotel, transport, and gangway timing.' },
+      { title: 'Sample / document courier', window: c.status === 'In port' ? callTimeWindow(c, 18, 22) : callTimeWindow(c, 20, 24), state: nextState, status: c.status === 'Closed' ? 'Filed' : 'Planned', note: 'Lab samples, signed SOF, cargo docs, and service tickets.' },
+    ];
+  }
+  function mockCallPlan(c) {
+    const cargo = mockCallCargo(c);
+    return {
+      cargo,
+      schedule: mockCallSchedule(c),
+      inspection: mockTankInspection(c, cargo),
+      services: mockServices(c),
+    };
+  }
+  function opsState(state, label) {
+    return `<span class="ops-state ${escapeHtml(state)}">${escapeHtml(label)}</span>`;
+  }
+  function closeMockCallModal() {
+    document.getElementById('ops-call-modal')?.remove();
+  }
+  function openMockCallModal(voyageNo) {
+    const c = MOCK_DASHBOARD_CALLS.find(call => call.voyage === voyageNo);
+    if (!c) return;
+    closeMockCallModal();
+    const plan = mockCallPlan(c);
+    document.body.insertAdjacentHTML('beforeend', `
+      <div class="ops-modal-backdrop" id="ops-call-modal" onclick="if(event.target===this) closeMockCallModal()">
+        <div class="ops-modal" role="dialog" aria-modal="true" aria-label="${escapeHtml(c.vessel)} call plan">
+          <div class="ops-modal-head">
+            <div>
+              <div class="ops-modal-kicker">Tentative call plan</div>
+              <div class="ops-modal-title">${escapeHtml(c.vessel)} <span class="mono">V.${escapeHtml(c.voyage)}</span></div>
+              <div class="ops-modal-sub">${escapeHtml(c.customer)} - ${escapeHtml(c.route)} - ${escapeHtml(c.progress)}</div>
+            </div>
+            <button class="ops-modal-close" onclick="closeMockCallModal()" aria-label="Close">${_modalIcons.x}</button>
+          </div>
+          <div class="ops-modal-body">
+            <div class="ops-summary-grid">
+              <div class="ops-summary-item"><div class="ops-summary-label">Status</div><div class="ops-summary-value">${statusPill(c.status)}</div></div>
+              <div class="ops-summary-item"><div class="ops-summary-label">ETA / Berth</div><div class="ops-summary-value mono">${fmtDateTime(c.eta)}</div><div class="ops-panel-sub">${escapeHtml(c.berth)}</div></div>
+              <div class="ops-summary-item"><div class="ops-summary-label">Cargo</div><div class="ops-summary-value">${escapeHtml(plan.cargo.grade)}</div><div class="ops-panel-sub">${escapeHtml(plan.cargo.quantity)} - ${escapeHtml(plan.cargo.operation)}</div></div>
+              <div class="ops-summary-item"><div class="ops-summary-label">Service Desk</div><div class="ops-summary-value">Agent ${escapeHtml(c.agent)}</div><div class="ops-panel-sub">Deliveries, crew, launches</div></div>
+            </div>
+
+            <div class="ops-modal-grid">
+              <div>
+                <div class="ops-panel">
+                  <div class="ops-panel-head">
+                    <div>
+                      <div class="ops-panel-title">Full tentative vessel schedule</div>
+                      <div class="ops-panel-sub">Times are mock planning windows and adjust as terminal / pilot data changes.</div>
+                    </div>
+                  </div>
+                  <div class="ops-panel-body">
+                    <div class="ops-schedule">
+                      ${plan.schedule.map(item => `
+                        <div class="ops-schedule-item">
+                          <div class="ops-schedule-time">${escapeHtml(item.time)}</div>
+                          <div>
+                            <div class="ops-schedule-title">${escapeHtml(item.title)}</div>
+                            <div class="ops-schedule-note">${escapeHtml(item.note)}</div>
+                          </div>
+                          ${opsState(item.state, item.label)}
+                        </div>
+                      `).join('')}
+                    </div>
+                  </div>
+                </div>
+
+                <div class="ops-panel">
+                  <div class="ops-panel-head">
+                    <div>
+                      <div class="ops-panel-title">Services and agency workstreams</div>
+                      <div class="ops-panel-sub">Deliveries, crew changes, launch runs, and document movement.</div>
+                    </div>
+                  </div>
+                  <div class="ops-panel-body">
+                    <div class="ops-service-list">
+                      ${plan.services.map(s => `
+                        <div class="ops-service">
+                          <div>
+                            <div class="ops-service-title">${escapeHtml(s.title)}</div>
+                            <div class="ops-service-meta">${escapeHtml(s.window)}<br>${escapeHtml(s.note)}</div>
+                          </div>
+                          ${opsState(s.state, s.status)}
+                        </div>
+                      `).join('')}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <div class="ops-panel">
+                  <div class="ops-panel-head"><div><div class="ops-panel-title">Cargo information</div><div class="ops-panel-sub">${escapeHtml(plan.cargo.notes)}</div></div></div>
+                  <div class="ops-panel-body">
+                    <div class="ops-cargo-grid">
+                      ${[
+                        ['Operation', plan.cargo.operation],
+                        ['Grade', plan.cargo.grade],
+                        ['Quantity', plan.cargo.quantity],
+                        ['Parcels', plan.cargo.parcels],
+                        ['Stowage', plan.cargo.stowage],
+                        ['Class', plan.cargo.classInfo],
+                        ['Transfer temp', plan.cargo.temperature],
+                        ['Terminal', plan.cargo.terminal],
+                      ].map(([label, value]) => `
+                        <div class="ops-mini-field">
+                          <div class="ops-mini-label">${escapeHtml(label)}</div>
+                          <div class="ops-mini-value">${escapeHtml(value)}</div>
+                        </div>
+                      `).join('')}
+                    </div>
+                  </div>
+                </div>
+
+                <div class="ops-panel">
+                  <div class="ops-panel-head"><div><div class="ops-panel-title">Tank inspection criteria</div><div class="ops-panel-sub">Pre-transfer checklist for cargo readiness.</div></div></div>
+                  <div class="ops-panel-body">
+                    <div class="ops-checklist">
+                      ${plan.inspection.map(item => `
+                        <div class="ops-check ${escapeHtml(item.state)}">
+                          <span class="ops-check-dot"></span>
+                          <div>
+                            <div class="ops-check-title">${escapeHtml(item.title)}</div>
+                            <div class="ops-check-note">${escapeHtml(item.note)}</div>
+                          </div>
+                          ${opsState(item.state === 'ok' ? 'done' : (item.state === 'alert' ? 'alert' : 'pending'), item.status)}
+                        </div>
+                      `).join('')}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="ops-modal-actions">
+            <button class="btn ghost" onclick="showToast('Service checklist queued')">${ICON.plus} Service checklist</button>
+            <button class="btn ghost" onclick="showToast('Tentative schedule copied')">${ICON.download} Copy schedule</button>
+            <button class="btn primary" onclick="showToast('Draft update queued')">${ICON.sparkle} Draft customer update</button>
+          </div>
+        </div>
+      </div>
+    `);
+    document.querySelector('#ops-call-modal .ops-modal-close')?.focus();
+  }
+  function handleMockCallRowKey(e, voyageNo) {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      openMockCallModal(voyageNo);
+    }
+  }
+  window.closeMockCallModal = closeMockCallModal;
+  window.openMockCallModal = openMockCallModal;
+  window.handleMockCallRowKey = handleMockCallRowKey;
+
 
   // ─── DASHBOARD ───
   function renderDashboard() {
@@ -2378,14 +2994,15 @@
           <div class="card">
             <div class="card-header"><div><div class="card-title">Mock upcoming arrivals</div><div class="card-subtitle">Sample data only · no real vessel or voyage names</div></div></div>
             <div class="card-body flush"><table class="tbl">
-              <thead><tr><th>Vessel</th><th>Voyage</th><th>Customer</th><th>ETA</th><th>Berth Prospect</th><th>Status</th></tr></thead>
-              <tbody>${calls.filter(c => c.status !== 'Closed').map(c => `<tr>
+              <thead><tr><th>Vessel</th><th>Voyage</th><th>Customer</th><th>ETA</th><th>Berth Prospect</th><th>Status</th><th></th></tr></thead>
+              <tbody>${calls.filter(c => c.status !== 'Closed').map(c => `<tr class="ops-click-row" tabindex="0" role="button" aria-label="Open ${escapeHtml(c.vessel)} call plan" onclick="openMockCallModal('${escapeHtml(c.voyage)}')" onkeydown="handleMockCallRowKey(event, '${escapeHtml(c.voyage)}')">
                 <td><div class="primary-text">${escapeHtml(c.vessel)}</div><div class="secondary-text">Mock chemical tanker</div></td>
                 <td><span class="mono">V.${escapeHtml(c.voyage)}</span></td>
                 <td>${escapeHtml(c.customer)}</td>
                 <td><div class="primary-text mono">${fmtDateTime(c.eta)}</div><div class="secondary-text">sample ETA</div></td>
                 <td>${escapeHtml(c.berth)}</td>
                 <td>${statusPill(c.status)}</td>
+                <td class="ops-open-cell">Open</td>
               </tr>`).join('')}</tbody>
             </table></div>
           </div>
@@ -2393,12 +3010,13 @@
           <div class="card">
             <div class="card-header"><div><div class="card-title">Mock current calls</div><div class="card-subtitle">Scrubbed current-voyage board</div></div></div>
             <div class="card-body flush"><table class="tbl">
-              <thead><tr><th>Vessel</th><th>Berth</th><th>Progress</th><th>Agent</th></tr></thead>
-              <tbody>${calls.map(c => `<tr>
+              <thead><tr><th>Vessel</th><th>Berth</th><th>Progress</th><th>Agent</th><th></th></tr></thead>
+              <tbody>${calls.map(c => `<tr class="ops-click-row" tabindex="0" role="button" aria-label="Open ${escapeHtml(c.vessel)} call plan" onclick="openMockCallModal('${escapeHtml(c.voyage)}')" onkeydown="handleMockCallRowKey(event, '${escapeHtml(c.voyage)}')">
                 <td><div class="primary-text">${escapeHtml(c.vessel)}</div><div class="secondary-text mono">V.${escapeHtml(c.voyage)}</div></td>
                 <td>${escapeHtml(c.berth)}<div class="secondary-text">${escapeHtml(c.route)}</div></td>
                 <td>${escapeHtml(c.progress)}</td>
                 <td><div class="row gap-sm"><span class="row-avatar circle" style="width:24px;height:24px;font-size:0.65rem">${escapeHtml(c.agent)}</span> Mock desk</div></td>
+                <td class="ops-open-cell">Open</td>
               </tr>`).join('')}</tbody>
             </table></div>
           </div>
