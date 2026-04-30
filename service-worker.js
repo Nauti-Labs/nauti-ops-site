@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nauti-ops-v2';
+const CACHE_NAME = 'nauti-ops-v3';
 const URLS_TO_CACHE = ['/manifest.json', '/icon-192.png', '/icon-512.png'];
 
 self.addEventListener('install', e => {
