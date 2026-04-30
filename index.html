@@ -1481,6 +1481,7 @@
     font-size: 0.92rem;
     line-height: 1.6;
     color: var(--text);
+    overflow-x: auto;
   }
   .email-body p { margin-bottom: 0.9rem; }
   .email-body h3 {
@@ -1489,15 +1490,25 @@
     margin: 1.2rem 0 0.6rem;
     color: var(--brand-primary);
   }
+  .email-body h4 {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin: 0.9rem 0 0.4rem;
+    color: var(--text);
+  }
   .email-body table {
     border-collapse: collapse; width: 100%; margin: 0.5rem 0 1rem;
     font-size: 0.85rem;
+    min-width: 560px;
   }
   .email-body table th, .email-body table td {
     padding: 0.5rem 0.7rem; border: 1px solid var(--line); text-align: left; vertical-align: top;
   }
   .email-body table th { background: var(--bg-sunk); font-weight: 600; color: var(--brand-primary); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em; }
+  .email-body .vp-table { min-width: 0; }
   .email-body .vp-table td:first-child { width: 38%; color: var(--text-muted); font-weight: 500; }
+  .email-body .email-note { color: var(--text-muted); font-size: 0.84rem; margin-top: -0.45rem; }
   .email-signature { margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--line); color: var(--text-muted); font-size: 0.85rem; }
   .email-signature strong { color: var(--text); display: block; margin-bottom: 2px; }
 
@@ -2884,6 +2895,204 @@
       services: mockServices(c),
     };
   }
+  function mockTemplateDate(date) {
+    return date.toLocaleString('en-US', {
+      month: '2-digit',
+      day: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+    }).replace(',', '');
+  }
+  function mockTemplateTime(date) {
+    return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+  }
+  function mockOperationLabel(operation) {
+    if (/discharge/i.test(operation)) return 'Discharging';
+    if (/load/i.test(operation)) return 'Loading';
+    if (/closed|complete/i.test(operation)) return 'Completed';
+    return operation || 'Pending';
+  }
+  function mockTemplatePorts(c) {
+    return c.route.split('->').map(p => p.trim()).filter(Boolean);
+  }
+  function mockTemplateUpdate(c) {
+    const plan = mockCallPlan(c);
+    const cargo = plan.cargo;
+    const ports = mockTemplatePorts(c);
+    const primaryPort = ports[0] || 'US Gulf';
+    const nextPort = ports[1] || primaryPort;
+    const eta = c.eta;
+    const allFast = c.status === 'In port' ? callDate(c, -14) : callDate(c, 0);
+    const etd = c.status === 'Closed' ? callDate(c, -6) : callDate(c, 24);
+    const operation = mockOperationLabel(cargo.operation);
+    const subject = `${c.vessel.replace(/^M\/T\s*/, '')} V.${c.voyage} - Orders Berthing Prospects [${ports.join(', ')}]`;
+    const leadParagraph = c.status === 'In port'
+      ? `Vessel currently alongside ${c.berth} (All Fast: ${mockTemplateTime(allFast)}) ${operation.toLowerCase()} cargo. Reverting updated ETC.`
+      : c.status === 'Approaching'
+        ? `Vessel is approaching ${primaryPort}; pilot ordered and berth window is being confirmed. Reverting updated prospects.`
+        : `Vessel remains ${c.status.toLowerCase()} for ${primaryPort}. Reverting berth prospects and tentative schedule.`;
+    const secondaryBerth = primaryPort === nextPort ? 'Pending Confirmed Berth' : `Mock ${nextPort} Berth`;
+    const prospects = [
+      { berth: c.berth, prospect: c.status === 'In port' ? `Alongside; ETD ${mockTemplateTime(etd)}.` : c.progress },
+      { berth: secondaryBerth, prospect: c.status === 'In port' ? 'Terminal states berth window late PM / early AM.' : 'Terminal states berth window pending.' },
+      { berth: 'Pending Confirmed Berth', prospect: `Tank cleaning tanks: ${cargo.stowage}` },
+      { berth: `${primaryPort} Anchorage`, prospect: 'Reverting confirmed prospects.' },
+    ];
+    const schedule = [
+      { berth: `${primaryPort} Anchorage`, status: c.status === 'Closed' ? 'Completed' : 'Standby', berthed: '2.33', shifting: '2.17', eta: mockTemplateDate(callDate(c, -8)), etd: mockTemplateDate(callDate(c, -6)) },
+      { berth: c.berth, status: c.status === 'In port' ? 'Along Side' : 'Pending', berthed: '24.25', shifting: '4.00', eta: mockTemplateDate(allFast), etd: mockTemplateDate(etd) },
+      { berth: secondaryBerth, status: 'Pending', berthed: '24.00', shifting: '4.00', eta: mockTemplateDate(callDate(c, 28)), etd: mockTemplateDate(callDate(c, 52)) },
+      { berth: 'Pending Confirmed Berth', status: 'Pending', berthed: '48.00', shifting: '1.50', eta: mockTemplateDate(callDate(c, 56)), etd: mockTemplateDate(callDate(c, 104)) },
+    ];
+    const berthDetails = (berth, port, overrides = {}) => ({
+      port,
+      berth,
+      heading: overrides.heading || 'Masters Option',
+      position: overrides.position || '29.727139, -95.225194',
+      channelDraft: overrides.channelDraft || '40 ft',
+      berthDraft: overrides.berthDraft || '38 ft',
+      storesAllowed: overrides.storesAllowed || 'Launch or terminal gate by approval',
+      gangway: overrides.gangway || 'Vessel',
+      freshwater: overrides.freshwater || 'By terminal arrangement',
+      transitTime: overrides.transitTime || '4 Hrs',
+      bunkersAllowed: overrides.bunkersAllowed || 'Barge only',
+      averageRate: overrides.averageRate || (operation === 'Loading' ? '120/250 MT per hour' : 'Terminal rate to be confirmed'),
+      hoseSize: overrides.hoseSize || '6 in or 8 in Cargo / No Vapor',
+      notes: overrides.notes,
+      parcels: overrides.parcels || [],
+    });
+    const primaryParcel = {
+      operation,
+      parcel: '#1',
+      grade: cargo.grade,
+      charterer: c.customer,
+      quantity: cargo.quantity,
+      option: /load/i.test(operation) ? '2% MOLCO' : 'Masters option',
+      stowage: cargo.stowage,
+      surveyor: /load/i.test(operation) ? 'Sample Surveyor - dispatch pending' : 'Sample Cargo Survey - pending',
+      tankInspection: /load/i.test(operation) ? 'WWT' : 'Pending',
+      notes: /load/i.test(operation)
+        ? 'Methanol wall wash, color <5, hydrocarbons pass/fail. Clean tank certificate to include tank number, cargo to load, prior cargoes, cleaning methods, and onboard WWT result.'
+        : 'Visual dry check, manifold readiness, shore sample chain, and previous cargo compatibility to be confirmed before transfer.',
+    };
+    const followParcel = {
+      operation: /load/i.test(operation) ? 'Loading' : 'Discharging',
+      parcel: '#2',
+      grade: /load/i.test(operation) ? 'Isopar sample cargo' : 'Base oil sample parcel',
+      charterer: c.customer,
+      quantity: /load/i.test(operation) ? '950.00 MT' : '3,000.00 MT',
+      option: /load/i.test(operation) ? '2% MOLCO' : 'Terminal option',
+      stowage: /load/i.test(operation) ? '9P, 9S' : '3P, 5P, 13S',
+      surveyor: /load/i.test(operation) ? 'Sample Surveyor - local office' : 'AmSpec - local office',
+      tankInspection: /load/i.test(operation) ? 'WWT / purge prior berthing' : 'Pending',
+      notes: /load/i.test(operation)
+        ? 'Wall wash parameters: hydrocarbon nil, chloride <1 PPM, APHA color <5, clear appearance, and purge status confirmed prior berthing.'
+        : 'Shore tanks, displacement volume, and final sample courier to be confirmed by agent.',
+    };
+    return {
+      subject,
+      leadParagraph,
+      vesselDetails: [
+        ['Vessel', c.vessel],
+        ['Voyage', c.voyage],
+        ['Ports', ports.join('; ')],
+        ['Operator', 'Mock Chemical Tankers'],
+        ['ETA Anchorage', mockTemplateDate(eta)],
+        ['Appointment #', 'Awaiting'],
+        ['Billing Reference', '8759-MOCK'],
+        ['Assigned Phone', 'Pending'],
+      ],
+      prospects,
+      schedule,
+      portCalls: [
+        berthDetails(c.berth, primaryPort, {
+          notes: cargo.notes,
+          parcels: [primaryParcel],
+        }),
+        berthDetails(secondaryBerth, nextPort, {
+          heading: nextPort === primaryPort ? 'Pending Dock' : 'Port Side To',
+          position: nextPort === primaryPort ? '29.725194, -95.019028' : '28.936850, -95.356820',
+          channelDraft: nextPort === primaryPort ? '40 ft' : '36 ft',
+          berthDraft: nextPort === primaryPort ? '40 ft' : '34 ft',
+          storesAllowed: nextPort === primaryPort ? 'Hand carry or launch' : 'Barge or truck',
+          freshwater: nextPort === primaryPort ? 'Yes - via shoreline' : 'Yes - via shoreline',
+          transitTime: nextPort === primaryPort ? '5 Hrs' : '1.5 Hrs',
+          bunkersAllowed: nextPort === primaryPort ? 'No' : 'Barge or truck by approval',
+          averageRate: nextPort === primaryPort ? '250/350 MT per hour' : 'Terminal rate pending',
+          notes: nextPort === primaryPort ? undefined : 'Final berth dependent on terminal lineup and prior vessel sailing.',
+          parcels: [followParcel],
+        }),
+      ],
+    };
+  }
+  function renderTemplateUpdateBody(update) {
+    return `
+      <p>Good day all,</p>
+      <p>${escapeHtml(update.leadParagraph)}</p>
+
+      <table class="vp-table"><tbody>
+        ${update.vesselDetails.map(([label, value]) => `<tr><td>${escapeHtml(label)}</td><td>${escapeHtml(value)}</td></tr>`).join('')}
+      </tbody></table>
+
+      <h3>Berthing Prospects</h3>
+      <table><thead><tr><th>Berth Name</th><th>Prospects</th></tr></thead><tbody>
+        ${update.prospects.map(p => `<tr><td>${escapeHtml(p.berth)}</td><td>${escapeHtml(p.prospect)}</td></tr>`).join('')}
+      </tbody></table>
+
+      <h3>Tentative Schedule</h3>
+      <table><thead><tr><th>Berth</th><th>Status</th><th>Berthed</th><th>Shifting</th><th>ETA</th><th>ETD</th></tr></thead><tbody>
+        ${update.schedule.map(row => `
+          <tr>
+            <td>${escapeHtml(row.berth)}</td>
+            <td>${escapeHtml(row.status)}</td>
+            <td>${escapeHtml(row.berthed)}</td>
+            <td>${escapeHtml(row.shifting)}</td>
+            <td>${escapeHtml(row.eta)}</td>
+            <td>${escapeHtml(row.etd)}</td>
+          </tr>
+        `).join('')}
+      </tbody></table>
+
+      ${update.portCalls.map(portCall => `
+        <h3>Port Call: ${escapeHtml(portCall.port)}</h3>
+        <h4>Berth: ${escapeHtml(portCall.berth)}</h4>
+        <table class="vp-table"><tbody>
+          <tr><td>Heading</td><td>${escapeHtml(portCall.heading)}</td></tr>
+          <tr><td>Position</td><td>${escapeHtml(portCall.position)}</td></tr>
+          <tr><td>Max Draft (Channel)</td><td>${escapeHtml(portCall.channelDraft)}</td></tr>
+          <tr><td>Max Draft (Berth)</td><td>${escapeHtml(portCall.berthDraft)}</td></tr>
+          <tr><td>Stores Allowed</td><td>${escapeHtml(portCall.storesAllowed)}</td></tr>
+          <tr><td>Gangway</td><td>${escapeHtml(portCall.gangway)}</td></tr>
+          <tr><td>Freshwater Available</td><td>${escapeHtml(portCall.freshwater)}</td></tr>
+          <tr><td>Transit Time (From POB)</td><td>${escapeHtml(portCall.transitTime)}</td></tr>
+          <tr><td>Bunkers Allowed</td><td>${escapeHtml(portCall.bunkersAllowed)}</td></tr>
+          <tr><td>Average Load Rate</td><td>${escapeHtml(portCall.averageRate)}</td></tr>
+          <tr><td>Hose Size (Cargo/Vapor)</td><td>${escapeHtml(portCall.hoseSize)}</td></tr>
+        </tbody></table>
+        ${portCall.notes ? `<p class="email-note"><b>Notes:</b> ${escapeHtml(portCall.notes)}</p>` : ''}
+        <table><thead><tr><th>Operation</th><th>Parcel #</th><th>Grade</th><th>Charterer</th><th>Quantity</th><th>Option</th><th>Stowage</th><th>Surveyor</th><th>Tank Inspection</th></tr></thead><tbody>
+          ${portCall.parcels.map(parcel => `
+            <tr>
+              <td>${escapeHtml(parcel.operation)}</td>
+              <td>${escapeHtml(parcel.parcel)}</td>
+              <td>${escapeHtml(parcel.grade)}</td>
+              <td>${escapeHtml(parcel.charterer)}</td>
+              <td>${escapeHtml(parcel.quantity)}</td>
+              <td>${escapeHtml(parcel.option)}</td>
+              <td>${escapeHtml(parcel.stowage)}</td>
+              <td>${escapeHtml(parcel.surveyor)}</td>
+              <td>${escapeHtml(parcel.tankInspection)}</td>
+            </tr>
+          `).join('')}
+        </tbody></table>
+        ${portCall.parcels.map(parcel => `<p class="email-note"><b>Tank Inspection Notes:</b> ${escapeHtml(parcel.notes)}</p>`).join('')}
+      `).join('')}
+
+      <p>Please reach out with any questions.</p>
+      <div class="email-signature"><strong>Mock Agent</strong><br>Texas Marine Agency style update · As Agents Only<br>updates@demo.nauti-labs.com</div>`;
+  }
   function opsState(state, label) {
     return `<span class="ops-state ${escapeHtml(state)}">${escapeHtml(label)}</span>`;
   }
@@ -4168,7 +4377,7 @@
     const tmp = document.createElement('div');
     tmp.innerHTML = html;
     // Add line breaks for block elements
-    tmp.querySelectorAll('h3, p, tr').forEach(el => el.appendChild(document.createTextNode('\n')));
+    tmp.querySelectorAll('h3, h4, p, tr').forEach(el => el.appendChild(document.createTextNode('\n')));
     tmp.querySelectorAll('td, th').forEach(el => el.appendChild(document.createTextNode('  ')));
     return tmp.innerText.replace(/\n{3,}/g, '\n\n').trim();
   }
@@ -4410,23 +4619,9 @@
     setBreadcrumbs([{label:'Email Studio'}]);
     const drafts = MOCK_DASHBOARD_CALLS.filter(c => c.status !== 'Closed');
     const selected = drafts.find(d => d.voyage === focusId) || drafts[0];
-    const subject = `${selected.vessel} V.${selected.voyage} - Mock Daily Update [${selected.route}]`;
-    const bodyHtml = `
-      <p>Good day all,</p>
-      <p>This is a mock Nauti-Ops daily update using scrubbed vessel, voyage, and customer data.</p>
-      <table class="vp-table"><tbody>
-        <tr><td>Vessel</td><td><b>${escapeHtml(selected.vessel)}</b></td></tr>
-        <tr><td>Voyage</td><td>V.${escapeHtml(selected.voyage)}</td></tr>
-        <tr><td>Port / Route</td><td>${escapeHtml(selected.route)}</td></tr>
-        <tr><td>Berth</td><td>${escapeHtml(selected.berth)}</td></tr>
-        <tr><td>Status</td><td>${escapeHtml(selected.progress)}</td></tr>
-      </tbody></table>
-      <h3>Berthing Prospects</h3>
-      <table><thead><tr><th>Berth</th><th>Prospect</th><th>ETA</th></tr></thead><tbody>
-        <tr><td>${escapeHtml(selected.berth)}</td><td>${escapeHtml(selected.progress)}</td><td>${fmtDateTime(selected.eta)}</td></tr>
-      </tbody></table>
-      <p>Please reach out with any questions.</p>
-      <div class="email-signature"><strong>Mock Agent</strong><br>updates@demo.nauti-labs.com</div>`;
+    const update = mockTemplateUpdate(selected);
+    const subject = update.subject;
+    const bodyHtml = renderTemplateUpdateBody(update);
 
     $page.innerHTML = `
       <div class="page-header">
