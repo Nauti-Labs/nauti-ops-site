@@ -2142,7 +2142,7 @@
         <kbd>⌘K</kbd>
       </div>
       <div class="topbar-actions">
-        <span class="env-pill">demo · v0.5</span>
+        <span class="env-pill">demo · v0.6</span>
         <button class="cb-toggle" id="cb-toggle" title="Color Bomb · change theme" aria-label="Open Color Bomb panel" aria-expanded="false">
           <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <circle cx="8.5" cy="9" r="5" fill="var(--blue)" opacity="0.85"/>
@@ -4954,8 +4954,14 @@
   window.captainChat = captainChat;
 
   // ─── ROUTER ───
-  function nav(route) {
-    location.hash = '#/' + route;
+  function nav(targetRoute) {
+    const nextHash = '#/' + targetRoute;
+    if (location.hash === nextHash) {
+      route();
+      return;
+    }
+    location.hash = nextHash;
+    setTimeout(route, 0);
   }
 
   function route() {
