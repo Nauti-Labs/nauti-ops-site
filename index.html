@@ -8,11 +8,32 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NAUTI-OPS — Maritime Operations Platform</title>
+<title>Nauti-Ops — Maritime Operations Platform</title>
+<meta name="description" content="Stop running the channel from a spreadsheet. Voyages, Statement of Facts, Captain AI, berth rotations — the maritime ops console for Houston Ship Channel agencies and operators.">
+
+<!-- Open Graph (link previews on Slack, iMessage, LinkedIn, Discord, etc.) -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://ops.nauti-labs.com/">
+<meta property="og:title" content="Nauti-Ops — Maritime Operations Platform">
+<meta property="og:description" content="Stop running the channel from a spreadsheet. Voyages, Statement of Facts, Captain AI, berth rotations — the maritime ops console you keep wishing you had.">
+<meta property="og:image" content="https://ops.nauti-labs.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Nauti-Ops — Stop running the channel from a spreadsheet.">
+<meta property="og:site_name" content="Nauti-Labs">
+
+<!-- Twitter / X large card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://ops.nauti-labs.com/">
+<meta name="twitter:title" content="Nauti-Ops — Maritime Operations">
+<meta name="twitter:description" content="Stop running the channel from a spreadsheet. Voyages · SOF · Captain AI · Berth rotations.">
+<meta name="twitter:image" content="https://ops.nauti-labs.com/og.png">
+<meta name="twitter:image:alt" content="Nauti-Ops — Stop running the channel from a spreadsheet.">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><rect x='10' y='3' width='4' height='4' fill='%23f5b800'/><path d='M9 8h6l1 14H8z' fill='%230b1f3a'/><path d='M9 11h6' stroke='%23f5b800' stroke-width='1' fill='none'/></svg>">
+<link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 44 44'><circle cx='22' cy='22' r='18' stroke='%230077ff' stroke-width='1.4' fill='none'/><circle cx='22' cy='22' r='13.5' stroke='%234099ff' stroke-width='0.5' fill='none' opacity='0.45'/><g transform='translate(22 22)'><g transform='rotate(45)'><polygon points='0,-8.5 0.85,0 0,0' fill='%234099ff' opacity='0.78'/><polygon points='0,-8.5 -0.85,0 0,0' fill='%230077ff' opacity='0.78'/></g><g transform='rotate(135)'><polygon points='0,-8.5 0.85,0 0,0' fill='%234099ff' opacity='0.78'/><polygon points='0,-8.5 -0.85,0 0,0' fill='%230077ff' opacity='0.78'/></g><g transform='rotate(225)'><polygon points='0,-8.5 0.85,0 0,0' fill='%234099ff' opacity='0.78'/><polygon points='0,-8.5 -0.85,0 0,0' fill='%230077ff' opacity='0.78'/></g><g transform='rotate(315)'><polygon points='0,-8.5 0.85,0 0,0' fill='%234099ff' opacity='0.78'/><polygon points='0,-8.5 -0.85,0 0,0' fill='%230077ff' opacity='0.78'/></g><g transform='rotate(90)'><polygon points='0,-13.5 1.2,0 0,0' fill='%234099ff'/><polygon points='0,-13.5 -1.2,0 0,0' fill='%230077ff'/></g><g transform='rotate(180)'><polygon points='0,-13.5 1.2,0 0,0' fill='%234099ff'/><polygon points='0,-13.5 -1.2,0 0,0' fill='%230077ff'/></g><g transform='rotate(270)'><polygon points='0,-13.5 1.2,0 0,0' fill='%234099ff'/><polygon points='0,-13.5 -1.2,0 0,0' fill='%230077ff'/></g><polygon points='0,-15.5 1.4,0 0,0' fill='%23ffcc4d'/><polygon points='0,-15.5 -1.4,0 0,0' fill='%23ffaa00'/></g><g stroke='%234099ff' stroke-linecap='round'><line x1='22' y1='2.6' x2='22' y2='4.6' stroke-width='1.4'/><line x1='22' y1='39.4' x2='22' y2='41.4' stroke-width='1.1'/><line x1='2.6' y1='22' x2='4.6' y2='22' stroke-width='1.1'/><line x1='39.4' y1='22' x2='41.4' y2='22' stroke-width='1.1'/></g><circle cx='22' cy='22' r='2.2' fill='%2306090f' stroke='%230077ff' stroke-width='0.6'/><circle cx='22' cy='22' r='1.05' fill='%23ffaa00'/></svg>">
 <style>
   /* ─── BRAND TOKENS — match live ops.nauti-labs.com ─── */
   :root {
@@ -1987,18 +2008,65 @@
     <div class="sidebar-brand">
       <div class="brand-mark" aria-hidden="true">
         <svg class="brand-svg" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
-          <circle class="wm-rim"   cx="22" cy="22" r="18" stroke-width="2.2" fill="none"/>
-          <circle class="wm-hub"   cx="22" cy="22" r="4.5" stroke-width="2" fill="none"/>
-          <circle class="wm-dot"   cx="22" cy="22" r="2"/>
-          <line   class="wm-spokeA" x1="22" y1="17.5" x2="22" y2="4"   stroke-width="2" stroke-linecap="round"/>
-          <line   class="wm-spokeA" x1="22" y1="26.5" x2="22" y2="40"  stroke-width="2" stroke-linecap="round"/>
-          <line   class="wm-spokeA" x1="17.5" y1="22" x2="4"  y2="22"  stroke-width="2" stroke-linecap="round"/>
-          <line   class="wm-spokeA" x1="26.5" y1="22" x2="40" y2="22"  stroke-width="2" stroke-linecap="round"/>
-          <line   class="wm-spokeB" x1="19.5" y1="19.5" x2="9.5" y2="9.5"   stroke-width="1.8" stroke-linecap="round"/>
-          <line   class="wm-spokeB" x1="24.5" y1="24.5" x2="34.5" y2="34.5" stroke-width="1.8" stroke-linecap="round"/>
-          <line   class="wm-spokeB" x1="24.5" y1="19.5" x2="34.5" y2="9.5"  stroke-width="1.8" stroke-linecap="round"/>
-          <line   class="wm-spokeB" x1="19.5" y1="24.5" x2="9.5"  y2="34.5" stroke-width="1.8" stroke-linecap="round"/>
-          <circle class="wm-rim"   cx="22" cy="22" r="18" stroke-width="0.4" opacity="0.25"/>
+          <defs>
+            <!-- Cardinal needle (long, two-tone amber) — drawn pointing up from origin -->
+            <g id="np-card-n">
+              <polygon points="0,-15.5  1.4,0  0,0" fill="var(--brand-accent-2)"/>
+              <polygon points="0,-15.5 -1.4,0  0,0" fill="var(--brand-accent)"/>
+            </g>
+            <!-- Cardinal needle (E/S/W — medium, two-tone blue) -->
+            <g id="np-card">
+              <polygon points="0,-13.5  1.2,0  0,0" fill="var(--brand-primary-2)"/>
+              <polygon points="0,-13.5 -1.2,0  0,0" fill="var(--brand-primary)"/>
+            </g>
+            <!-- Intercardinal needle (short, dim blue two-tone) -->
+            <g id="np-inter">
+              <polygon points="0,-8.5  0.85,0  0,0" fill="var(--brand-primary-2)" opacity="0.78"/>
+              <polygon points="0,-8.5 -0.85,0  0,0" fill="var(--brand-primary)"   opacity="0.78"/>
+            </g>
+          </defs>
+
+          <!-- Outer rim -->
+          <circle class="wm-rim" cx="22" cy="22" r="18" stroke="var(--brand-primary)" stroke-width="1.4" fill="none"/>
+          <!-- Subtle inner bezel ring -->
+          <circle cx="22" cy="22" r="13.5" stroke="var(--brand-primary-2)" stroke-width="0.5" fill="none" opacity="0.45"/>
+
+          <!-- Compass body — 8-point star, drawn from intercardinal (back) → cardinal → North (top) -->
+          <g transform="translate(22 22)">
+            <!-- Intercardinals: NE, SE, SW, NW -->
+            <use href="#np-inter" transform="rotate(45)"/>
+            <use href="#np-inter" transform="rotate(135)"/>
+            <use href="#np-inter" transform="rotate(225)"/>
+            <use href="#np-inter" transform="rotate(315)"/>
+            <!-- Minor cardinals: E, S, W (blue) -->
+            <use href="#np-card" transform="rotate(90)"/>
+            <use href="#np-card" transform="rotate(180)"/>
+            <use href="#np-card" transform="rotate(270)"/>
+            <!-- North: amber, longest, drawn last so it's on top -->
+            <use href="#np-card-n"/>
+          </g>
+
+          <!-- 4 cardinal tick marks just outside the rim (engraved scale) -->
+          <g stroke="var(--brand-primary-2)" stroke-linecap="round" opacity="0.85">
+            <line x1="22"   y1="2.6"  x2="22"   y2="4.6"  stroke-width="1.4"/>
+            <line x1="22"   y1="39.4" x2="22"   y2="41.4" stroke-width="1.1"/>
+            <line x1="2.6"  y1="22"   x2="4.6"  y2="22"   stroke-width="1.1"/>
+            <line x1="39.4" y1="22"   x2="41.4" y2="22"   stroke-width="1.1"/>
+          </g>
+          <!-- 4 intercardinal tick marks (shorter, dimmer) -->
+          <g stroke="var(--brand-primary-2)" stroke-linecap="round" stroke-width="0.8" opacity="0.55">
+            <line x1="9.0"  y1="9.0"  x2="10.4" y2="10.4"/>
+            <line x1="33.6" y1="9.0"  x2="35.0" y2="10.4"/>
+            <line x1="9.0"  y1="35.0" x2="10.4" y2="33.6"/>
+            <line x1="33.6" y1="35.0" x2="35.0" y2="33.6"/>
+          </g>
+
+          <!-- Center hub: small metallic-feel disc with rim + amber pin -->
+          <circle cx="22" cy="22" r="2.2" fill="var(--bg-sidebar, #04060b)" stroke="var(--brand-primary)" stroke-width="0.6"/>
+          <circle cx="22" cy="22" r="1.05" fill="var(--brand-accent)"/>
+
+          <!-- Faint outer rim glow -->
+          <circle cx="22" cy="22" r="18" stroke="var(--brand-primary)" stroke-width="0.4" fill="none" opacity="0.22"/>
         </svg>
       </div>
       <div>
@@ -3956,17 +4024,47 @@
       <div class="sof-page">
         <div class="sof-header">
           <svg class="sof-logo" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:60px;height:60px;flex:0 0 60px">
-            <circle class="wm-rim"   cx="22" cy="22" r="18" stroke-width="2.2" fill="none"/>
-            <circle class="wm-hub"   cx="22" cy="22" r="4.5" stroke-width="2" fill="none"/>
-            <circle class="wm-dot"   cx="22" cy="22" r="2"/>
-            <line   class="wm-spokeA" x1="22" y1="17.5" x2="22" y2="4"   stroke-width="2" stroke-linecap="round"/>
-            <line   class="wm-spokeA" x1="22" y1="26.5" x2="22" y2="40"  stroke-width="2" stroke-linecap="round"/>
-            <line   class="wm-spokeA" x1="17.5" y1="22" x2="4"  y2="22"  stroke-width="2" stroke-linecap="round"/>
-            <line   class="wm-spokeA" x1="26.5" y1="22" x2="40" y2="22"  stroke-width="2" stroke-linecap="round"/>
-            <line   class="wm-spokeB" x1="19.5" y1="19.5" x2="9.5" y2="9.5"   stroke-width="1.8" stroke-linecap="round"/>
-            <line   class="wm-spokeB" x1="24.5" y1="24.5" x2="34.5" y2="34.5" stroke-width="1.8" stroke-linecap="round"/>
-            <line   class="wm-spokeB" x1="24.5" y1="19.5" x2="34.5" y2="9.5"  stroke-width="1.8" stroke-linecap="round"/>
-            <line   class="wm-spokeB" x1="19.5" y1="24.5" x2="9.5"  y2="34.5" stroke-width="1.8" stroke-linecap="round"/>
+            <!-- Compass rose — print version (fixed brand colors on white letterhead, intentionally not theme-reactive) -->
+            <defs>
+              <g id="sof-card-n">
+                <polygon points="0,-15.5  1.4,0  0,0" fill="#ffaa00"/>
+                <polygon points="0,-15.5 -1.4,0  0,0" fill="#06090f"/>
+              </g>
+              <g id="sof-card">
+                <polygon points="0,-13.5  1.2,0  0,0" fill="#0077ff"/>
+                <polygon points="0,-13.5 -1.2,0  0,0" fill="#06090f"/>
+              </g>
+              <g id="sof-inter">
+                <polygon points="0,-8.5  0.85,0  0,0" fill="#0077ff" opacity="0.85"/>
+                <polygon points="0,-8.5 -0.85,0  0,0" fill="#06090f" opacity="0.85"/>
+              </g>
+            </defs>
+            <circle cx="22" cy="22" r="18"   stroke="#06090f" stroke-width="1.6" fill="none"/>
+            <circle cx="22" cy="22" r="13.5" stroke="#0077ff" stroke-width="0.5" fill="none" opacity="0.55"/>
+            <g transform="translate(22 22)">
+              <use href="#sof-inter" transform="rotate(45)"/>
+              <use href="#sof-inter" transform="rotate(135)"/>
+              <use href="#sof-inter" transform="rotate(225)"/>
+              <use href="#sof-inter" transform="rotate(315)"/>
+              <use href="#sof-card"  transform="rotate(90)"/>
+              <use href="#sof-card"  transform="rotate(180)"/>
+              <use href="#sof-card"  transform="rotate(270)"/>
+              <use href="#sof-card-n"/>
+            </g>
+            <g stroke="#0077ff" stroke-linecap="round" opacity="0.85">
+              <line x1="22"   y1="2.6"  x2="22"   y2="4.6"  stroke-width="1.4"/>
+              <line x1="22"   y1="39.4" x2="22"   y2="41.4" stroke-width="1.1"/>
+              <line x1="2.6"  y1="22"   x2="4.6"  y2="22"   stroke-width="1.1"/>
+              <line x1="39.4" y1="22"   x2="41.4" y2="22"   stroke-width="1.1"/>
+            </g>
+            <g stroke="#0077ff" stroke-linecap="round" stroke-width="0.8" opacity="0.5">
+              <line x1="9.0"  y1="9.0"  x2="10.4" y2="10.4"/>
+              <line x1="33.6" y1="9.0"  x2="35.0" y2="10.4"/>
+              <line x1="9.0"  y1="35.0" x2="10.4" y2="33.6"/>
+              <line x1="33.6" y1="35.0" x2="35.0" y2="33.6"/>
+            </g>
+            <circle cx="22" cy="22" r="2.2"  fill="#fff"    stroke="#06090f" stroke-width="0.6"/>
+            <circle cx="22" cy="22" r="1.05" fill="#ffaa00"/>
           </svg>
           <div class="sof-letterhead">
             <h2>Nauti-Ops Demo Agency, LLC</h2>

@@ -4,3 +4,7 @@ node_modules/
 .env
 .env.*
 private-seed/
+
+# Local brand verification artifacts (not for deploy)
+_brand-*
+*.helm-backup

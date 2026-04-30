@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg-grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0a1018"/>
+      <stop offset="100%" stop-color="#06090f"/>
+    </linearGradient>
+    <radialGradient id="amber-glow" cx="0.85" cy="0.15" r="0.6">
+      <stop offset="0%" stop-color="#ffaa00" stop-opacity="0.16"/>
+      <stop offset="100%" stop-color="#ffaa00" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="blue-glow" cx="0.1" cy="0.95" r="0.55">
+      <stop offset="0%" stop-color="#0077ff" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#0077ff" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1a2434" stroke-width="0.5" opacity="0.5"/>
+    </pattern>
+    <g id="og-card-n">
+      <polygon points="0,-15.5  1.4,0  0,0" fill="#ffcc4d"/>
+      <polygon points="0,-15.5 -1.4,0  0,0" fill="#ffaa00"/>
+    </g>
+    <g id="og-card">
+      <polygon points="0,-13.5  1.2,0  0,0" fill="#4099ff"/>
+      <polygon points="0,-13.5 -1.2,0  0,0" fill="#0077ff"/>
+    </g>
+    <g id="og-inter">
+      <polygon points="0,-8.5  0.85,0  0,0" fill="#4099ff" opacity="0.78"/>
+      <polygon points="0,-8.5 -0.85,0  0,0" fill="#0077ff" opacity="0.78"/>
+    </g>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg-grad)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect width="1200" height="630" fill="url(#amber-glow)"/>
+  <rect width="1200" height="630" fill="url(#blue-glow)"/>
+  <rect width="1200" height="3" fill="#0077ff"/>
+
+  <!-- Header: compass + wordmark + tagline -->
+  <g transform="translate(80 80)">
+    <g transform="translate(0 30) scale(1.55)">
+      <circle cx="0" cy="0" r="18"   stroke="#0077ff" stroke-width="1.4" fill="none"/>
+      <circle cx="0" cy="0" r="13.5" stroke="#4099ff" stroke-width="0.5" fill="none" opacity="0.45"/>
+      <use href="#og-inter" transform="rotate(45)"/>
+      <use href="#og-inter" transform="rotate(135)"/>
+      <use href="#og-inter" transform="rotate(225)"/>
+      <use href="#og-inter" transform="rotate(315)"/>
+      <use href="#og-card"  transform="rotate(90)"/>
+      <use href="#og-card"  transform="rotate(180)"/>
+      <use href="#og-card"  transform="rotate(270)"/>
+      <use href="#og-card-n"/>
+      <circle cx="0" cy="0" r="2.2"  fill="#06090f" stroke="#0077ff" stroke-width="0.6"/>
+      <circle cx="0" cy="0" r="1.05" fill="#ffaa00"/>
+    </g>
+    <text x="80" y="40" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="32" font-weight="800" fill="#fafafd" letter-spacing="0.5">Nauti-Ops</text>
+    <text x="320" y="40" font-family="Menlo, 'Courier New', monospace" font-size="14" font-weight="500" fill="#7a8a9a" letter-spacing="0.5">// by Nauti-Labs</text>
+  </g>
+
+  <!-- Top-right: status badge -->
+  <g transform="translate(1120 80)">
+    <text text-anchor="end" y="40" font-family="Menlo, 'Courier New', monospace" font-size="14" font-weight="700" fill="#ffcc4d" letter-spacing="2">v1 · LIVE</text>
+  </g>
+
+  <!-- Divider -->
+  <line x1="80" y1="148" x2="1120" y2="148" stroke="#1a2434" stroke-width="1"/>
+
+  <!-- Headline -->
+  <g transform="translate(80 240)">
+    <text font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="68" font-weight="700" fill="#fafafd" letter-spacing="-1.5">
+      <tspan x="0" dy="0">Stop running the channel</tspan>
+      <tspan x="0" dy="84">from a </tspan>
+      <tspan font-style="italic" fill="#ffaa00" font-weight="600">spreadsheet.</tspan>
+    </text>
+  </g>
+
+  <!-- URL above pills (own line, no collision) -->
+  <text x="80" y="475" font-family="Menlo, 'Courier New', monospace" font-size="15" font-weight="500" fill="#b8d4f0" letter-spacing="1">ops.nauti-labs.com</text>
+
+  <!-- Tech pills (4 only) -->
+  <g transform="translate(80 510)" font-family="Menlo, 'Courier New', monospace" font-size="13">
+    <rect x="0"   y="0" width="120" height="38" rx="6" fill="#0e1622" stroke="#1a2434"/>
+    <text x="14"  y="25" font-weight="700" fill="#ffaa00">▸</text>
+    <text x="32"  y="25" font-weight="500" fill="#b8d4f0">Voyages</text>
+
+    <rect x="136" y="0" width="200" height="38" rx="6" fill="#0e1622" stroke="#1a2434"/>
+    <text x="150" y="25" font-weight="700" fill="#ffaa00">▸</text>
+    <text x="168" y="25" font-weight="500" fill="#b8d4f0">Statement of Facts</text>
+
+    <rect x="352" y="0" width="160" height="38" rx="6" fill="#0e1622" stroke="#1a2434"/>
+    <text x="366" y="25" font-weight="700" fill="#ffaa00">▸</text>
+    <text x="384" y="25" font-weight="500" fill="#b8d4f0">Captain AI</text>
+
+    <rect x="528" y="0" width="180" height="38" rx="6" fill="#0e1622" stroke="#1a2434"/>
+    <text x="542" y="25" font-weight="700" fill="#ffaa00">▸</text>
+    <text x="560" y="25" font-weight="500" fill="#b8d4f0">Berth rotations</text>
+  </g>
+
+  <!-- Bottom-right: signature -->
+  <text x="1120" y="540" text-anchor="end" font-family="Menlo, 'Courier New', monospace" font-size="13" font-weight="500" fill="#7a8a9a" letter-spacing="2">NAUTI-LABS · 2026</text>
+</svg>
