@@ -307,6 +307,409 @@
     background: var(--bg-sunk);
   }
 
+  /* ─── COLOR BOMB ─── */
+  .cb-toggle {
+    height: 36px;
+    min-width: 132px;
+    padding: 0 12px 0 8px;
+    border: 1px solid var(--line-strong);
+    border-radius: 8px;
+    background:
+      linear-gradient(135deg, rgba(255,255,255,0.10), rgba(255,255,255,0)),
+      linear-gradient(135deg, var(--blue), var(--amber));
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 0.82rem;
+    font-weight: 800;
+    box-shadow: 0 10px 26px rgba(0,0,0,0.24), 0 0 22px var(--blue-glow);
+    transition: transform 0.14s ease, box-shadow 0.14s ease, border-color 0.14s ease;
+    white-space: nowrap;
+  }
+  .cb-toggle:hover {
+    transform: translateY(-1px);
+    border-color: rgba(255,255,255,0.30);
+    box-shadow: 0 14px 34px rgba(0,0,0,0.30), 0 0 28px var(--amber-glow);
+  }
+  .cb-toggle[aria-expanded="true"] {
+    border-color: var(--brand-accent);
+    box-shadow: 0 0 0 3px var(--amber-dim), 0 14px 34px rgba(0,0,0,0.30);
+  }
+  .cb-toggle svg {
+    width: 22px;
+    height: 22px;
+    flex: 0 0 22px;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.28));
+  }
+
+  .cb-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: min(420px, calc(100vw - 16px));
+    background:
+      linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0)),
+      linear-gradient(180deg, var(--bg-elev), var(--bg));
+    border-left: 1px solid var(--line-strong);
+    box-shadow: -22px 0 60px rgba(0,0,0,0.58);
+    color: var(--text);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    pointer-events: none;
+    transform: translateX(calc(100% + 24px));
+    transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1040;
+  }
+  .cb-panel.open {
+    pointer-events: auto;
+    transform: translateX(0);
+  }
+  .cb-panel::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(135deg, var(--blue-dim), transparent 42%),
+      linear-gradient(315deg, var(--amber-dim), transparent 44%);
+    pointer-events: none;
+  }
+  .cb-head {
+    position: relative;
+    z-index: 1;
+    padding: 1.1rem 1.1rem 1rem;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.9rem;
+  }
+  .cb-title-block {
+    min-width: 0;
+  }
+  .cb-kicker {
+    color: var(--brand-accent);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0;
+    text-transform: uppercase;
+  }
+  .cb-head h3 {
+    margin-top: 2px;
+    color: #fff;
+    font-size: 1.22rem;
+    font-weight: 800;
+    letter-spacing: 0;
+    line-height: 1.1;
+  }
+  .cb-close {
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--line-strong);
+    border-radius: 8px;
+    color: var(--text-2);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    line-height: 1;
+    flex: 0 0 36px;
+  }
+  .cb-close:hover {
+    color: #fff;
+    border-color: var(--brand-accent);
+    background: var(--amber-dim);
+  }
+  .cb-body {
+    position: relative;
+    z-index: 1;
+    padding: 1rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+  .cb-hint {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.7rem 0.8rem;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: rgba(255,255,255,0.04);
+    color: var(--text-2);
+    font-size: 0.82rem;
+    font-weight: 600;
+  }
+  .cb-hint-pip {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--brand-accent);
+    box-shadow: 0 0 0 4px var(--amber-dim), 0 0 18px var(--amber-glow);
+    flex: 0 0 9px;
+  }
+  #cb-presets {
+    display: grid;
+    gap: 0.75rem;
+  }
+  .cb-preset {
+    width: 100%;
+    min-height: 86px;
+    display: grid;
+    grid-template-columns: 62px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.85rem;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background:
+      linear-gradient(135deg, rgba(255,255,255,0.07), rgba(255,255,255,0.01)),
+      var(--bg-sunk);
+    color: var(--text);
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    transition: transform 0.14s ease, border-color 0.14s ease, box-shadow 0.14s ease, background 0.14s ease;
+  }
+  .cb-preset::after {
+    content: '';
+    position: absolute;
+    inset: auto -20% -48% 26%;
+    height: 78px;
+    background: linear-gradient(90deg, var(--cb-a), var(--cb-b), var(--cb-c));
+    opacity: 0.16;
+    filter: blur(14px);
+    transform: rotate(-5deg);
+    z-index: -1;
+  }
+  .cb-preset:hover {
+    transform: translateX(-3px);
+    border-color: var(--cb-b);
+    box-shadow: 0 14px 34px rgba(0,0,0,0.28);
+  }
+  .cb-preset.active {
+    border-color: var(--brand-accent);
+    box-shadow: 0 0 0 3px var(--amber-dim), 0 14px 34px rgba(0,0,0,0.24);
+  }
+  .cb-bomb {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: conic-gradient(from 135deg, var(--cb-a), var(--cb-b), var(--cb-c), var(--cb-a));
+    border: 1px solid rgba(255,255,255,0.28);
+    box-shadow: inset 0 0 18px rgba(255,255,255,0.22), 0 10px 22px rgba(0,0,0,0.32);
+    position: relative;
+    flex: 0 0 56px;
+  }
+  .cb-bomb::before {
+    content: '';
+    position: absolute;
+    width: 22px;
+    height: 14px;
+    top: -9px;
+    right: 1px;
+    border-top: 3px solid var(--cb-b);
+    border-right: 3px solid var(--cb-b);
+    border-radius: 0 12px 0 0;
+    transform: rotate(17deg);
+    transform-origin: left bottom;
+    box-shadow: 0 -2px 10px var(--cb-b);
+  }
+  .cb-bomb::after {
+    content: '';
+    position: absolute;
+    inset: 9px auto auto 10px;
+    width: 17px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.55);
+    filter: blur(2px);
+  }
+  .cb-copy {
+    min-width: 0;
+  }
+  .cb-name {
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 800;
+    line-height: 1.2;
+    overflow-wrap: anywhere;
+  }
+  .cb-desc {
+    margin-top: 2px;
+    color: var(--text-muted);
+    font-size: 0.76rem;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+  }
+  .cb-swatches {
+    display: flex;
+    gap: 5px;
+    margin-top: 0.48rem;
+  }
+  .cb-sw {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.55);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.24);
+    flex: 0 0 18px;
+  }
+  .cb-arm {
+    justify-self: end;
+    align-self: center;
+    padding: 5px 8px;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 999px;
+    background: rgba(255,255,255,0.07);
+    color: var(--text-2);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .cb-preset.active .cb-arm {
+    background: var(--brand-accent);
+    border-color: var(--brand-accent);
+    color: var(--brand-primary-3);
+  }
+  .cb-explosion {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 1035;
+  }
+  .cb-explosion::before {
+    content: '';
+    position: absolute;
+    inset: -12%;
+    background:
+      radial-gradient(circle at var(--cb-x) var(--cb-y), var(--cb-a) 0 2%, transparent 20%),
+      radial-gradient(circle at calc(var(--cb-x) + 18vw) calc(var(--cb-y) + 12vh), var(--cb-b) 0 1.6%, transparent 18%),
+      radial-gradient(circle at calc(var(--cb-x) - 22vw) calc(var(--cb-y) + 18vh), var(--cb-c) 0 1.4%, transparent 17%);
+    opacity: 0;
+    animation: cbWash 900ms ease-out forwards;
+  }
+  .cb-explosion-burst {
+    position: absolute;
+    left: var(--cb-x);
+    top: var(--cb-y);
+    width: 18px;
+    height: 18px;
+    transform: translate(-50%, -50%);
+  }
+  .cb-explosion-burst::before,
+  .cb-explosion-burst::after {
+    content: '';
+    position: absolute;
+    inset: -12px;
+    border-radius: 50%;
+    border: 3px solid var(--cb-b);
+    box-shadow: 0 0 28px var(--cb-a), inset 0 0 24px var(--cb-c);
+    animation: cbRing 780ms cubic-bezier(0.12, 0.84, 0.33, 1) forwards;
+  }
+  .cb-explosion-burst::after {
+    border-color: var(--cb-a);
+    animation-delay: 90ms;
+  }
+  .cb-splatter {
+    position: absolute;
+    left: var(--cb-x);
+    top: var(--cb-y);
+    width: var(--size);
+    height: var(--size);
+    border-radius: 58% 42% 64% 36%;
+    background: radial-gradient(circle at 32% 26%, rgba(255,255,255,0.86), var(--c) 23%, var(--c) 70%, transparent 72%);
+    box-shadow: 0 4px 18px rgba(0,0,0,0.22), 0 0 18px var(--c);
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.35) rotate(var(--spin));
+    animation: cbSplatter 920ms cubic-bezier(0.18, 0.86, 0.32, 1) forwards;
+  }
+  .cb-splashed {
+    animation: cbSurfaceSplash 760ms ease-out;
+  }
+  body.cb-dragging .page,
+  body.cb-dragging .topbar,
+  body.cb-dragging .sidebar {
+    cursor: copy;
+  }
+  body.cb-dragging .cb-panel {
+    border-left-color: var(--brand-accent);
+  }
+  @keyframes cbWash {
+    0% { opacity: 0; transform: scale(0.82); }
+    26% { opacity: 0.34; }
+    100% { opacity: 0; transform: scale(1.08); }
+  }
+  @keyframes cbRing {
+    0% { opacity: 0.95; transform: scale(0.35); }
+    100% { opacity: 0; transform: scale(18); }
+  }
+  @keyframes cbSplatter {
+    0% { opacity: 0.98; transform: translate(-50%, -50%) scale(0.35) rotate(var(--spin)); }
+    72% { opacity: 0.88; transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(1) rotate(calc(var(--spin) + 80deg)); }
+    100% { opacity: 0; transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(0.38) rotate(calc(var(--spin) + 120deg)); }
+  }
+  @keyframes cbSurfaceSplash {
+    0% { border-color: var(--line); }
+    38% { border-color: var(--brand-accent); box-shadow: 0 0 0 2px var(--amber-dim), 0 18px 44px rgba(0,0,0,0.34); }
+    100% { border-color: var(--line); }
+  }
+  @media (max-width: 920px) {
+    .cb-toggle {
+      min-width: 36px;
+      width: 36px;
+      padding: 0;
+    }
+    .cb-toggle-label {
+      display: none;
+    }
+  }
+  @media (max-width: 560px) {
+    .cb-panel {
+      width: 100vw;
+    }
+    .cb-preset {
+      grid-template-columns: 54px minmax(0, 1fr);
+    }
+    .cb-bomb {
+      width: 50px;
+      height: 50px;
+    }
+    .cb-arm {
+      grid-column: 2;
+      justify-self: start;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cb-toggle,
+    .cb-panel,
+    .cb-preset {
+      transition: none;
+    }
+    .cb-explosion {
+      display: none;
+    }
+    .cb-splashed {
+      animation: none;
+    }
+  }
+  @media print {
+    .cb-panel,
+    .cb-explosion {
+      display: none !important;
+    }
+  }
+
   /* ─── PAGE CONTENT ─── */
   .page {
     padding: 1.75rem 2rem 4rem;
@@ -1328,12 +1731,13 @@
       </div>
       <div class="topbar-actions">
         <span class="env-pill">demo · v0.5</span>
-        <button class="cb-toggle" id="cb-toggle" title="Color Bomb · change theme" aria-label="Open Color Bomb panel">
+        <button class="cb-toggle" id="cb-toggle" title="Color Bomb · change theme" aria-label="Open Color Bomb panel" aria-expanded="false">
           <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <circle cx="8.5" cy="9" r="5" fill="var(--blue)" opacity="0.85"/>
             <circle cx="15" cy="11" r="4.5" fill="var(--amber)" opacity="0.85"/>
             <circle cx="11.5" cy="16" r="4" fill="var(--status-active)" opacity="0.85"/>
           </svg>
+          <span class="cb-toggle-label">Color Bomb</span>
         </button>
         <button class="icon-btn" title="Notifications">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
@@ -1773,6 +2177,11 @@
   function terminalProductList(t) {
     return [...new Set((t.berths || []).flatMap(b => Array.isArray(b.products) ? b.products : []).filter(Boolean))].sort((a,b) => a.localeCompare(b));
   }
+  function terminalForVoyage(v) {
+    if (!v) return null;
+    const bp = (v.berthingProspects || []).find(b => b.terminalId);
+    return bp ? byId(TERMINALS, bp.terminalId) : null;
+  }
   function matchTerminalByName(name) {
     const n = String(name || '').toLowerCase().trim();
     if (!n) return null;
@@ -1894,11 +2303,6 @@
     const drafts = t.berths.map(b => parseFloat(b.draft)).filter(d => !isNaN(d));
     return drafts.length ? Math.max(...drafts) : null;
   }
-  function terminalForVoyage(v) {
-    const bp = (v.berthingProspects || []).find(b => b.terminalId);
-    return bp ? byId(TERMINALS, bp.terminalId) : null;
-  }
-
   function setActiveNav(route) {
     document.querySelectorAll('.nav-item').forEach(a => a.classList.toggle('active', a.dataset.route === route));
   }
@@ -3788,7 +4192,69 @@
     };
   }
 
-  function cbApply(presetKey) {
+  function cbGetOrigin(sourceEvent) {
+    if (sourceEvent && Number.isFinite(sourceEvent.clientX) && Number.isFinite(sourceEvent.clientY)) {
+      return { x: sourceEvent.clientX, y: sourceEvent.clientY };
+    }
+    const toggle = document.getElementById('cb-toggle');
+    if (toggle) {
+      const rect = toggle.getBoundingClientRect();
+      return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+    }
+    return { x: window.innerWidth - 88, y: 88 };
+  }
+
+  function cbSetSwatchVars(el, swatches) {
+    if (!el || !swatches || swatches.length < 3) return;
+    el.style.setProperty('--cb-a', swatches[0]);
+    el.style.setProperty('--cb-b', swatches[1]);
+    el.style.setProperty('--cb-c', swatches[2]);
+  }
+
+  function cbSwatchMarkup(swatches) {
+    return swatches.map(c => `<span class="cb-sw" style="background:${c}"></span>`).join('');
+  }
+
+  function cbLaunchExplosion(swatches, sourceEvent) {
+    const origin = cbGetOrigin(sourceEvent);
+    const burst = document.createElement('div');
+    burst.className = 'cb-explosion';
+    burst.style.setProperty('--cb-x', `${origin.x}px`);
+    burst.style.setProperty('--cb-y', `${origin.y}px`);
+    cbSetSwatchVars(burst, swatches);
+    burst.innerHTML = '<div class="cb-explosion-burst"></div>';
+
+    const particleCount = 42;
+    const throwRadius = Math.max(window.innerWidth, window.innerHeight) * 0.72;
+    for (let i = 0; i < particleCount; i++) {
+      const angle = (Math.PI * 2 * i / particleCount) + (Math.random() * 0.72);
+      const distance = 88 + Math.random() * throwRadius;
+      const splatter = document.createElement('span');
+      splatter.className = 'cb-splatter';
+      splatter.style.setProperty('--dx', `${Math.cos(angle) * distance}px`);
+      splatter.style.setProperty('--dy', `${Math.sin(angle) * distance}px`);
+      splatter.style.setProperty('--size', `${10 + Math.random() * 30}px`);
+      splatter.style.setProperty('--spin', `${Math.floor(Math.random() * 180)}deg`);
+      splatter.style.setProperty('--c', swatches[i % swatches.length]);
+      splatter.style.animationDelay = `${Math.floor(Math.random() * 120)}ms`;
+      burst.appendChild(splatter);
+    }
+
+    document.body.appendChild(burst);
+    setTimeout(() => burst.remove(), 1200);
+  }
+
+  function cbSplashSurfaces() {
+    const targets = document.querySelectorAll('.topbar, .sidebar-brand, .nav-item.active, .kpi, .card, .detail-hero, .timeline-item, .draft-item.active');
+    targets.forEach((el, idx) => {
+      window.setTimeout(() => {
+        el.classList.add('cb-splashed');
+        window.setTimeout(() => el.classList.remove('cb-splashed'), 820);
+      }, Math.min(idx * 26, 260));
+    });
+  }
+
+  function cbApply(presetKey, sourceEvent) {
     let preset = CB_PRESETS[presetKey];
     if (!preset) return;
     let vars = preset.vars;
@@ -3798,9 +4264,11 @@
       swatches = vars._swatches;
       delete vars._swatches;
       // Update random preview swatches
-      const randomCard = document.querySelector('[data-preset="random"] .cb-swatches');
+      const randomCard = document.querySelector('[data-preset="random"]');
       if (randomCard) {
-        randomCard.innerHTML = swatches.map(c => `<div class="cb-sw" style="background:${c}"></div>`).join('');
+        cbSetSwatchVars(randomCard, swatches);
+        const randomSwatches = randomCard.querySelector('.cb-swatches');
+        if (randomSwatches) randomSwatches.innerHTML = cbSwatchMarkup(swatches);
       }
     }
     Object.entries(vars).forEach(([k, v]) => document.documentElement.style.setProperty(k, v));
@@ -3808,28 +4276,31 @@
     document.querySelectorAll('.cb-preset').forEach(el => {
       el.classList.toggle('active', el.dataset.preset === presetKey);
     });
-    // burst effect
-    const burst = document.createElement('div');
-    burst.className = 'cb-explosion';
-    burst.innerHTML = '<div class="cb-explosion-burst"></div>';
-    document.body.appendChild(burst);
-    setTimeout(() => burst.remove(), 700);
+    cbLaunchExplosion(swatches, sourceEvent);
+    cbSplashSurfaces();
     if (window.showToast) showToast(`Theme: ${preset.name}`);
   }
 
   function cbBuildPanel() {
     const wrap = document.getElementById('cb-presets');
     if (!wrap) return;
-    wrap.innerHTML = Object.entries(CB_PRESETS).map(([k, p]) => `
-      <button class="cb-preset" data-preset="${k}" draggable="true">
-        <div class="cb-swatches">${p.swatches.map(c => `<div class="cb-sw" style="background:${c}"></div>`).join('')}</div>
-        <div class="cb-name">${p.name}</div>
-        <div class="cb-desc">${p.desc}</div>
-      </button>
-    `).join('');
+    wrap.innerHTML = Object.entries(CB_PRESETS).map(([k, p]) => {
+      const bombName = /bomb/i.test(p.name) ? p.name : `${p.name} Bomb`;
+      return `
+        <button class="cb-preset" data-preset="${k}" draggable="true" style="--cb-a:${p.swatches[0]};--cb-b:${p.swatches[1]};--cb-c:${p.swatches[2]};">
+          <div class="cb-bomb" aria-hidden="true"></div>
+          <div class="cb-copy">
+            <div class="cb-name">${bombName}</div>
+            <div class="cb-desc">${p.desc}</div>
+            <div class="cb-swatches" aria-hidden="true">${cbSwatchMarkup(p.swatches)}</div>
+          </div>
+          <div class="cb-arm">Bomb</div>
+        </button>
+      `;
+    }).join('');
 
     wrap.querySelectorAll('.cb-preset').forEach(card => {
-      card.addEventListener('click', () => cbApply(card.dataset.preset));
+      card.addEventListener('click', (e) => cbApply(card.dataset.preset, e));
       card.addEventListener('dragstart', (e) => {
         e.dataTransfer.setData('text/plain', card.dataset.preset);
         e.dataTransfer.effectAllowed = 'copy';
@@ -3844,11 +4315,14 @@
     document.body.insertAdjacentHTML('beforeend', `
       <div class="cb-panel" id="cb-panel" role="dialog" aria-label="Color theme presets">
         <div class="cb-head">
-          <h3>Color Bomb</h3>
+          <div class="cb-title-block">
+            <div class="cb-kicker">Palette bombs</div>
+            <h3>Color Bomb</h3>
+          </div>
           <button class="cb-close" id="cb-close" aria-label="Close">×</button>
         </div>
         <div class="cb-body">
-          <div class="cb-hint"><b>Drag</b> a preset onto the page or just <b>click</b> to apply. Choice is remembered next visit.</div>
+          <div class="cb-hint"><span class="cb-hint-pip"></span><span>Console palettes armed for this watch.</span></div>
           <div id="cb-presets"></div>
         </div>
       </div>
@@ -3857,25 +4331,33 @@
     const toggle = document.getElementById('cb-toggle');
     const panel  = document.getElementById('cb-panel');
     const close  = document.getElementById('cb-close');
+    const setPanelOpen = (open) => {
+      if (!panel || !toggle) return;
+      panel.classList.toggle('open', open);
+      toggle.setAttribute('aria-expanded', String(open));
+    };
     if (toggle && panel) {
       toggle.addEventListener('click', (e) => {
         e.stopPropagation();
-        panel.classList.toggle('open');
+        setPanelOpen(!panel.classList.contains('open'));
       });
     }
-    if (close) close.addEventListener('click', () => panel.classList.remove('open'));
+    if (close) close.addEventListener('click', () => setPanelOpen(false));
     // close panel when clicking outside
     document.addEventListener('click', (e) => {
       if (!panel.contains(e.target) && !toggle.contains(e.target)) {
-        panel.classList.remove('open');
+        setPanelOpen(false);
       }
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') setPanelOpen(false);
     });
     // drop target = whole document
     document.addEventListener('dragover', (e) => { e.preventDefault(); e.dataTransfer.dropEffect = 'copy'; });
     document.addEventListener('drop', (e) => {
       e.preventDefault();
       const preset = e.dataTransfer.getData('text/plain');
-      if (preset && CB_PRESETS[preset]) cbApply(preset);
+      if (preset && CB_PRESETS[preset]) cbApply(preset, e);
       document.body.classList.remove('cb-dragging');
     });
     // restore saved theme
@@ -3886,6 +4368,14 @@
       let vars = preset.vars;
       if (saved === 'random') vars = generateRandomBombVars();
       if (vars) {
+        if (saved === 'random' && vars._swatches) {
+          const randomCard = document.querySelector('[data-preset="random"]');
+          if (randomCard) {
+            cbSetSwatchVars(randomCard, vars._swatches);
+            const randomSwatches = randomCard.querySelector('.cb-swatches');
+            if (randomSwatches) randomSwatches.innerHTML = cbSwatchMarkup(vars._swatches);
+          }
+        }
         if (vars._swatches) delete vars._swatches;
         Object.entries(vars).forEach(([k, v]) => document.documentElement.style.setProperty(k, v));
       }
