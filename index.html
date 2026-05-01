@@ -1069,7 +1069,7 @@
     animation: fadeIn 0.15s ease;
   }
   .ops-modal {
-    width: min(1120px, 100%);
+    width: min(1280px, 100%);
     max-height: calc(100vh - 36px);
     background:
       linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0)),
@@ -1198,6 +1198,104 @@
   }
   .ops-panel-body {
     padding: 0.9rem;
+  }
+  .ops-template-panel {
+    margin-bottom: 1rem;
+  }
+  .ops-template-columns {
+    display: grid;
+    grid-template-columns: minmax(260px, 0.7fr) minmax(0, 1.3fr);
+    gap: 0.85rem;
+    align-items: start;
+  }
+  .ops-template-section {
+    min-width: 0;
+  }
+  .ops-template-section + .ops-template-section {
+    margin-top: 0.9rem;
+  }
+  .ops-template-columns .ops-template-section + .ops-template-section {
+    margin-top: 0;
+  }
+  .ops-template-title {
+    margin-bottom: 0.42rem;
+    color: #fff;
+    font-size: 0.78rem;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+  .ops-table-wrap {
+    max-width: 100%;
+    overflow-x: auto;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--bg-sunk);
+  }
+  .ops-data-table {
+    width: 100%;
+    min-width: 560px;
+    border-collapse: collapse;
+    color: var(--text);
+    font-size: 0.74rem;
+    line-height: 1.35;
+  }
+  .ops-data-table.key {
+    min-width: 280px;
+  }
+  .ops-data-table th,
+  .ops-data-table td {
+    padding: 0.52rem 0.58rem;
+    border-bottom: 1px solid var(--line);
+    border-right: 1px solid var(--line);
+    vertical-align: top;
+    text-align: left;
+  }
+  .ops-data-table tr:last-child td {
+    border-bottom: none;
+  }
+  .ops-data-table th:last-child,
+  .ops-data-table td:last-child {
+    border-right: none;
+  }
+  .ops-data-table th {
+    background: rgba(255,255,255,0.04);
+    color: var(--brand-accent);
+    font-size: 0.62rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .ops-data-table.key td:first-child {
+    width: 42%;
+    color: var(--text-muted);
+    font-size: 0.62rem;
+    font-weight: 900;
+    text-transform: uppercase;
+  }
+  .ops-data-table td {
+    overflow-wrap: anywhere;
+  }
+  .ops-port-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.65rem;
+    margin-bottom: 0.75rem;
+  }
+  .ops-port-card {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--bg-sunk);
+    padding: 0.65rem;
+  }
+  .ops-port-title {
+    color: var(--text);
+    font-weight: 800;
+  }
+  .ops-port-meta {
+    margin-top: 0.28rem;
+    color: var(--text-muted);
+    font-size: 0.74rem;
+    line-height: 1.35;
   }
   .ops-schedule {
     display: grid;
@@ -1341,8 +1439,13 @@
   }
   @media (max-width: 960px) {
     .ops-summary-grid,
-    .ops-modal-grid {
+    .ops-modal-grid,
+    .ops-template-columns,
+    .ops-port-grid {
       grid-template-columns: 1fr;
+    }
+    .ops-template-columns .ops-template-section + .ops-template-section {
+      margin-top: 0.9rem;
     }
     .ops-schedule-item {
       grid-template-columns: 1fr;
@@ -3093,17 +3196,99 @@
       <p>Please reach out with any questions.</p>
       <div class="email-signature"><strong>Mock Agent</strong><br>Texas Marine Agency style update · As Agents Only<br>updates@demo.nauti-labs.com</div>`;
   }
+  function renderOpsDataTable(headers, rows, className = '') {
+    const headerHtml = headers.length
+      ? `<thead><tr>${headers.map(header => `<th>${escapeHtml(header)}</th>`).join('')}</tr></thead>`
+      : '';
+    return `
+      <div class="ops-table-wrap">
+        <table class="ops-data-table ${className}">
+          ${headerHtml}
+          <tbody>
+            ${rows.map(row => `<tr>${row.map(value => `<td>${escapeHtml(value ?? '—')}</td>`).join('')}</tr>`).join('')}
+          </tbody>
+        </table>
+      </div>`;
+  }
+  function renderOpsTemplateSnapshot(update) {
+    const cargoRows = update.portCalls.flatMap(portCall => portCall.parcels.map(parcel => [
+      portCall.port,
+      portCall.berth,
+      parcel.operation,
+      parcel.parcel,
+      parcel.grade,
+      parcel.quantity,
+      parcel.stowage,
+      parcel.surveyor,
+      parcel.tankInspection,
+    ]));
+    return `
+      <div class="ops-panel ops-template-panel">
+        <div class="ops-panel-head">
+          <div>
+            <div class="ops-panel-title">Agency template snapshot</div>
+            <div class="ops-panel-sub">Berthing prospects, tentative schedule, cargo parcels, and port-call particulars from the customer update.</div>
+          </div>
+        </div>
+        <div class="ops-panel-body">
+          <div class="ops-template-columns">
+            <div class="ops-template-section">
+              <div class="ops-template-title">Vessel details</div>
+              ${renderOpsDataTable([], update.vesselDetails, 'key')}
+            </div>
+            <div class="ops-template-section">
+              <div class="ops-template-title">Berthing prospects</div>
+              ${renderOpsDataTable(['Berth Name', 'Prospects'], update.prospects.map(p => [p.berth, p.prospect]))}
+            </div>
+          </div>
+
+          <div class="ops-template-section">
+            <div class="ops-template-title">Tentative Schedule</div>
+            ${renderOpsDataTable(
+              ['Berth', 'Status', 'Berthed', 'Shifting', 'ETA', 'ETD'],
+              update.schedule.map(row => [row.berth, row.status, row.berthed, row.shifting, row.eta, row.etd])
+            )}
+          </div>
+
+          <div class="ops-template-section">
+            <div class="ops-template-title">Port call particulars</div>
+            <div class="ops-port-grid">
+              ${update.portCalls.map(portCall => `
+                <div class="ops-port-card">
+                  <div class="ops-port-title">${escapeHtml(portCall.port)} - ${escapeHtml(portCall.berth)}</div>
+                  <div class="ops-port-meta">
+                    Heading: ${escapeHtml(portCall.heading)}<br>
+                    Draft: ${escapeHtml(portCall.channelDraft)} channel / ${escapeHtml(portCall.berthDraft)} berth<br>
+                    Stores: ${escapeHtml(portCall.storesAllowed)}<br>
+                    Transit: ${escapeHtml(portCall.transitTime)} from POB
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+            ${renderOpsDataTable(
+              ['Port', 'Berth', 'Operation', 'Parcel #', 'Grade', 'Quantity', 'Stowage', 'Surveyor', 'Tank Inspection'],
+              cargoRows
+            )}
+          </div>
+        </div>
+      </div>`;
+  }
   function opsState(state, label) {
     return `<span class="ops-state ${escapeHtml(state)}">${escapeHtml(label)}</span>`;
   }
   function closeMockCallModal() {
     document.getElementById('ops-call-modal')?.remove();
   }
+  function openMockCallUpdate(voyageNo) {
+    closeMockCallModal();
+    nav(`updates:${voyageNo}`);
+  }
   function openMockCallModal(voyageNo) {
     const c = MOCK_DASHBOARD_CALLS.find(call => call.voyage === voyageNo);
     if (!c) return;
     closeMockCallModal();
     const plan = mockCallPlan(c);
+    const update = mockTemplateUpdate(c);
     document.body.insertAdjacentHTML('beforeend', `
       <div class="ops-modal-backdrop" id="ops-call-modal" onclick="if(event.target===this) closeMockCallModal()">
         <div class="ops-modal" role="dialog" aria-modal="true" aria-label="${escapeHtml(c.vessel)} call plan">
@@ -3123,12 +3308,14 @@
               <div class="ops-summary-item"><div class="ops-summary-label">Service Desk</div><div class="ops-summary-value">Agent ${escapeHtml(c.agent)}</div><div class="ops-panel-sub">Deliveries, crew, launches</div></div>
             </div>
 
+            ${renderOpsTemplateSnapshot(update)}
+
             <div class="ops-modal-grid">
               <div>
                 <div class="ops-panel">
                   <div class="ops-panel-head">
                     <div>
-                      <div class="ops-panel-title">Full tentative vessel schedule</div>
+                      <div class="ops-panel-title">Operational timeline</div>
                       <div class="ops-panel-sub">Times are mock planning windows and adjust as terminal / pilot data changes.</div>
                     </div>
                   </div>
@@ -3218,7 +3405,7 @@
           <div class="ops-modal-actions">
             <button class="btn ghost" onclick="showToast('Service checklist queued')">${ICON.plus} Service checklist</button>
             <button class="btn ghost" onclick="showToast('Tentative schedule copied')">${ICON.download} Copy schedule</button>
-            <button class="btn primary" onclick="showToast('Draft update queued')">${ICON.sparkle} Draft customer update</button>
+            <button class="btn primary" onclick="openMockCallUpdate('${escapeHtml(c.voyage)}')">${ICON.sparkle} Draft customer update</button>
           </div>
         </div>
       </div>
@@ -3232,6 +3419,7 @@
     }
   }
   window.closeMockCallModal = closeMockCallModal;
+  window.openMockCallUpdate = openMockCallUpdate;
   window.openMockCallModal = openMockCallModal;
   window.handleMockCallRowKey = handleMockCallRowKey;
 
