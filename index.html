@@ -1470,6 +1470,391 @@
     }
   }
 
+  /* ─── AGENT WORKBENCH ─── */
+  .workbench-hero {
+    background:
+      linear-gradient(135deg, rgba(0,119,255,0.14), rgba(255,170,0,0.06) 58%, transparent),
+      var(--bg-elev);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: 1.1rem;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 1rem;
+  }
+  .workbench-hero-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.85rem;
+  }
+  .workbench-title {
+    color: #fff;
+    font-size: 1.35rem;
+    font-weight: 800;
+    line-height: 1.15;
+  }
+  .workbench-subtitle {
+    margin-top: 0.25rem;
+    color: var(--text-muted);
+    font-size: 0.88rem;
+  }
+  .workbench-hub-grid {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 0.65rem;
+  }
+  .workbench-hub-field {
+    padding: 0.62rem 0.7rem;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: rgba(2,4,10,0.28);
+    min-width: 0;
+  }
+  .workbench-hub-field.wide {
+    grid-column: span 2;
+  }
+  .workbench-label {
+    color: var(--text-muted);
+    font-size: 0.62rem;
+    font-weight: 900;
+    letter-spacing: 0;
+    text-transform: uppercase;
+  }
+  .workbench-value {
+    margin-top: 3px;
+    color: var(--text);
+    font-weight: 800;
+    overflow-wrap: anywhere;
+  }
+  .workbench-value.mono {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82rem;
+  }
+  .workbench-moments {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+  .workbench-moment {
+    display: grid;
+    grid-template-columns: 34px minmax(0, 1fr);
+    gap: 0.7rem;
+    align-items: start;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--bg-elev);
+    padding: 0.75rem;
+  }
+  .workbench-moment-num {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-sunk);
+    color: var(--brand-accent);
+    border: 1px solid var(--line);
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 900;
+  }
+  .workbench-moment-title {
+    color: #fff;
+    font-weight: 850;
+  }
+  .workbench-moment-text {
+    margin-top: 2px;
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    line-height: 1.35;
+  }
+  .workbench-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+  }
+  .workbench-action-btn {
+    border-color: var(--line);
+    background: var(--bg-elev);
+  }
+  .workbench-shell {
+    display: grid;
+    grid-template-columns: minmax(270px, 0.92fr) minmax(360px, 1.28fr) minmax(300px, 0.95fr);
+    gap: 1rem;
+    align-items: start;
+  }
+  .workbench-panel {
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    background: var(--bg-elev);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+  }
+  .workbench-panel + .workbench-panel {
+    margin-top: 1rem;
+  }
+  .workbench-panel-head {
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  .workbench-panel-title {
+    color: #fff;
+    font-weight: 850;
+  }
+  .workbench-panel-sub {
+    margin-top: 2px;
+    color: var(--text-muted);
+    font-size: 0.76rem;
+  }
+  .workbench-panel-body {
+    padding: 0.9rem 1rem 1rem;
+  }
+  .wb-timeline {
+    position: relative;
+    display: grid;
+    gap: 0.75rem;
+  }
+  .wb-event {
+    display: grid;
+    grid-template-columns: 92px minmax(0, 1fr);
+    gap: 0.75rem;
+    padding: 0.68rem 0.72rem;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--bg-sunk);
+  }
+  .wb-event-time {
+    color: var(--text-2);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.74rem;
+    line-height: 1.35;
+  }
+  .wb-event-title {
+    color: var(--text);
+    font-weight: 850;
+  }
+  .wb-event-note {
+    margin-top: 2px;
+    color: var(--text-muted);
+    font-size: 0.76rem;
+    line-height: 1.35;
+  }
+  .wb-cargo-card {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--bg-sunk);
+    padding: 0.72rem;
+  }
+  .wb-cargo-card + .wb-cargo-card {
+    margin-top: 0.62rem;
+  }
+  .wb-cargo-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.75rem;
+    align-items: flex-start;
+  }
+  .wb-cargo-title {
+    color: var(--text);
+    font-weight: 850;
+  }
+  .wb-cargo-meta {
+    margin-top: 0.25rem;
+    color: var(--text-muted);
+    font-size: 0.76rem;
+    line-height: 1.45;
+  }
+  .wb-job-list {
+    display: grid;
+    gap: 0.68rem;
+  }
+  .wb-job-card {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--bg-sunk);
+    padding: 0.72rem;
+  }
+  .wb-job-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.65rem;
+    align-items: flex-start;
+  }
+  .wb-job-title {
+    color: #fff;
+    font-weight: 850;
+  }
+  .wb-job-meta {
+    margin-top: 0.32rem;
+    color: var(--text-muted);
+    font-size: 0.76rem;
+    line-height: 1.45;
+  }
+  .wb-job-foot {
+    margin-top: 0.6rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+  .wb-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 2px 7px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--text-2);
+    background: rgba(255,255,255,0.04);
+    font-size: 0.68rem;
+    font-weight: 750;
+  }
+  .job-drawer-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1180;
+    background: rgba(2,4,10,0.58);
+    -webkit-backdrop-filter: blur(3px);
+    backdrop-filter: blur(3px);
+    display: flex;
+    justify-content: flex-end;
+    animation: fadeIn 0.14s ease;
+  }
+  .job-drawer {
+    width: min(460px, 100vw);
+    height: 100%;
+    background: var(--bg-elev);
+    border-left: 1px solid var(--line-strong);
+    box-shadow: -22px 0 54px rgba(0,0,0,0.45);
+    display: flex;
+    flex-direction: column;
+    animation: drawerIn 0.2s ease;
+  }
+  @keyframes drawerIn {
+    from { transform: translateX(22px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+  .job-drawer-head,
+  .job-drawer-foot {
+    padding: 1rem;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    gap: 0.75rem;
+    align-items: flex-start;
+  }
+  .job-drawer-foot {
+    margin-top: auto;
+    border-top: 1px solid var(--line);
+    border-bottom: none;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    background: var(--bg-sunk);
+  }
+  .job-drawer-title {
+    color: #fff;
+    font-weight: 850;
+    font-size: 1rem;
+  }
+  .job-drawer-sub {
+    margin-top: 2px;
+    color: var(--text-muted);
+    font-size: 0.78rem;
+  }
+  .job-drawer-body {
+    padding: 1rem;
+    overflow: auto;
+  }
+  .job-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+  .job-field {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+  .job-field.full {
+    grid-column: 1 / -1;
+  }
+  .job-field label {
+    margin-bottom: 5px;
+    color: var(--text-muted);
+    font-size: 0.66rem;
+    font-weight: 900;
+    text-transform: uppercase;
+  }
+  .job-field input,
+  .job-field select,
+  .job-field textarea {
+    width: 100%;
+    border: 1px solid var(--line-strong);
+    border-radius: 8px;
+    background: var(--bg-sunk);
+    color: var(--text);
+    padding: 0.58rem 0.68rem;
+    font-size: 0.86rem;
+  }
+  .job-field textarea {
+    min-height: 84px;
+    resize: vertical;
+  }
+  .job-field input:focus,
+  .job-field select:focus,
+  .job-field textarea:focus {
+    outline: none;
+    border-color: var(--brand-accent);
+    box-shadow: 0 0 0 3px var(--amber-dim);
+  }
+  .job-error {
+    display: none;
+    margin-bottom: 0.75rem;
+    padding: 0.55rem 0.7rem;
+    border: 1px solid rgba(255,71,87,0.24);
+    border-radius: 8px;
+    background: var(--status-alert-bg);
+    color: var(--status-alert);
+    font-size: 0.78rem;
+    font-weight: 750;
+  }
+  .job-error.show {
+    display: block;
+  }
+  @media (max-width: 1180px) {
+    .workbench-shell {
+      grid-template-columns: 1fr 1fr;
+    }
+    .workbench-shell > :last-child {
+      grid-column: 1 / -1;
+    }
+    .workbench-hub-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 780px) {
+    .workbench-shell,
+    .workbench-moments,
+    .workbench-hub-grid,
+    .job-form-grid {
+      grid-template-columns: 1fr;
+    }
+    .workbench-hub-field.wide,
+    .workbench-shell > :last-child {
+      grid-column: auto;
+    }
+    .wb-event {
+      grid-template-columns: 1fr;
+    }
+  }
+
   /* ─── LIST ROW (people, companies) ─── */
   .row-list { display: flex; flex-direction: column; }
   .row-item {
@@ -3283,6 +3668,333 @@
     closeMockCallModal();
     nav(`updates:${voyageNo}`);
   }
+  function openCallWorkbench(voyageNo) {
+    closeMockCallModal();
+    nav(`workbench:${voyageNo}`);
+  }
+  function workbenchJobState(status) {
+    if (/complete|closed|filed|ready/i.test(status)) return 'done';
+    if (/standing|confirmed|now/i.test(status)) return 'now';
+    if (/critical|hold|urgent/i.test(status)) return 'alert';
+    return 'pending';
+  }
+  function mockWorkbenchJobs(c, plan = mockCallPlan(c)) {
+    const terminalGate = `${c.berth} gate`;
+    return [
+      {
+        title: 'Launch',
+        window: c.status === 'Closed' ? callTimeWindow(c, -8, -6) : callTimeWindow(c, -2, 2),
+        vendor: 'Harbor launch vendor',
+        location: c.status === 'Approaching' ? `${mockTemplatePorts(c)[0] || 'Port'} pilot station` : c.berth,
+        instructions: 'Pilot, agent boarding, and final document run coverage.',
+        status: c.status === 'In port' ? 'Standing by' : (c.status === 'Closed' ? 'Complete' : 'Requested'),
+        billing: 'Billable',
+        notes: 'Keep launch on call until berth window is firm.',
+        attachments: 'Launch quote.pdf',
+      },
+      {
+        title: 'Stores / spares delivery',
+        window: c.status === 'In port' ? callTimeWindow(c, 5, 9) : callTimeWindow(c, 3, 7),
+        vendor: 'Approved trucker',
+        location: terminalGate,
+        instructions: 'Coordinate truck arrival, gate list, terminal escort, and launch fallback.',
+        status: c.status === 'Closed' ? 'Complete' : 'Needs gate slot',
+        billing: 'Cost + agency fee',
+        notes: 'Agent to confirm terminal receiving window before vendor dispatch.',
+        attachments: 'Delivery manifest.xlsx',
+      },
+      {
+        title: 'Crew change',
+        window: c.status === 'Approaching' ? callTimeWindow(c, 6, 10) : callTimeWindow(c, 10, 14),
+        vendor: 'Crew transport vendor',
+        location: 'IAH / terminal security',
+        instructions: 'CBP/immigration package, hotel, transport, and gangway timing.',
+        status: c.status === 'Closed' ? 'Closed' : 'Awaiting final names',
+        billing: 'Billable',
+        notes: 'Hold sign-on letter until master confirms final list.',
+        attachments: 'Crew list draft.pdf',
+      },
+      {
+        title: 'Surveyor attendance',
+        window: callTimeWindow(c, 2, 8),
+        vendor: /load/i.test(plan.cargo.operation) ? 'Sample Surveyor' : 'Sample Cargo Survey',
+        location: `${c.berth} manifold`,
+        instructions: 'Attend pre-transfer meeting, initial sample, and shore/vessel figure comparison.',
+        status: c.status === 'In port' ? 'Confirmed' : 'Tentative',
+        billing: 'Billing review',
+        notes: 'Tie surveyor report to cargo parcel and tank inspection result.',
+        attachments: 'Survey nomination.eml',
+      },
+    ];
+  }
+  function renderWorkbenchJobCard(job) {
+    return `
+      <div class="wb-job-card">
+        <div class="wb-job-head">
+          <div>
+            <div class="wb-job-title">${escapeHtml(job.title)}</div>
+            <div class="wb-job-meta">
+              ${escapeHtml(job.window)}<br>
+              Vendor: ${escapeHtml(job.vendor || 'Unassigned')}<br>
+              Location: ${escapeHtml(job.location || 'TBD')}
+            </div>
+          </div>
+          ${opsState(workbenchJobState(job.status), job.status)}
+        </div>
+        <div class="wb-job-meta">${escapeHtml(job.instructions || 'No instructions entered yet.')}</div>
+        <div class="wb-job-foot">
+          <span class="wb-chip">${escapeHtml(job.billing || 'Billing review')}</span>
+          <span class="wb-chip">${escapeHtml(job.attachments || 'No attachments')}</span>
+        </div>
+      </div>`;
+  }
+  function renderCallWorkbench(voyageNo) {
+    setActiveNav('dashboard');
+    const calls = MOCK_DASHBOARD_CALLS.filter(c => c.status !== 'Closed');
+    const c = MOCK_DASHBOARD_CALLS.find(call => call.voyage === voyageNo) || calls[0] || MOCK_DASHBOARD_CALLS[0];
+    if (!c) return renderDashboard();
+    setBreadcrumbs([{ label: 'Dashboard', route: 'dashboard' }, { label: 'Agent Workbench' }]);
+
+    const plan = mockCallPlan(c);
+    const update = mockTemplateUpdate(c);
+    const ports = mockTemplatePorts(c);
+    const berthRow = update.schedule.find(row => row.berth === c.berth) || update.schedule[1] || update.schedule[0];
+    const jobs = mockWorkbenchJobs(c, plan);
+    const cargoParcels = update.portCalls.flatMap(portCall => portCall.parcels.map(parcel => ({ ...parcel, port: portCall.port, berth: portCall.berth })));
+    const timeline = [
+      { phase: 'Intake', time: callTimeWindow(c, -24, -23), title: 'Appointment / orders captured', note: `${c.customer}, ${c.route}, assigned to Agent ${c.agent}.` },
+      { phase: 'Intake', time: callTimeWindow(c, -10, -9), title: 'Pre-arrival file check', note: 'Crew list, cargo docs, terminal nomination, agency appointment.' },
+      { phase: 'Operations', time: callTimeWindow(c, -4, -3), title: 'Pilot / berth confirmation', note: c.progress },
+      { phase: 'Operations', time: callTimeWindow(c, 0, 1), title: 'Arrival / all fast window', note: `${c.berth}; keep ETA, ETB, ETC, and ETD moving together.` },
+      { phase: 'Operations', time: callTimeWindow(c, 3, 5), title: 'Tank inspection / safety conference', note: 'Capture pass/fail, inspector, photos, and restrictions before cargo starts.' },
+      { phase: 'Closeout', time: callTimeWindow(c, 22, 26), title: 'Final SOF / billing review', note: 'Signed SOF, service tickets, attachments, and cost flags ready before closing call.' },
+    ];
+
+    $page.innerHTML = `
+      <div class="page-header">
+        <div class="page-title-block">
+          <h1>Agent Workbench</h1>
+          <div class="subtitle">One live vessel call hub for schedule, cargo, tank criteria, services, documents, and closeout.</div>
+        </div>
+        <div class="page-actions">
+          <button class="btn ghost" data-link="dashboard">${ICON.arrow} Back to dashboard</button>
+          <button class="btn ghost" data-link="updates:${escapeHtml(c.voyage)}">${ICON.sparkle} Draft update</button>
+          <button class="btn primary" onclick="openServiceJobDrawer('${escapeHtml(c.voyage)}')">${ICON.plus} New Job</button>
+        </div>
+      </div>
+
+      <div class="workbench-hero">
+        <div class="workbench-hero-top">
+          <div>
+            <div class="workbench-title">${escapeHtml(c.vessel)} <span class="mono">V.${escapeHtml(c.voyage)}</span></div>
+            <div class="workbench-subtitle">${escapeHtml(c.customer)} - ${escapeHtml(c.route)} - ${escapeHtml(update.leadParagraph)}</div>
+          </div>
+          ${statusPill(c.status)}
+        </div>
+        <div class="workbench-hub-grid">
+          <div class="workbench-hub-field"><div class="workbench-label">Status</div><div class="workbench-value">${escapeHtml(c.status)}</div></div>
+          <div class="workbench-hub-field wide"><div class="workbench-label">Port / Berth / Terminal</div><div class="workbench-value">${escapeHtml(ports[0] || 'US Gulf')} - ${escapeHtml(c.berth)}</div></div>
+          <div class="workbench-hub-field"><div class="workbench-label">ETA</div><div class="workbench-value mono">${fmtDateTime(c.eta)}</div></div>
+          <div class="workbench-hub-field"><div class="workbench-label">ETB / All Fast</div><div class="workbench-value mono">${escapeHtml(berthRow?.eta || 'Pending')}</div></div>
+          <div class="workbench-hub-field"><div class="workbench-label">ETC / ETD</div><div class="workbench-value mono">${escapeHtml(berthRow?.etd || 'Pending')}</div></div>
+          <div class="workbench-hub-field"><div class="workbench-label">Assigned Agent</div><div class="workbench-value">Agent ${escapeHtml(c.agent)}</div></div>
+        </div>
+      </div>
+
+      <div class="workbench-moments">
+        <div class="workbench-moment"><div class="workbench-moment-num">01</div><div><div class="workbench-moment-title">Intake</div><div class="workbench-moment-text">Create the call from appointment email, manual entry, or forwarded orders.</div></div></div>
+        <div class="workbench-moment"><div class="workbench-moment-num">02</div><div><div class="workbench-moment-title">Operations</div><div class="workbench-moment-text">Fast updates while the vessel is approaching, alongside, loading, or discharging.</div></div></div>
+        <div class="workbench-moment"><div class="workbench-moment-num">03</div><div><div class="workbench-moment-title">Closeout</div><div class="workbench-moment-text">Final SOF, attachments, service tickets, cost flags, and billing review.</div></div></div>
+      </div>
+
+      <div class="workbench-actions">
+        <button class="btn workbench-action-btn" onclick="showToast('Event entry queued for this call')">${ICON.plus} Add Event</button>
+        <button class="btn workbench-action-btn" onclick="openServiceJobDrawer('${escapeHtml(c.voyage)}')">${ICON.plus} Add Service Job</button>
+        <button class="btn workbench-action-btn" onclick="showToast('ETA / berth update queued')">${ICON.clock} Update ETA / Berth</button>
+        <button class="btn workbench-action-btn" onclick="showToast('Cargo parcel entry queued')">${ICON.flask} Add Cargo Parcel</button>
+        <button class="btn workbench-action-btn" onclick="showToast('Tank inspection result queued')">${ICON.edit} Tank Inspection Result</button>
+        <button class="btn workbench-action-btn" onclick="showToast('Document attachment queued')">${ICON.download} Attach Document</button>
+        <button class="btn workbench-action-btn" onclick="showToast('Closeout checklist queued')">${ICON.send} Close Call</button>
+      </div>
+
+      <div class="workbench-shell">
+        <div>
+          <div class="workbench-panel">
+            <div class="workbench-panel-head"><div><div class="workbench-panel-title">Schedule / SOF timeline</div><div class="workbench-panel-sub">Agent-facing event log tied to the final SOF.</div></div></div>
+            <div class="workbench-panel-body">
+              <div class="wb-timeline">
+                ${timeline.map(event => `
+                  <div class="wb-event">
+                    <div class="wb-event-time">${escapeHtml(event.phase)}<br>${escapeHtml(event.time)}</div>
+                    <div><div class="wb-event-title">${escapeHtml(event.title)}</div><div class="wb-event-note">${escapeHtml(event.note)}</div></div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="workbench-panel">
+            <div class="workbench-panel-head">
+              <div><div class="workbench-panel-title">Cargo parcels</div><div class="workbench-panel-sub">Parcel data feeds customer updates, tank checks, and final SOF cargo blocks.</div></div>
+              <button class="btn ghost text-sm" onclick="showToast('Cargo parcel entry queued')">${ICON.plus} Parcel</button>
+            </div>
+            <div class="workbench-panel-body">
+              ${cargoParcels.map(parcel => `
+                <div class="wb-cargo-card">
+                  <div class="wb-cargo-head">
+                    <div>
+                      <div class="wb-cargo-title">${escapeHtml(parcel.grade)} <span class="mono">${escapeHtml(parcel.parcel)}</span></div>
+                      <div class="wb-cargo-meta">
+                        ${escapeHtml(parcel.operation)} - ${escapeHtml(parcel.quantity)} - ${escapeHtml(parcel.stowage)}<br>
+                        ${escapeHtml(parcel.port)} / ${escapeHtml(parcel.berth)}<br>
+                        Charterer: ${escapeHtml(parcel.charterer)} - Surveyor: ${escapeHtml(parcel.surveyor)}
+                      </div>
+                    </div>
+                    ${opsState(workbenchJobState(parcel.tankInspection), parcel.tankInspection)}
+                  </div>
+                  <div class="wb-cargo-meta">Tank notes: ${escapeHtml(parcel.notes)}</div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+
+          <div class="workbench-panel">
+            <div class="workbench-panel-head">
+              <div><div class="workbench-panel-title">Tank inspection checklist</div><div class="workbench-panel-sub">Criteria agents capture before cargo authority.</div></div>
+              <button class="btn ghost text-sm" onclick="showToast('Tank inspection result queued')">${ICON.edit} Result</button>
+            </div>
+            <div class="workbench-panel-body">
+              <div class="ops-checklist">
+                ${plan.inspection.map(item => `
+                  <div class="ops-check ${escapeHtml(item.state)}">
+                    <span class="ops-check-dot"></span>
+                    <div><div class="ops-check-title">${escapeHtml(item.title)}</div><div class="ops-check-note">${escapeHtml(item.note)}</div></div>
+                    ${opsState(item.state === 'ok' ? 'done' : (item.state === 'alert' ? 'alert' : 'pending'), item.status)}
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="workbench-panel">
+            <div class="workbench-panel-head">
+              <div><div class="workbench-panel-title">Service jobs</div><div class="workbench-panel-sub">Launches, deliveries, crew changes, surveyors, couriers, and vendor work.</div></div>
+              <button class="btn primary text-sm" onclick="openServiceJobDrawer('${escapeHtml(c.voyage)}')">${ICON.plus} New Job</button>
+            </div>
+            <div class="workbench-panel-body">
+              <div class="wb-job-list" id="workbench-jobs">
+                ${jobs.map(renderWorkbenchJobCard).join('')}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>`;
+  }
+  function closeServiceJobDrawer() {
+    document.getElementById('job-drawer-backdrop')?.remove();
+  }
+  function openServiceJobDrawer(voyageNo, serviceType = '') {
+    const c = MOCK_DASHBOARD_CALLS.find(call => call.voyage === voyageNo) || MOCK_DASHBOARD_CALLS[0];
+    if (!c) return;
+    closeServiceJobDrawer();
+    const serviceTypes = ['Launch', 'Crew change', 'Stores / spares delivery', 'Document courier', 'Surveyor attendance', 'Sample pickup', 'Medical / transport', 'Bunkers / slops'];
+    document.body.insertAdjacentHTML('beforeend', `
+      <div class="job-drawer-backdrop" id="job-drawer-backdrop" onclick="if(event.target===this) closeServiceJobDrawer()">
+        <aside class="job-drawer" role="dialog" aria-modal="true" aria-label="New service job">
+          <div class="job-drawer-head">
+            <div><div class="job-drawer-title">New service job</div><div class="job-drawer-sub">${escapeHtml(c.vessel)} V.${escapeHtml(c.voyage)} - ${escapeHtml(c.berth)}</div></div>
+            <button class="ops-modal-close" onclick="closeServiceJobDrawer()" aria-label="Close">${_modalIcons.x}</button>
+          </div>
+          <div class="job-drawer-body">
+            <div class="job-error" id="job-error">Service type and time window are required.</div>
+            <div class="job-form-grid">
+              <div class="job-field full">
+                <label>Service type</label>
+                <select id="job-type">
+                  <option value="">Select service</option>
+                  ${serviceTypes.map(type => `<option value="${escapeHtml(type)}" ${type === serviceType ? 'selected' : ''}>${escapeHtml(type)}</option>`).join('')}
+                </select>
+              </div>
+              <div class="job-field">
+                <label>Time window</label>
+                <input id="job-window" placeholder="Apr 27, 13:00 - 17:00">
+              </div>
+              <div class="job-field">
+                <label>Status</label>
+                <select id="job-status">
+                  <option>Requested</option>
+                  <option>Vendor confirmed</option>
+                  <option>Standing by</option>
+                  <option>Complete</option>
+                </select>
+              </div>
+              <div class="job-field">
+                <label>Vendor</label>
+                <input id="job-vendor" placeholder="Vendor / dispatcher">
+              </div>
+              <div class="job-field">
+                <label>Location</label>
+                <input id="job-location" value="${escapeHtml(c.berth)}">
+              </div>
+              <div class="job-field">
+                <label>Billing flag</label>
+                <select id="job-billing">
+                  <option>Billable</option>
+                  <option>Cost + agency fee</option>
+                  <option>Included</option>
+                  <option>Quote needed</option>
+                  <option>Billing review</option>
+                </select>
+              </div>
+              <div class="job-field">
+                <label>Attachment</label>
+                <input id="job-attachment" placeholder="Quote, email, PDF, ticket">
+              </div>
+              <div class="job-field full">
+                <label>Instructions</label>
+                <textarea id="job-instructions" placeholder="Gate details, crew names, launch instructions, contact, restrictions"></textarea>
+              </div>
+              <div class="job-field full">
+                <label>Notes</label>
+                <textarea id="job-notes" placeholder="Internal handoff notes for the next agent"></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="job-drawer-foot">
+            <button class="btn ghost" onclick="closeServiceJobDrawer()">Cancel</button>
+            <button class="btn primary" onclick="saveServiceJob('${escapeHtml(c.voyage)}')">${ICON.plus} Save Job</button>
+          </div>
+        </aside>
+      </div>
+    `);
+    document.getElementById('job-type')?.focus();
+  }
+  function saveServiceJob(voyageNo) {
+    const value = (id) => document.getElementById(id)?.value.trim() || '';
+    const type = value('job-type');
+    const windowText = value('job-window');
+    if (!type || !windowText) {
+      document.getElementById('job-error')?.classList.add('show');
+      return;
+    }
+    const job = {
+      title: type,
+      window: windowText,
+      status: value('job-status') || 'Requested',
+      vendor: value('job-vendor') || 'Unassigned',
+      location: value('job-location') || 'TBD',
+      billing: value('job-billing') || 'Billing review',
+      attachments: value('job-attachment') || 'No attachments',
+      instructions: value('job-instructions') || value('job-notes') || 'Instructions pending.',
+    };
+    document.getElementById('workbench-jobs')?.insertAdjacentHTML('afterbegin', renderWorkbenchJobCard(job));
+    closeServiceJobDrawer();
+    showToast(`${type} job logged to this vessel call`);
+  }
   function openMockCallModal(voyageNo) {
     const c = MOCK_DASHBOARD_CALLS.find(call => call.voyage === voyageNo);
     if (!c) return;
@@ -3405,6 +4117,7 @@
           <div class="ops-modal-actions">
             <button class="btn ghost" onclick="showToast('Service checklist queued')">${ICON.plus} Service checklist</button>
             <button class="btn ghost" onclick="showToast('Tentative schedule copied')">${ICON.download} Copy schedule</button>
+            <button class="btn accent" onclick="openCallWorkbench('${escapeHtml(c.voyage)}')">${ICON.compass} Open Workbench</button>
             <button class="btn primary" onclick="openMockCallUpdate('${escapeHtml(c.voyage)}')">${ICON.sparkle} Draft customer update</button>
           </div>
         </div>
@@ -3420,6 +4133,11 @@
   }
   window.closeMockCallModal = closeMockCallModal;
   window.openMockCallUpdate = openMockCallUpdate;
+  window.openCallWorkbench = openCallWorkbench;
+  window.renderCallWorkbench = renderCallWorkbench;
+  window.openServiceJobDrawer = openServiceJobDrawer;
+  window.closeServiceJobDrawer = closeServiceJobDrawer;
+  window.saveServiceJob = saveServiceJob;
   window.openMockCallModal = openMockCallModal;
   window.handleMockCallRowKey = handleMockCallRowKey;
 
@@ -5173,6 +5891,7 @@
       case 'cargos':    renderCargos();    break;
       case 'cargo':     renderCargo(id);   break;
       case 'updates':   renderUpdates(id); break;
+      case 'workbench': renderCallWorkbench(id); break;
       case 'sof':       renderFinalSOF(id);break;
       default:          renderDashboard(); break;
     }
