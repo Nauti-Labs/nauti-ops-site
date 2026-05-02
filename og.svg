@@ -51,7 +51,7 @@
       <circle cx="0" cy="0" r="2.2"  fill="#06090f" stroke="#0077ff" stroke-width="0.6"/>
       <circle cx="0" cy="0" r="1.05" fill="#ffaa00"/>
     </g>
-    <text x="80" y="40" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="32" font-weight="800" fill="#fafafd" letter-spacing="0.5">Nauti-Ops</text>
+    <text x="80" y="40" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="32" font-weight="800" fill="#fafafd" letter-spacing="0.5">Triton</text>
     <text x="320" y="40" font-family="Menlo, 'Courier New', monospace" font-size="14" font-weight="500" fill="#7a8a9a" letter-spacing="0.5">// by Nauti-Labs</text>
   </g>
 
