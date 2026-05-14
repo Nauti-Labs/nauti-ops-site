@@ -33,7 +33,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 44 44'><circle cx='22' cy='22' r='18' stroke='%230077ff' stroke-width='1.4' fill='none'/><circle cx='22' cy='22' r='13.5' stroke='%234099ff' stroke-width='0.5' fill='none' opacity='0.45'/><g transform='translate(22 22)'><g transform='rotate(45)'><polygon points='0,-8.5 0.85,0 0,0' fill='%234099ff' opacity='0.78'/><polygon points='0,-8.5 -0.85,0 0,0' fill='%230077ff' opacity='0.78'/></g><g transform='rotate(135)'><polygon points='0,-8.5 0.85,0 0,0' fill='%234099ff' opacity='0.78'/><polygon points='0,-8.5 -0.85,0 0,0' fill='%230077ff' opacity='0.78'/></g><g transform='rotate(225)'><polygon points='0,-8.5 0.85,0 0,0' fill='%234099ff' opacity='0.78'/><polygon points='0,-8.5 -0.85,0 0,0' fill='%230077ff' opacity='0.78'/></g><g transform='rotate(315)'><polygon points='0,-8.5 0.85,0 0,0' fill='%234099ff' opacity='0.78'/><polygon points='0,-8.5 -0.85,0 0,0' fill='%230077ff' opacity='0.78'/></g><g transform='rotate(90)'><polygon points='0,-13.5 1.2,0 0,0' fill='%234099ff'/><polygon points='0,-13.5 -1.2,0 0,0' fill='%230077ff'/></g><g transform='rotate(180)'><polygon points='0,-13.5 1.2,0 0,0' fill='%234099ff'/><polygon points='0,-13.5 -1.2,0 0,0' fill='%230077ff'/></g><g transform='rotate(270)'><polygon points='0,-13.5 1.2,0 0,0' fill='%234099ff'/><polygon points='0,-13.5 -1.2,0 0,0' fill='%230077ff'/></g><polygon points='0,-15.5 1.4,0 0,0' fill='%23ffcc4d'/><polygon points='0,-15.5 -1.4,0 0,0' fill='%23ffaa00'/></g><g stroke='%234099ff' stroke-linecap='round'><line x1='22' y1='2.6' x2='22' y2='4.6' stroke-width='1.4'/><line x1='22' y1='39.4' x2='22' y2='41.4' stroke-width='1.1'/><line x1='2.6' y1='22' x2='4.6' y2='22' stroke-width='1.1'/><line x1='39.4' y1='22' x2='41.4' y2='22' stroke-width='1.1'/></g><circle cx='22' cy='22' r='2.2' fill='%2306090f' stroke='%230077ff' stroke-width='0.6'/><circle cx='22' cy='22' r='1.05' fill='%23ffaa00'/></svg>">
+<link rel="icon" type="image/svg+xml" href="/triton-mark.svg">
+<link rel="apple-touch-icon" href="/icon-192.png">
+<link rel="manifest" href="/manifest.json">
 <style>
   /* ─── BRAND TOKENS — match live ops.nauti-labs.com ─── */
   :root {
@@ -143,7 +145,8 @@
     display: flex; align-items: center; justify-content: center;
     filter: drop-shadow(0 0 6px rgba(0,119,255,0.5));
   }
-  .brand-mark .brand-svg { width: 100%; height: 100%; }
+  .brand-mark .brand-svg,
+  .brand-mark img { width: 100%; height: 100%; object-fit: contain; }
   .brand-name {
     font-family: 'Inter', sans-serif;
     font-weight: 800;
@@ -2506,67 +2509,7 @@
   <aside class="sidebar">
     <div class="sidebar-brand">
       <div class="brand-mark" aria-hidden="true">
-        <svg class="brand-svg" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
-          <defs>
-            <!-- Cardinal needle (long, two-tone amber) — drawn pointing up from origin -->
-            <g id="np-card-n">
-              <polygon points="0,-15.5  1.4,0  0,0" fill="var(--brand-accent-2)"/>
-              <polygon points="0,-15.5 -1.4,0  0,0" fill="var(--brand-accent)"/>
-            </g>
-            <!-- Cardinal needle (E/S/W — medium, two-tone blue) -->
-            <g id="np-card">
-              <polygon points="0,-13.5  1.2,0  0,0" fill="var(--brand-primary-2)"/>
-              <polygon points="0,-13.5 -1.2,0  0,0" fill="var(--brand-primary)"/>
-            </g>
-            <!-- Intercardinal needle (short, dim blue two-tone) -->
-            <g id="np-inter">
-              <polygon points="0,-8.5  0.85,0  0,0" fill="var(--brand-primary-2)" opacity="0.78"/>
-              <polygon points="0,-8.5 -0.85,0  0,0" fill="var(--brand-primary)"   opacity="0.78"/>
-            </g>
-          </defs>
-
-          <!-- Outer rim -->
-          <circle class="wm-rim" cx="22" cy="22" r="18" stroke="var(--brand-primary)" stroke-width="1.4" fill="none"/>
-          <!-- Subtle inner bezel ring -->
-          <circle cx="22" cy="22" r="13.5" stroke="var(--brand-primary-2)" stroke-width="0.5" fill="none" opacity="0.45"/>
-
-          <!-- Compass body — 8-point star, drawn from intercardinal (back) → cardinal → North (top) -->
-          <g transform="translate(22 22)">
-            <!-- Intercardinals: NE, SE, SW, NW -->
-            <use href="#np-inter" transform="rotate(45)"/>
-            <use href="#np-inter" transform="rotate(135)"/>
-            <use href="#np-inter" transform="rotate(225)"/>
-            <use href="#np-inter" transform="rotate(315)"/>
-            <!-- Minor cardinals: E, S, W (blue) -->
-            <use href="#np-card" transform="rotate(90)"/>
-            <use href="#np-card" transform="rotate(180)"/>
-            <use href="#np-card" transform="rotate(270)"/>
-            <!-- North: amber, longest, drawn last so it's on top -->
-            <use href="#np-card-n"/>
-          </g>
-
-          <!-- 4 cardinal tick marks just outside the rim (engraved scale) -->
-          <g stroke="var(--brand-primary-2)" stroke-linecap="round" opacity="0.85">
-            <line x1="22"   y1="2.6"  x2="22"   y2="4.6"  stroke-width="1.4"/>
-            <line x1="22"   y1="39.4" x2="22"   y2="41.4" stroke-width="1.1"/>
-            <line x1="2.6"  y1="22"   x2="4.6"  y2="22"   stroke-width="1.1"/>
-            <line x1="39.4" y1="22"   x2="41.4" y2="22"   stroke-width="1.1"/>
-          </g>
-          <!-- 4 intercardinal tick marks (shorter, dimmer) -->
-          <g stroke="var(--brand-primary-2)" stroke-linecap="round" stroke-width="0.8" opacity="0.55">
-            <line x1="9.0"  y1="9.0"  x2="10.4" y2="10.4"/>
-            <line x1="33.6" y1="9.0"  x2="35.0" y2="10.4"/>
-            <line x1="9.0"  y1="35.0" x2="10.4" y2="33.6"/>
-            <line x1="33.6" y1="35.0" x2="35.0" y2="33.6"/>
-          </g>
-
-          <!-- Center hub: small metallic-feel disc with rim + amber pin -->
-          <circle cx="22" cy="22" r="2.2" fill="var(--bg-sidebar, #04060b)" stroke="var(--brand-primary)" stroke-width="0.6"/>
-          <circle cx="22" cy="22" r="1.05" fill="var(--brand-accent)"/>
-
-          <!-- Faint outer rim glow -->
-          <circle cx="22" cy="22" r="18" stroke="var(--brand-primary)" stroke-width="0.4" fill="none" opacity="0.22"/>
-        </svg>
+        <img src="/triton-mark.svg" alt="">
       </div>
       <div>
         <div class="brand-name">TRITON</div>
@@ -5923,127 +5866,69 @@
 
   // ─── COLOR BOMB ───
   const CB_PRESETS = {
-    'deep-ocean': {
-      name: 'Deep Ocean',
-      desc: 'Nauti default · blue + amber',
-      swatches: ['#0077ff', '#ffaa00', '#06090f'],
+    'radar-glass': {
+      name: 'Radar Glass',
+      desc: 'Light radar glass · seafoam, graphite, signal green',
+      swatches: ['#f4fbf9', '#2dd4bf', '#8fbf3f'],
       vars: {
-        '--blue': '#0077ff', '--blue-glow': 'rgba(0, 119, 255, 0.45)', '--blue-dim': 'rgba(0, 119, 255, 0.08)',
-        '--amber': '#ffaa00', '--amber-glow': 'rgba(255, 170, 0, 0.45)', '--amber-dim': 'rgba(255, 170, 0, 0.08)',
-        '--brand-primary': '#0077ff', '--brand-primary-2': '#4099ff',
-        '--brand-accent': '#ffaa00', '--brand-accent-2': '#ffcc4d',
-        '--bg': '#06090f', '--bg-elev': '#0b1018', '--bg-sunk': '#101722',
-        '--line': 'rgba(0, 119, 255, 0.15)', '--line-strong': 'rgba(0, 119, 255, 0.30)',
-        '--status-active': '#00d97e', '--status-active-bg': 'rgba(0,217,126,0.12)',
-        '--status-eta': '#ffaa00', '--status-eta-bg': 'rgba(255,170,0,0.12)',
-        '--status-done': '#4099ff', '--status-done-bg': 'rgba(64,153,255,0.14)',
+        '--blue': '#0f766e', '--blue-glow': 'rgba(15, 118, 110, 0.28)', '--blue-dim': 'rgba(15, 118, 110, 0.08)',
+        '--amber': '#8fbf3f', '--amber-glow': 'rgba(143, 191, 63, 0.30)', '--amber-dim': 'rgba(143, 191, 63, 0.10)',
+        '--brand-primary': '#0f766e', '--brand-primary-2': '#2dd4bf', '--brand-primary-3': '#ecf8f6',
+        '--brand-accent': '#8fbf3f', '--brand-accent-2': '#d7ef9b',
+        '--bg': '#f6fbfa', '--bg-elev': '#ffffff', '--bg-sunk': '#e7f3f1', '--bg-sidebar': '#eef8f6', '--bg-sidebar-2': '#dcecea',
+        '--line': 'rgba(15, 118, 110, 0.16)', '--line-strong': 'rgba(15, 118, 110, 0.32)', '--line-sidebar': 'rgba(20, 68, 72, 0.12)',
+        '--text': '#102326', '--text-2': '#36575a', '--text-muted': 'rgba(34, 58, 62, 0.62)', '--text-faint': 'rgba(34, 58, 62, 0.34)',
+        '--text-sidebar': '#143034', '--text-sidebar-muted': 'rgba(20, 48, 52, 0.56)',
+        '--status-active': '#0f9f6e', '--status-active-bg': 'rgba(15,159,110,0.12)',
+        '--status-eta': '#b58928', '--status-eta-bg': 'rgba(181,137,40,0.14)',
+        '--status-done': '#0f766e', '--status-done-bg': 'rgba(15,118,110,0.12)',
+        '--shadow-sm': '0 1px 2px rgba(27, 55, 61, 0.08)', '--shadow': '0 8px 24px rgba(27, 55, 61, 0.12)', '--shadow-lg': '0 18px 50px rgba(27, 55, 61, 0.16)',
+        '--glow-blue': '0 0 24px rgba(45, 212, 191, 0.22)', '--glow-amber': '0 0 18px rgba(143, 191, 63, 0.18)',
       }
     },
-    'black-ice': {
-      name: 'Black Ice',
-      desc: 'Charcoal + glacial cyan',
-      swatches: ['#38bdf8', '#e2e8f0', '#030712'],
+    'monaco': {
+      name: 'Monaco',
+      desc: 'Light regatta enamel · ivory, harbor blue, racing red',
+      swatches: ['#fff8ea', '#0b5d7a', '#c81e32'],
       vars: {
-        '--blue': '#38bdf8', '--blue-glow': 'rgba(56, 189, 248, 0.48)', '--blue-dim': 'rgba(56, 189, 248, 0.10)',
-        '--amber': '#e2e8f0', '--amber-glow': 'rgba(226, 232, 240, 0.30)', '--amber-dim': 'rgba(226, 232, 240, 0.08)',
-        '--brand-primary': '#38bdf8', '--brand-primary-2': '#7dd3fc',
-        '--brand-accent': '#e2e8f0', '--brand-accent-2': '#f8fafc',
-        '--bg': '#030712', '--bg-elev': '#07111f', '--bg-sunk': '#0b1626',
-        '--line': 'rgba(56, 189, 248, 0.18)', '--line-strong': 'rgba(56, 189, 248, 0.40)',
-        '--status-active': '#2dd4bf', '--status-active-bg': 'rgba(45,212,191,0.14)',
-        '--status-eta': '#e2e8f0', '--status-eta-bg': 'rgba(226,232,240,0.12)',
-        '--status-done': '#60a5fa', '--status-done-bg': 'rgba(96,165,250,0.14)',
+        '--blue': '#0b5d7a', '--blue-glow': 'rgba(11, 93, 122, 0.26)', '--blue-dim': 'rgba(11, 93, 122, 0.08)',
+        '--amber': '#c81e32', '--amber-glow': 'rgba(200, 30, 50, 0.24)', '--amber-dim': 'rgba(200, 30, 50, 0.08)',
+        '--brand-primary': '#0b5d7a', '--brand-primary-2': '#2c89a8', '--brand-primary-3': '#f5f0e5',
+        '--brand-accent': '#c81e32', '--brand-accent-2': '#d7a849',
+        '--bg': '#fff8ea', '--bg-elev': '#ffffff', '--bg-sunk': '#f2eadb', '--bg-sidebar': '#f8f0df', '--bg-sidebar-2': '#ebe1cf',
+        '--line': 'rgba(11, 93, 122, 0.16)', '--line-strong': 'rgba(200, 30, 50, 0.26)', '--line-sidebar': 'rgba(61, 55, 44, 0.13)',
+        '--text': '#1e2a2f', '--text-2': '#40555d', '--text-muted': 'rgba(45, 59, 65, 0.62)', '--text-faint': 'rgba(45, 59, 65, 0.34)',
+        '--text-sidebar': '#1f2d32', '--text-sidebar-muted': 'rgba(31, 45, 50, 0.56)',
+        '--status-active': '#16845f', '--status-active-bg': 'rgba(22,132,95,0.12)',
+        '--status-eta': '#c81e32', '--status-eta-bg': 'rgba(200,30,50,0.10)',
+        '--status-done': '#0b5d7a', '--status-done-bg': 'rgba(11,93,122,0.12)',
+        '--shadow-sm': '0 1px 2px rgba(56, 45, 30, 0.08)', '--shadow': '0 8px 24px rgba(56, 45, 30, 0.12)', '--shadow-lg': '0 18px 50px rgba(56, 45, 30, 0.16)',
+        '--glow-blue': '0 0 22px rgba(44, 137, 168, 0.20)', '--glow-amber': '0 0 18px rgba(200, 30, 50, 0.16)',
       }
     },
     'harbor-steel': {
       name: 'Harbor Steel',
-      desc: 'Steel blue + tactical teal',
-      swatches: ['#2563eb', '#14b8a6', '#05070b'],
+      desc: 'Light shipyard steel · pearl, slate, brass',
+      swatches: ['#f3f6f8', '#577082', '#d1a04d'],
       vars: {
-        '--blue': '#2563eb', '--blue-glow': 'rgba(37, 99, 235, 0.48)', '--blue-dim': 'rgba(37, 99, 235, 0.10)',
-        '--amber': '#14b8a6', '--amber-glow': 'rgba(20, 184, 166, 0.48)', '--amber-dim': 'rgba(20, 184, 166, 0.10)',
-        '--brand-primary': '#2563eb', '--brand-primary-2': '#60a5fa',
-        '--brand-accent': '#14b8a6', '--brand-accent-2': '#5eead4',
-        '--bg': '#05070b', '--bg-elev': '#0a1018', '--bg-sunk': '#101826',
-        '--line': 'rgba(37, 99, 235, 0.18)', '--line-strong': 'rgba(20, 184, 166, 0.36)',
-        '--status-active': '#14b8a6', '--status-active-bg': 'rgba(20,184,166,0.14)',
-        '--status-eta': '#f59e0b', '--status-eta-bg': 'rgba(245,158,11,0.14)',
-        '--status-done': '#60a5fa', '--status-done-bg': 'rgba(96,165,250,0.14)',
+        '--blue': '#577082', '--blue-glow': 'rgba(87, 112, 130, 0.26)', '--blue-dim': 'rgba(87, 112, 130, 0.08)',
+        '--amber': '#d1a04d', '--amber-glow': 'rgba(209, 160, 77, 0.28)', '--amber-dim': 'rgba(209, 160, 77, 0.10)',
+        '--brand-primary': '#577082', '--brand-primary-2': '#7e98aa', '--brand-primary-3': '#eef2f4',
+        '--brand-accent': '#d1a04d', '--brand-accent-2': '#efd58f',
+        '--bg': '#f3f6f8', '--bg-elev': '#ffffff', '--bg-sunk': '#e5ebef', '--bg-sidebar': '#eaf0f3', '--bg-sidebar-2': '#dce4e9',
+        '--line': 'rgba(87, 112, 130, 0.18)', '--line-strong': 'rgba(87, 112, 130, 0.34)', '--line-sidebar': 'rgba(61, 76, 87, 0.13)',
+        '--text': '#17242c', '--text-2': '#40515c', '--text-muted': 'rgba(39, 53, 62, 0.62)', '--text-faint': 'rgba(39, 53, 62, 0.34)',
+        '--text-sidebar': '#1b2a33', '--text-sidebar-muted': 'rgba(27, 42, 51, 0.56)',
+        '--status-active': '#247a64', '--status-active-bg': 'rgba(36,122,100,0.12)',
+        '--status-eta': '#b88325', '--status-eta-bg': 'rgba(184,131,37,0.12)',
+        '--status-done': '#577082', '--status-done-bg': 'rgba(87,112,130,0.12)',
+        '--shadow-sm': '0 1px 2px rgba(34, 48, 58, 0.08)', '--shadow': '0 8px 24px rgba(34, 48, 58, 0.12)', '--shadow-lg': '0 18px 50px rgba(34, 48, 58, 0.16)',
+        '--glow-blue': '0 0 22px rgba(126, 152, 170, 0.20)', '--glow-amber': '0 0 18px rgba(209, 160, 77, 0.16)',
       }
-    },
-    'carbon-copper': {
-      name: 'Carbon Copper',
-      desc: 'Carbon black + brushed copper',
-      swatches: ['#0891b2', '#d6a15f', '#07090a'],
-      vars: {
-        '--blue': '#0891b2', '--blue-glow': 'rgba(8, 145, 178, 0.46)', '--blue-dim': 'rgba(8, 145, 178, 0.10)',
-        '--amber': '#d6a15f', '--amber-glow': 'rgba(214, 161, 95, 0.42)', '--amber-dim': 'rgba(214, 161, 95, 0.10)',
-        '--brand-primary': '#0891b2', '--brand-primary-2': '#22d3ee',
-        '--brand-accent': '#d6a15f', '--brand-accent-2': '#f0c987',
-        '--bg': '#07090a', '--bg-elev': '#0e1214', '--bg-sunk': '#141a1d',
-        '--line': 'rgba(8, 145, 178, 0.20)', '--line-strong': 'rgba(214, 161, 95, 0.34)',
-        '--status-active': '#34d399', '--status-active-bg': 'rgba(52,211,153,0.14)',
-        '--status-eta': '#d6a15f', '--status-eta-bg': 'rgba(214,161,95,0.14)',
-        '--status-done': '#22d3ee', '--status-done-bg': 'rgba(34,211,238,0.14)',
-      }
-    },
-    'monaco-teal': {
-      name: 'Monaco Teal',
-      desc: 'Deep teal + champagne linework',
-      swatches: ['#0f766e', '#f5d06f', '#031310'],
-      vars: {
-        '--blue': '#0f766e', '--blue-glow': 'rgba(15, 118, 110, 0.50)', '--blue-dim': 'rgba(15, 118, 110, 0.12)',
-        '--amber': '#f5d06f', '--amber-glow': 'rgba(245, 208, 111, 0.38)', '--amber-dim': 'rgba(245, 208, 111, 0.10)',
-        '--brand-primary': '#0f766e', '--brand-primary-2': '#2dd4bf',
-        '--brand-accent': '#f5d06f', '--brand-accent-2': '#fde68a',
-        '--bg': '#031310', '--bg-elev': '#071b18', '--bg-sunk': '#0c2621',
-        '--line': 'rgba(45, 212, 191, 0.18)', '--line-strong': 'rgba(245, 208, 111, 0.34)',
-        '--status-active': '#2dd4bf', '--status-active-bg': 'rgba(45,212,191,0.14)',
-        '--status-eta': '#f5d06f', '--status-eta-bg': 'rgba(245,208,111,0.14)',
-        '--status-done': '#5eead4', '--status-done-bg': 'rgba(94,234,212,0.14)',
-      }
-    },
-    'redline-carbon': {
-      name: 'Redline Carbon',
-      desc: 'Graphite + precise redline',
-      swatches: ['#94a3b8', '#f43f5e', '#06070a'],
-      vars: {
-        '--blue': '#94a3b8', '--blue-glow': 'rgba(148, 163, 184, 0.34)', '--blue-dim': 'rgba(148, 163, 184, 0.09)',
-        '--amber': '#f43f5e', '--amber-glow': 'rgba(244, 63, 94, 0.46)', '--amber-dim': 'rgba(244, 63, 94, 0.10)',
-        '--brand-primary': '#64748b', '--brand-primary-2': '#94a3b8',
-        '--brand-accent': '#f43f5e', '--brand-accent-2': '#fb7185',
-        '--bg': '#06070a', '--bg-elev': '#0c1016', '--bg-sunk': '#111722',
-        '--line': 'rgba(148, 163, 184, 0.16)', '--line-strong': 'rgba(244, 63, 94, 0.36)',
-        '--status-active': '#38bdf8', '--status-active-bg': 'rgba(56,189,248,0.14)',
-        '--status-eta': '#f43f5e', '--status-eta-bg': 'rgba(244,63,94,0.14)',
-        '--status-done': '#94a3b8', '--status-done-bg': 'rgba(148,163,184,0.14)',
-      }
-    },
-    'radar-glass': {
-      name: 'Radar Glass',
-      desc: 'Black glass + radar green',
-      swatches: ['#22d3ee', '#a3e635', '#04100f'],
-      vars: {
-        '--blue': '#22d3ee', '--blue-glow': 'rgba(34, 211, 238, 0.48)', '--blue-dim': 'rgba(34, 211, 238, 0.10)',
-        '--amber': '#a3e635', '--amber-glow': 'rgba(163, 230, 53, 0.42)', '--amber-dim': 'rgba(163, 230, 53, 0.10)',
-        '--brand-primary': '#22d3ee', '--brand-primary-2': '#67e8f9',
-        '--brand-accent': '#a3e635', '--brand-accent-2': '#bef264',
-        '--bg': '#04100f', '--bg-elev': '#081a18', '--bg-sunk': '#0d2522',
-        '--line': 'rgba(34, 211, 238, 0.18)', '--line-strong': 'rgba(163, 230, 53, 0.34)',
-        '--status-active': '#a3e635', '--status-active-bg': 'rgba(163,230,53,0.14)',
-        '--status-eta': '#facc15', '--status-eta-bg': 'rgba(250,204,21,0.14)',
-        '--status-done': '#22d3ee', '--status-done-bg': 'rgba(34,211,238,0.14)',
-      }
-    },
-    'random': {
-      name: 'Random Bomb',
-      desc: 'Curated pro rotation',
-      swatches: ['#38bdf8', '#e2e8f0', '#030712'], // placeholder, regenerated on apply
-      vars: null, // generated from curated presets each click
     },
   };
 
-  const CB_PRO_RANDOM_KEYS = ['black-ice', 'harbor-steel', 'carbon-copper', 'monaco-teal', 'redline-carbon', 'radar-glass'];
+  const CB_PRO_RANDOM_KEYS = ['radar-glass', 'monaco', 'harbor-steel'];
 
   function generateRandomBombVars() {
     const key = CB_PRO_RANDOM_KEYS[Math.floor(Math.random() * CB_PRO_RANDOM_KEYS.length)];
@@ -6240,7 +6125,9 @@
       }
       document.querySelectorAll('.cb-preset').forEach(el => el.classList.toggle('active', el.dataset.preset === saved));
     } else {
-      document.querySelectorAll('.cb-preset[data-preset="deep-ocean"]').forEach(el => el.classList.add('active'));
+      const preset = CB_PRESETS['radar-glass'];
+      Object.entries(preset.vars).forEach(([k, v]) => document.documentElement.style.setProperty(k, v));
+      document.querySelectorAll('.cb-preset[data-preset="radar-glass"]').forEach(el => el.classList.add('active'));
     }
   }
   cbInit();

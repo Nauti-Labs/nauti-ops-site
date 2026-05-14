@@ -33,31 +33,18 @@
   <rect width="1200" height="630" fill="url(#grid)"/>
   <rect width="1200" height="630" fill="url(#amber-glow)"/>
   <rect width="1200" height="630" fill="url(#blue-glow)"/>
-  <rect width="1200" height="3" fill="#0077ff"/>
+  <rect width="1200" height="3" fill="#f5a118"/>
 
   <!-- Header: compass + wordmark + tagline -->
   <g transform="translate(80 80)">
-    <g transform="translate(0 30) scale(1.55)">
-      <circle cx="0" cy="0" r="18"   stroke="#0077ff" stroke-width="1.4" fill="none"/>
-      <circle cx="0" cy="0" r="13.5" stroke="#4099ff" stroke-width="0.5" fill="none" opacity="0.45"/>
-      <use href="#og-inter" transform="rotate(45)"/>
-      <use href="#og-inter" transform="rotate(135)"/>
-      <use href="#og-inter" transform="rotate(225)"/>
-      <use href="#og-inter" transform="rotate(315)"/>
-      <use href="#og-card"  transform="rotate(90)"/>
-      <use href="#og-card"  transform="rotate(180)"/>
-      <use href="#og-card"  transform="rotate(270)"/>
-      <use href="#og-card-n"/>
-      <circle cx="0" cy="0" r="2.2"  fill="#06090f" stroke="#0077ff" stroke-width="0.6"/>
-      <circle cx="0" cy="0" r="1.05" fill="#ffaa00"/>
-    </g>
-    <text x="80" y="40" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="32" font-weight="800" fill="#fafafd" letter-spacing="0.5">Triton</text>
-    <text x="320" y="40" font-family="Menlo, 'Courier New', monospace" font-size="14" font-weight="500" fill="#7a8a9a" letter-spacing="0.5">// by Nauti-Labs</text>
+    <image href="triton-mark.svg" x="-36" y="-8" width="72" height="72"/>
+    <text x="80" y="40" font-family="Arial" font-size="32" font-weight="800" fill="#fafafd" letter-spacing="0.5">Triton</text>
+    <text x="320" y="40" font-family="Courier" font-size="14" font-weight="500" fill="#7a8a9a" letter-spacing="0.5">// by Nauti-Labs</text>
   </g>
 
   <!-- Top-right: status badge -->
   <g transform="translate(1120 80)">
-    <text text-anchor="end" y="40" font-family="Menlo, 'Courier New', monospace" font-size="14" font-weight="700" fill="#ffcc4d" letter-spacing="2">v1 · LIVE</text>
+    <text text-anchor="end" y="40" font-family="Courier" font-size="14" font-weight="700" fill="#ffcc4d" letter-spacing="2">v1 · LIVE</text>
   </g>
 
   <!-- Divider -->
@@ -65,7 +52,7 @@
 
   <!-- Headline -->
   <g transform="translate(80 240)">
-    <text font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="68" font-weight="700" fill="#fafafd" letter-spacing="-1.5">
+    <text font-family="Arial" font-size="68" font-weight="700" fill="#fafafd" letter-spacing="-1.5">
       <tspan x="0" dy="0">Stop running the channel</tspan>
       <tspan x="0" dy="84">from a </tspan>
       <tspan font-style="italic" fill="#ffaa00" font-weight="600">spreadsheet.</tspan>
@@ -73,10 +60,10 @@
   </g>
 
   <!-- URL above pills (own line, no collision) -->
-  <text x="80" y="475" font-family="Menlo, 'Courier New', monospace" font-size="15" font-weight="500" fill="#b8d4f0" letter-spacing="1">ops.nauti-labs.com</text>
+  <text x="80" y="475" font-family="Courier" font-size="15" font-weight="500" fill="#b8d4f0" letter-spacing="1">ops.nauti-labs.com</text>
 
   <!-- Tech pills (4 only) -->
-  <g transform="translate(80 510)" font-family="Menlo, 'Courier New', monospace" font-size="13">
+  <g transform="translate(80 510)" font-family="Courier" font-size="13">
     <rect x="0"   y="0" width="120" height="38" rx="6" fill="#0e1622" stroke="#1a2434"/>
     <text x="14"  y="25" font-weight="700" fill="#ffaa00">▸</text>
     <text x="32"  y="25" font-weight="500" fill="#b8d4f0">Voyages</text>
@@ -95,5 +82,5 @@
   </g>
 
   <!-- Bottom-right: signature -->
-  <text x="1120" y="540" text-anchor="end" font-family="Menlo, 'Courier New', monospace" font-size="13" font-weight="500" fill="#7a8a9a" letter-spacing="2">NAUTI-LABS · 2026</text>
+  <text x="1120" y="540" text-anchor="end" font-family="Courier" font-size="13" font-weight="500" fill="#7a8a9a" letter-spacing="2">NAUTI-LABS · 2026</text>
 </svg>
