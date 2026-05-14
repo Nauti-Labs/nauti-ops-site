@@ -2495,6 +2495,326 @@
   .demo-banner b { color: var(--blue); font-weight: 700; letter-spacing: 0.10em; }
   .demo-banner .demo-tag { color: var(--amber); font-weight: 600; }
   .demo-banner .dot-live { width: 7px; height: 7px; border-radius: 50%; background: var(--status-active); box-shadow: 0 0 8px rgba(0,217,126,0.6); animation: pulse 2s ease-in-out infinite; }
+
+  /* ─── DENSE OPS SKIN (CWC / Anchor alignment) ─── */
+  :root {
+    --radius: 7px;
+    --radius-lg: 8px;
+    --shadow-sm: none;
+    --shadow: none;
+    --shadow-lg: 0 18px 44px rgba(0,0,0,0.42);
+  }
+  body {
+    font-size: 13px;
+    line-height: 1.42;
+  }
+  .demo-banner {
+    min-height: 24px;
+    padding: 3px 1rem;
+    font-size: 0.66rem;
+  }
+  .app {
+    grid-template-columns: 250px minmax(0, 1fr);
+  }
+  .sidebar {
+    background: var(--bg-sidebar);
+    border-right: 1px solid var(--line-sidebar);
+  }
+  .sidebar-brand {
+    min-height: 82px;
+    padding: 0.85rem 1rem;
+    gap: 0.65rem;
+  }
+  .brand-mark {
+    width: 34px;
+    height: 34px;
+    flex-basis: 34px;
+    filter: drop-shadow(0 0 5px rgba(255,170,0,0.32));
+  }
+  .brand-name {
+    font-size: 1.02rem;
+    letter-spacing: 0.08em;
+  }
+  .brand-sub {
+    font-size: 0.66rem;
+    letter-spacing: 0.08em;
+  }
+  .brand-tagline {
+    font-size: 0.56rem;
+  }
+  .sidebar-section {
+    padding: 0.68rem 0 0.2rem;
+  }
+  .sidebar-section-title {
+    padding: 0 1.1rem 0.38rem;
+    font-size: 0.58rem;
+    letter-spacing: 0.16em;
+  }
+  .nav-item {
+    border-left: 2px solid transparent;
+    border-radius: 0;
+    gap: 0.64rem;
+    padding: 0.56rem 1.05rem;
+    font-size: 0.8rem;
+  }
+  .nav-item:hover {
+    color: var(--text-sidebar);
+  }
+  .nav-item.active {
+    background: var(--amber-dim);
+    border-left-color: var(--brand-accent);
+    box-shadow: none;
+  }
+  .nav-item .icon {
+    width: 16px;
+    height: 16px;
+  }
+  .nav-item .badge {
+    padding: 1px 6px;
+    font-size: 0.62rem;
+  }
+  .nav-item.active .badge {
+    color: var(--bg);
+  }
+  .sidebar-footer {
+    padding: 0.75rem 1rem;
+  }
+  .avatar {
+    width: 28px;
+    height: 28px;
+    flex-basis: 28px;
+    font-size: 0.7rem;
+  }
+  .sidebar-user-name {
+    font-size: 0.78rem;
+  }
+  .sidebar-user-role {
+    font-size: 0.65rem;
+  }
+  .topbar {
+    min-height: 46px;
+    padding: 0.5rem 1.25rem;
+    gap: 0.75rem;
+  }
+  .breadcrumbs {
+    font-size: 0.76rem;
+  }
+  .topbar-search {
+    max-width: 540px;
+  }
+  .topbar-search input {
+    border-radius: 6px;
+    padding: 0.42rem 0.75rem 0.42rem 1.95rem;
+    font-size: 0.78rem;
+  }
+  .topbar-search input:focus {
+    background: var(--bg-sunk);
+    border-color: var(--brand-accent);
+    box-shadow: 0 0 0 2px var(--amber-dim);
+  }
+  .topbar-search kbd {
+    display: none;
+  }
+  .topbar-actions {
+    gap: 0.45rem;
+  }
+  .env-pill {
+    border-radius: 4px;
+    padding: 2px 7px;
+    font-size: 0.64rem;
+  }
+  .icon-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 6px;
+  }
+  .cb-toggle {
+    min-width: 112px;
+    height: 32px;
+    border-radius: 6px;
+    box-shadow: none;
+    font-size: 0.76rem;
+  }
+  .cb-toggle svg {
+    width: 18px;
+    height: 18px;
+    flex-basis: 18px;
+  }
+  .page {
+    max-width: none;
+    margin: 0;
+    padding: 1rem 1.45rem 2rem;
+  }
+  .page-header {
+    gap: 0.75rem;
+    margin-bottom: 0.85rem;
+  }
+  .page-title-block h1 {
+    font-size: 1.45rem;
+    font-weight: 650;
+  }
+  .page-title-block .subtitle {
+    margin-top: 0.12rem;
+    font-size: 0.78rem;
+  }
+  .page-actions {
+    gap: 0.4rem;
+  }
+  .btn {
+    min-height: 32px;
+    border-radius: 6px;
+    padding: 0.38rem 0.72rem;
+    background: var(--bg-elev);
+    color: var(--text);
+    box-shadow: none;
+    font-size: 0.76rem;
+    font-weight: 650;
+  }
+  .btn .icon {
+    width: 14px;
+    height: 14px;
+  }
+  .btn.accent {
+    color: #121416;
+  }
+  .kpi-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 0.55rem;
+    margin-bottom: 0.85rem;
+  }
+  .kpi {
+    border-radius: 7px;
+    padding: 0.64rem 0.76rem;
+    box-shadow: none;
+  }
+  .kpi-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+  }
+  .kpi-value {
+    margin-top: 0.2rem;
+    font-size: 1.35rem;
+  }
+  .kpi-delta {
+    font-size: 0.68rem;
+  }
+  .kpi-icon {
+    top: 0.55rem;
+    right: 0.55rem;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+  }
+  .card {
+    border-radius: 7px;
+    box-shadow: none;
+  }
+  .card-header {
+    gap: 0.55rem;
+    padding: 0.65rem 0.85rem;
+  }
+  .card-title {
+    font-size: 0.88rem;
+  }
+  .card-subtitle {
+    font-size: 0.7rem;
+  }
+  .card-body {
+    padding: 0.75rem 0.85rem;
+  }
+  .tbl {
+    font-size: 0.78rem;
+  }
+  .tbl thead th {
+    padding: 0.48rem 0.72rem;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+  }
+  .tbl td {
+    padding: 0.52rem 0.72rem;
+  }
+  .tbl td .mono {
+    font-size: 0.72rem;
+  }
+  .tbl td .secondary-text {
+    font-size: 0.7rem;
+  }
+  .pill {
+    padding: 1px 7px;
+    font-size: 0.64rem;
+  }
+  .detail-grid,
+  .stack {
+    gap: 0.85rem;
+  }
+  .field-grid {
+    gap: 0.6rem 1rem;
+  }
+  .field label {
+    font-size: 0.6rem;
+  }
+  .field .value {
+    font-size: 0.82rem;
+  }
+  .detail-hero {
+    gap: 0.85rem;
+    margin-bottom: 0.85rem;
+    border-radius: 7px;
+    padding: 0.85rem 1rem;
+  }
+  .hero-icon {
+    width: 42px;
+    height: 42px;
+    flex-basis: 42px;
+    border-radius: 8px;
+  }
+  .hero-icon svg {
+    width: 22px;
+    height: 22px;
+  }
+  .hero-meta h1 {
+    gap: 0.4rem;
+    font-size: 1.24rem;
+  }
+  .hero-sub {
+    margin-top: 2px;
+    font-size: 0.78rem;
+  }
+  .timeline-event {
+    grid-template-columns: 58px 1fr;
+    padding: 0.26rem 0;
+    font-size: 0.78rem;
+  }
+  .ops-modal-head {
+    padding: 0.72rem 0.85rem;
+  }
+  .ops-modal-body {
+    padding: 0.75rem;
+  }
+  .ops-summary-grid {
+    gap: 0.5rem;
+    margin-bottom: 0.7rem;
+  }
+  .ops-summary-item {
+    padding: 0.5rem 0.58rem;
+  }
+  .ops-panel-head {
+    padding: 0.58rem 0.68rem;
+  }
+  .ops-panel-body {
+    padding: 0.68rem;
+  }
+  @media (max-width: 900px) {
+    .page {
+      padding: 0.85rem 0.8rem 1.5rem;
+    }
+    .topbar {
+      padding: 0.45rem 0.8rem;
+    }
+    .kpi-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
 </style>
 </head>
 <body>
@@ -5866,6 +6186,46 @@
 
   // ─── COLOR BOMB ───
   const CB_PRESETS = {
+    'deep-ocean': {
+      name: 'Deep Ocean',
+      desc: 'Nauti default · blue + amber',
+      swatches: ['#0077ff', '#ffaa00', '#06090f'],
+      vars: {
+        '--blue': '#0077ff', '--blue-glow': 'rgba(0, 119, 255, 0.45)', '--blue-dim': 'rgba(0, 119, 255, 0.08)',
+        '--amber': '#ffaa00', '--amber-glow': 'rgba(255, 170, 0, 0.45)', '--amber-dim': 'rgba(255, 170, 0, 0.08)',
+        '--brand-primary': '#0077ff', '--brand-primary-2': '#4099ff', '--brand-primary-3': '#0f2a44',
+        '--brand-accent': '#ffaa00', '--brand-accent-2': '#ffcc4d',
+        '--bg': '#06090f', '--bg-elev': '#0b1018', '--bg-sunk': '#101722', '--bg-sidebar': '#05070c', '--bg-sidebar-2': '#0a0f17',
+        '--line': 'rgba(0, 119, 255, 0.15)', '--line-strong': 'rgba(0, 119, 255, 0.30)', '--line-sidebar': 'rgba(0, 119, 255, 0.12)',
+        '--text': '#e7edf5', '--text-2': '#cad4e2', '--text-muted': '#8592a3', '--text-faint': '#4a5565',
+        '--text-sidebar': '#cbd5e1', '--text-sidebar-muted': '#64748b',
+        '--status-active': '#00d97e', '--status-active-bg': 'rgba(0,217,126,0.12)',
+        '--status-eta': '#ffaa00', '--status-eta-bg': 'rgba(255,170,0,0.12)',
+        '--status-done': '#4099ff', '--status-done-bg': 'rgba(64,153,255,0.14)',
+        '--shadow-sm': '0 2px 8px rgba(0, 0, 0, 0.22)', '--shadow': '0 12px 34px rgba(0, 0, 0, 0.34)', '--shadow-lg': '0 22px 60px rgba(0, 0, 0, 0.44)',
+        '--glow-blue': '0 0 22px rgba(0, 119, 255, 0.32)', '--glow-amber': '0 0 18px rgba(255, 170, 0, 0.30)',
+      }
+    },
+    'black-ice': {
+      name: 'Black Ice',
+      desc: 'Charcoal + glacial cyan',
+      swatches: ['#38bdf8', '#e2e8f0', '#030712'],
+      vars: {
+        '--blue': '#38bdf8', '--blue-glow': 'rgba(56, 189, 248, 0.48)', '--blue-dim': 'rgba(56, 189, 248, 0.10)',
+        '--amber': '#e2e8f0', '--amber-glow': 'rgba(226, 232, 240, 0.30)', '--amber-dim': 'rgba(226, 232, 240, 0.08)',
+        '--brand-primary': '#38bdf8', '--brand-primary-2': '#7dd3fc', '--brand-primary-3': '#0b1726',
+        '--brand-accent': '#e2e8f0', '--brand-accent-2': '#f8fafc',
+        '--bg': '#030712', '--bg-elev': '#07111f', '--bg-sunk': '#0b1626', '--bg-sidebar': '#02050c', '--bg-sidebar-2': '#07111f',
+        '--line': 'rgba(56, 189, 248, 0.18)', '--line-strong': 'rgba(56, 189, 248, 0.40)', '--line-sidebar': 'rgba(56, 189, 248, 0.14)',
+        '--text': '#e5edf7', '--text-2': '#c8d5e4', '--text-muted': '#8794a6', '--text-faint': '#4c596a',
+        '--text-sidebar': '#d6e2f0', '--text-sidebar-muted': '#738196',
+        '--status-active': '#2dd4bf', '--status-active-bg': 'rgba(45,212,191,0.14)',
+        '--status-eta': '#e2e8f0', '--status-eta-bg': 'rgba(226,232,240,0.12)',
+        '--status-done': '#60a5fa', '--status-done-bg': 'rgba(96,165,250,0.14)',
+        '--shadow-sm': '0 2px 8px rgba(0, 0, 0, 0.24)', '--shadow': '0 12px 34px rgba(0, 0, 0, 0.36)', '--shadow-lg': '0 22px 60px rgba(0, 0, 0, 0.46)',
+        '--glow-blue': '0 0 24px rgba(56, 189, 248, 0.30)', '--glow-amber': '0 0 18px rgba(226, 232, 240, 0.18)',
+      }
+    },
     'radar-glass': {
       name: 'Radar Glass',
       desc: 'Light radar glass · seafoam, graphite, signal green',
@@ -5886,7 +6246,7 @@
         '--glow-blue': '0 0 24px rgba(45, 212, 191, 0.22)', '--glow-amber': '0 0 18px rgba(143, 191, 63, 0.18)',
       }
     },
-    'monaco': {
+    'monaco-teal': {
       name: 'Monaco',
       desc: 'Light regatta enamel · ivory, harbor blue, racing red',
       swatches: ['#fff8ea', '#0b5d7a', '#c81e32'],
@@ -5926,9 +6286,55 @@
         '--glow-blue': '0 0 22px rgba(126, 152, 170, 0.20)', '--glow-amber': '0 0 18px rgba(209, 160, 77, 0.16)',
       }
     },
+    'carbon-copper': {
+      name: 'Carbon Copper',
+      desc: 'Carbon black + brushed copper',
+      swatches: ['#0891b2', '#d6a15f', '#07090a'],
+      vars: {
+        '--blue': '#0891b2', '--blue-glow': 'rgba(8, 145, 178, 0.46)', '--blue-dim': 'rgba(8, 145, 178, 0.10)',
+        '--amber': '#d6a15f', '--amber-glow': 'rgba(214, 161, 95, 0.42)', '--amber-dim': 'rgba(214, 161, 95, 0.10)',
+        '--brand-primary': '#0891b2', '--brand-primary-2': '#22d3ee', '--brand-primary-3': '#0c252b',
+        '--brand-accent': '#d6a15f', '--brand-accent-2': '#f0c987',
+        '--bg': '#07090a', '--bg-elev': '#0e1214', '--bg-sunk': '#141a1d', '--bg-sidebar': '#050607', '--bg-sidebar-2': '#0e1214',
+        '--line': 'rgba(8, 145, 178, 0.20)', '--line-strong': 'rgba(214, 161, 95, 0.34)', '--line-sidebar': 'rgba(214, 161, 95, 0.13)',
+        '--text': '#e8edf0', '--text-2': '#ccd6db', '--text-muted': '#8a969e', '--text-faint': '#4e5960',
+        '--text-sidebar': '#d5dde2', '--text-sidebar-muted': '#77848d',
+        '--status-active': '#34d399', '--status-active-bg': 'rgba(52,211,153,0.14)',
+        '--status-eta': '#d6a15f', '--status-eta-bg': 'rgba(214,161,95,0.14)',
+        '--status-done': '#22d3ee', '--status-done-bg': 'rgba(34,211,238,0.14)',
+        '--shadow-sm': '0 2px 8px rgba(0, 0, 0, 0.24)', '--shadow': '0 12px 34px rgba(0, 0, 0, 0.36)', '--shadow-lg': '0 22px 60px rgba(0, 0, 0, 0.46)',
+        '--glow-blue': '0 0 22px rgba(8, 145, 178, 0.28)', '--glow-amber': '0 0 18px rgba(214, 161, 95, 0.28)',
+      }
+    },
+    'redline-carbon': {
+      name: 'Redline Carbon',
+      desc: 'Graphite + precise redline',
+      swatches: ['#94a3b8', '#f43f5e', '#06070a'],
+      vars: {
+        '--blue': '#94a3b8', '--blue-glow': 'rgba(148, 163, 184, 0.34)', '--blue-dim': 'rgba(148, 163, 184, 0.09)',
+        '--amber': '#f43f5e', '--amber-glow': 'rgba(244, 63, 94, 0.46)', '--amber-dim': 'rgba(244, 63, 94, 0.10)',
+        '--brand-primary': '#64748b', '--brand-primary-2': '#94a3b8', '--brand-primary-3': '#141821',
+        '--brand-accent': '#f43f5e', '--brand-accent-2': '#fb7185',
+        '--bg': '#06070a', '--bg-elev': '#0c1016', '--bg-sunk': '#111722', '--bg-sidebar': '#040508', '--bg-sidebar-2': '#0c1016',
+        '--line': 'rgba(148, 163, 184, 0.16)', '--line-strong': 'rgba(244, 63, 94, 0.36)', '--line-sidebar': 'rgba(148, 163, 184, 0.13)',
+        '--text': '#eceff4', '--text-2': '#cdd5df', '--text-muted': '#8b96a5', '--text-faint': '#4f5967',
+        '--text-sidebar': '#d7dde6', '--text-sidebar-muted': '#778293',
+        '--status-active': '#38bdf8', '--status-active-bg': 'rgba(56,189,248,0.14)',
+        '--status-eta': '#f43f5e', '--status-eta-bg': 'rgba(244,63,94,0.14)',
+        '--status-done': '#94a3b8', '--status-done-bg': 'rgba(148,163,184,0.14)',
+        '--shadow-sm': '0 2px 8px rgba(0, 0, 0, 0.24)', '--shadow': '0 12px 34px rgba(0, 0, 0, 0.36)', '--shadow-lg': '0 22px 60px rgba(0, 0, 0, 0.46)',
+        '--glow-blue': '0 0 22px rgba(148, 163, 184, 0.20)', '--glow-amber': '0 0 18px rgba(244, 63, 94, 0.28)',
+      }
+    },
+    'random': {
+      name: 'Random Bomb',
+      desc: 'Curated pro rotation',
+      swatches: ['#38bdf8', '#e2e8f0', '#030712'],
+      vars: null
+    },
   };
 
-  const CB_PRO_RANDOM_KEYS = ['radar-glass', 'monaco', 'harbor-steel'];
+  const CB_PRO_RANDOM_KEYS = ['black-ice', 'radar-glass', 'monaco-teal', 'harbor-steel', 'carbon-copper', 'redline-carbon'];
 
   function generateRandomBombVars() {
     const key = CB_PRO_RANDOM_KEYS[Math.floor(Math.random() * CB_PRO_RANDOM_KEYS.length)];
@@ -6105,7 +6511,8 @@
       document.body.classList.remove('cb-dragging');
     });
     // restore saved theme
-    const saved = localStorage.getItem('triton-theme');
+    let saved = localStorage.getItem('triton-theme');
+    if (saved === 'monaco') saved = 'monaco-teal';
     if (saved && CB_PRESETS[saved]) {
       // Apply WITHOUT the burst on restore
       let preset = CB_PRESETS[saved];
@@ -6125,9 +6532,9 @@
       }
       document.querySelectorAll('.cb-preset').forEach(el => el.classList.toggle('active', el.dataset.preset === saved));
     } else {
-      const preset = CB_PRESETS['radar-glass'];
+      const preset = CB_PRESETS['deep-ocean'];
       Object.entries(preset.vars).forEach(([k, v]) => document.documentElement.style.setProperty(k, v));
-      document.querySelectorAll('.cb-preset[data-preset="radar-glass"]').forEach(el => el.classList.add('active'));
+      document.querySelectorAll('.cb-preset[data-preset="deep-ocean"]').forEach(el => el.classList.add('active'));
     }
   }
   cbInit();
