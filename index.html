@@ -764,6 +764,48 @@
   }
   .page-actions { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
 
+  .pilot-cta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin: 0 0 0.85rem;
+    padding: 0.9rem 1rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 170, 0, 0.38);
+    background: linear-gradient(100deg, rgba(255,170,0,0.12), rgba(0,119,255,0.08));
+  }
+  .pilot-cta-kicker {
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--amber);
+  }
+  .pilot-cta-title {
+    margin-top: 0.15rem;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+  .pilot-cta-text {
+    margin-top: 0.2rem;
+    max-width: 68ch;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+  }
+  .pilot-cta-actions { display: flex; flex-wrap: wrap; gap: 0.45rem; flex-shrink: 0; }
+  a.pilot-cta-book {
+    background: var(--amber);
+    color: #121416;
+    border-color: var(--amber);
+    font-weight: 700;
+  }
+  a.pilot-cta-book:hover { background: #ffb82e; color: #121416; }
+  @media (max-width: 800px) {
+    .pilot-cta { flex-direction: column; align-items: flex-start; }
+  }
+
   /* ─── BUTTONS ─── */
   .btn {
     display: inline-flex; align-items: center; gap: 0.45rem;
@@ -2874,6 +2916,16 @@
       </a>
     </div>
 
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Get Triton</div>
+      <a class="nav-item" href="/pricing/">
+        <span class="icon">${ICON.tag}</span> Pricing
+      </a>
+      <a class="nav-item" href="/pilot/">
+        <span class="icon">${ICON.calendar}</span> Book a demo
+      </a>
+    </div>
+
     <div class="sidebar-footer">
       <div class="avatar">JL</div>
       <div class="sidebar-user">
@@ -2936,6 +2988,8 @@
     arrow:   `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>`,
     clock:   `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
     phone:   `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>`,
+    tag:     `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>`,
+    calendar:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`,
   };
 
   // After ICON is defined, fill the sidebar nav icons in (we used template-literal placeholders that won't auto-evaluate in HTML)
@@ -4425,6 +4479,18 @@
         <div class="page-actions">
           <button class="btn ghost">${ICON.download} Export daily report</button>
           <button class="btn primary" data-link="updates">${ICON.sparkle} Review today's updates</button>
+        </div>
+      </div>
+
+      <div class="pilot-cta">
+        <div>
+          <div class="pilot-cta-kicker">For ship agencies</div>
+          <div class="pilot-cta-title">Put the channel desk on Triton</div>
+          <div class="pilot-cta-text">Founding Pilot, Desk, and Agency plans for Houston Ship Channel agencies. Book a demo and we’ll confirm the fit before anything is billed.</div>
+        </div>
+        <div class="pilot-cta-actions">
+          <a class="btn pilot-cta-book" href="/pilot/">Book a demo</a>
+          <a class="btn" href="/pricing/">See pricing</a>
         </div>
       </div>
 

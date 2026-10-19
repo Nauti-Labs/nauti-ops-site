@@ -1,0 +1,538 @@
+<!-- Copyright (c) 2026 Nauti-Labs LLC. All rights reserved. -->
+<!-- page-url: https://ops.nauti-labs.com/pilot/ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book a demo — Triton</title>
+    <meta name="description" content="Book a Triton demo or start a Founding Pilot. Tell us your agency, ports, and how many vessels you run each month.">
+    <link rel="canonical" href="https://ops.nauti-labs.com/pilot/">
+    <meta name="theme-color" content="#06090f">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ops.nauti-labs.com/pilot/">
+    <meta property="og:title" content="Book a demo — Triton">
+    <meta property="og:description" content="Pilot signup and demo requests for Houston Ship Channel ship agencies. Voyages, SOF, and the berth board on one desk.">
+    <meta property="og:image" content="https://ops.nauti-labs.com/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Triton — Stop running the channel from a spreadsheet.">
+    <meta property="og:site_name" content="Nauti-Labs">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://ops.nauti-labs.com/pilot/">
+    <meta name="twitter:title" content="Book a demo — Triton">
+    <meta name="twitter:description" content="Request a Triton pilot or demo for your ship agency.">
+    <meta name="twitter:image" content="https://ops.nauti-labs.com/og.png">
+    <meta name="twitter:image:alt" content="Triton — Stop running the channel from a spreadsheet.">
+    <link rel="icon" type="image/svg+xml" href="/triton-mark.svg">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --blue:        #0077ff;
+            --blue-glow:   rgba(0, 119, 255, 0.45);
+            --blue-dim:    rgba(0, 119, 255, 0.08);
+            --amber:       #ffaa00;
+            --amber-dim:   rgba(255, 170, 0, 0.08);
+            --bg:          #06090f;
+            --bg2:         #0b1018;
+            --bg3:         #101722;
+            --border:      rgba(0, 119, 255, 0.15);
+            --border-amber:rgba(255, 170, 0, 0.2);
+            --text:        #e0f0ff;
+            --text-muted:  rgba(200, 225, 255, 0.45);
+            --danger:      #ff8b96;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            background-image:
+                radial-gradient(ellipse at 20% 10%, rgba(0,119,255,0.07) 0%, transparent 55%),
+                radial-gradient(ellipse at 80% 90%, rgba(255,170,0,0.04) 0%, transparent 55%);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        a { color: var(--blue); text-decoration: none; transition: color 0.2s; }
+        a:hover { color: var(--amber); }
+        .sr {
+            position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+            overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+        }
+
+        header {
+            padding: 1.2rem 2rem;
+            background: linear-gradient(180deg, var(--bg2) 0%, transparent 100%);
+            border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: space-between;
+            position: sticky; top: 0; backdrop-filter: blur(8px); z-index: 10;
+        }
+        .brand { display: flex; align-items: center; gap: 14px; color: inherit; }
+        .brand:hover { color: inherit; }
+        .wheel-mark { width: 38px; height: 38px; filter: drop-shadow(0 0 8px var(--blue-glow)); }
+        .brand-txt { display: flex; flex-direction: column; line-height: 1; }
+        .brand-name {
+            font-size: 1.4rem; font-weight: 800; letter-spacing: -0.02em;
+            background: linear-gradient(135deg, var(--blue) 0%, #40aaff 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .brand-sub {
+            font-size: 0.65rem; font-weight: 600; letter-spacing: 0.16em;
+            color: var(--amber); text-transform: uppercase; opacity: 0.85; margin-top: 4px;
+        }
+        .nav-toggle { position: absolute; opacity: 0; pointer-events: none; }
+        .nav-burger {
+            display: none; width: 42px; height: 42px;
+            border: 1px solid var(--border); border-radius: 8px;
+            align-items: center; justify-content: center; cursor: pointer;
+        }
+        .nav-burger > span:first-child,
+        .nav-burger > span:first-child::before,
+        .nav-burger > span:first-child::after {
+            display: block; width: 18px; height: 2px; background: var(--text); position: relative;
+        }
+        .nav-burger > span:first-child::before,
+        .nav-burger > span:first-child::after { content: ""; position: absolute; left: 0; }
+        .nav-burger > span:first-child::before { top: -6px; }
+        .nav-burger > span:first-child::after { top: 6px; }
+        .nav-links { display: flex; gap: 1.5rem; align-items: center; }
+        .nav-links a { font-size: 0.82rem; font-weight: 500; color: var(--text-muted); }
+        .nav-links a:hover, .nav-links a[aria-current="page"] { color: var(--blue); }
+
+        .wrap { max-width: 760px; margin: 0 auto; padding: 3.5rem 1.25rem 4rem; }
+        .eyebrow {
+            display: inline-block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem; font-weight: 600; color: var(--amber);
+            text-transform: uppercase; letter-spacing: 0.2em;
+            padding: 0.4rem 1rem; background: var(--amber-dim);
+            border: 1px solid var(--border-amber); border-radius: 50px; margin-bottom: 1.2rem;
+        }
+        h1 { font-size: clamp(2rem, 5vw, 3rem); font-weight: 900; letter-spacing: -0.03em; line-height: 1.08; margin-bottom: 0.8rem; }
+        .lede { color: var(--text-muted); font-size: 1.05rem; margin-bottom: 1.6rem; }
+        .lede a { font-weight: 600; }
+
+        .card {
+            background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; padding: 1.4rem;
+        }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem 1rem; }
+        .field { display: flex; flex-direction: column; gap: 0.35rem; }
+        .field.full { grid-column: 1 / -1; }
+        label { font-size: 0.78rem; font-weight: 650; letter-spacing: 0.02em; }
+        .opt { color: var(--text-muted); font-weight: 500; }
+        input, select, textarea {
+            width: 100%; padding: 0.85rem 0.9rem;
+            background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+            color: var(--text); font: inherit; font-size: 0.95rem;
+        }
+        textarea { min-height: 120px; resize: vertical; }
+        input:focus, select:focus, textarea:focus {
+            outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px var(--blue-dim);
+        }
+        .field.invalid input, .field.invalid select, .field.invalid textarea { border-color: var(--danger); }
+        .field-error { color: var(--danger); font-size: 0.78rem; min-height: 1em; }
+        .form-error {
+            display: none; margin-bottom: 0.9rem; padding: 0.75rem 0.9rem;
+            border: 1px solid rgba(255, 71, 87, 0.45); border-radius: 8px;
+            background: rgba(255, 71, 87, 0.08); color: var(--danger); font-size: 0.88rem;
+        }
+        .form-error.show { display: block; }
+        .actions { display: flex; flex-wrap: wrap; gap: 0.7rem; align-items: center; margin-top: 0.4rem; }
+        .btn {
+            display: inline-flex; align-items: center; justify-content: center; gap: 0.45rem;
+            padding: 0.95rem 1.4rem; font-size: 0.95rem; font-weight: 700; border-radius: 8px;
+            border: 1px solid transparent; cursor: pointer; font-family: inherit;
+        }
+        .btn.primary { background: var(--amber); color: var(--bg); box-shadow: 0 4px 20px rgba(255,170,0,0.25); }
+        .btn.primary:hover { background: #ffb82e; }
+        .btn:disabled { opacity: 0.65; cursor: wait; }
+        .btn.ghost { background: transparent; border-color: var(--border); color: var(--text); }
+        .btn.ghost:hover { border-color: var(--blue); color: var(--blue); }
+        .fine { color: var(--text-muted); font-size: 0.78rem; }
+
+        .success { display: none; }
+        .success.show { display: block; }
+        .success h2 { font-size: 1.7rem; font-weight: 800; letter-spacing: -0.02em; margin: 0.4rem 0 0.6rem; }
+        .success p { color: var(--text-muted); margin-bottom: 1rem; }
+        .summary { list-style: none; margin: 0 0 1.2rem; }
+        .summary li { padding: 0.45rem 0; border-bottom: 1px solid var(--border); font-size: 0.92rem; }
+        .summary b { display: inline-block; min-width: 9.5rem; color: var(--text-muted); font-weight: 600; }
+
+        footer {
+            border-top: 1px solid var(--border); padding: 2rem; text-align: center;
+            color: var(--text-muted); font-size: 0.82rem;
+        }
+        footer a { color: var(--text-muted); }
+        footer a:hover { color: var(--blue); }
+
+        @media (max-width: 720px) {
+            header { padding: 0.9rem 1rem; }
+            .nav-burger { display: inline-flex; }
+            .nav-links {
+                display: none; position: absolute; top: 100%; left: 0; right: 0;
+                flex-direction: column; align-items: stretch; gap: 0;
+                padding: 0.4rem 0 0.8rem; background: rgba(6, 9, 15, 0.97);
+                border-bottom: 1px solid var(--border);
+            }
+            .nav-links a { padding: 0.85rem 1.25rem; }
+            .nav-toggle:checked ~ .nav-links { display: flex; }
+            .nav-toggle:focus-visible + .nav-burger { outline: 2px solid var(--blue); outline-offset: 2px; }
+            .grid { grid-template-columns: 1fr; }
+            .wrap { padding-top: 2.2rem; }
+            .actions .btn { width: 100%; }
+            .summary b { display: block; min-width: 0; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="/" class="brand">
+        <img class="wheel-mark" src="/triton-mark.svg" alt="">
+        <div class="brand-txt">
+            <div class="brand-name">Triton</div>
+            <div class="brand-sub">Maritime Operations</div>
+        </div>
+    </a>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle">
+    <label class="nav-burger" for="nav-toggle"><span></span><span class="sr">Menu</span></label>
+    <nav class="nav-links" aria-label="Primary">
+        <a href="/">Console</a>
+        <a href="/pricing/">Pricing</a>
+        <a href="/pilot/" aria-current="page">Book a demo</a>
+    </nav>
+</header>
+
+<main class="wrap">
+    <div class="eyebrow">Pilot · Book a demo</div>
+    <h1>Put one agency desk on Triton.</h1>
+    <p class="lede">Tell us who you are and how many vessels you run. We’ll confirm a Founding Pilot or set a time to walk the console. Rates are on the <a href="/pricing/">pricing page</a>.</p>
+
+    <div class="card" id="form-card">
+        <form id="pilot-form" novalidate>
+            <div class="form-error" id="form-error" role="alert"></div>
+            <div class="grid">
+                <div class="field">
+                    <label for="name">Name</label>
+                    <input id="name" name="name" type="text" autocomplete="name" required maxlength="120">
+                    <div class="field-error" id="name-error"></div>
+                </div>
+                <div class="field">
+                    <label for="company">Company / agency</label>
+                    <input id="company" name="company" type="text" autocomplete="organization" required maxlength="160">
+                    <div class="field-error" id="company-error"></div>
+                </div>
+                <div class="field">
+                    <label for="role">Role</label>
+                    <input id="role" name="role" type="text" autocomplete="organization-title" required maxlength="80" list="role-list" placeholder="Operations manager">
+                    <datalist id="role-list">
+                        <option value="Agency principal"></option>
+                        <option value="Operations manager"></option>
+                        <option value="Boarding agent"></option>
+                        <option value="Documentation"></option>
+                        <option value="Chartering"></option>
+                    </datalist>
+                    <div class="field-error" id="role-error"></div>
+                </div>
+                <div class="field">
+                    <label for="email">Email</label>
+                    <input id="email" name="email" type="email" autocomplete="email" required maxlength="160" inputmode="email">
+                    <div class="field-error" id="email-error"></div>
+                </div>
+                <div class="field">
+                    <label for="phone">Phone <span class="opt">(optional)</span></label>
+                    <input id="phone" name="phone" type="tel" autocomplete="tel" maxlength="40" inputmode="tel">
+                    <div class="field-error" id="phone-error"></div>
+                </div>
+                <div class="field">
+                    <label for="vessels">Vessels per month</label>
+                    <input id="vessels" name="vessels" type="number" required min="0" max="10000" step="1" inputmode="numeric" placeholder="20">
+                    <div class="field-error" id="vessels-error"></div>
+                </div>
+                <div class="field full">
+                    <label for="ports">Port(s)</label>
+                    <input id="ports" name="ports" type="text" required maxlength="200" placeholder="Houston Ship Channel, Galveston, Texas City">
+                    <div class="field-error" id="ports-error"></div>
+                </div>
+                <div class="field full">
+                    <label for="plan">Plan</label>
+                    <select id="plan" name="plan" required>
+                        <option value="">Select a plan</option>
+                        <option value="founding-pilot">Founding Pilot — 90 days</option>
+                        <option value="desk">Desk — monthly</option>
+                        <option value="agency">Agency — monthly</option>
+                        <option value="enterprise">Enterprise — talk to us</option>
+                        <option value="unsure">Not sure yet — book a demo</option>
+                    </select>
+                    <div class="field-error" id="plan-error"></div>
+                </div>
+                <div class="field full">
+                    <label for="notes">Notes <span class="opt">(optional)</span></label>
+                    <textarea id="notes" name="notes" maxlength="2000" placeholder="What the desk is trying to get off the spreadsheet."></textarea>
+                    <div class="field-error" id="notes-error"></div>
+                </div>
+            </div>
+            <div class="actions">
+                <button class="btn primary" type="submit" id="submit-btn">Request a pilot</button>
+                <p class="fine">We’ll only use this to reply about Triton.</p>
+            </div>
+        </form>
+    </div>
+
+    <div class="card success" id="success" role="status" tabindex="-1">
+        <div class="eyebrow" id="success-kicker">Request received</div>
+        <h2 id="success-title"></h2>
+        <p id="success-body"></p>
+        <ul class="summary" id="success-summary"></ul>
+        <button class="btn ghost" type="button" id="reset-btn">Submit another</button>
+    </div>
+</main>
+
+<footer>
+    © 2026 Nauti-Labs LLC · Mont Belvieu, TX ·
+    <a href="/">Console</a> ·
+    <a href="/pricing/">Pricing</a> ·
+    <a href="/pilot/">Book a demo</a> ·
+    <a href="/vision/">Live intel</a> ·
+    <a href="/letter/">Letter</a>
+</footer>
+
+<script>
+    // ─────────────────────────────────────────────────────────────
+    // PLACEHOLDERS — Justin must fill these in before requests deliver.
+    //
+    // FORM_ENDPOINT
+    //   Full URL of a form backend such as Formspree.
+    //   Example shape: https://formspree.io/f/xxxxxxxx
+    //   Leave "" until that endpoint exists. Do not invent one.
+    //
+    // CONTACT_EMAIL
+    //   Inbox for the mailto: fallback, used only when FORM_ENDPOINT is empty.
+    //   Example shape: ops@your-domain.com
+    //   Leave "" until the address is confirmed. Do not guess one.
+    // ─────────────────────────────────────────────────────────────
+    const FORM_ENDPOINT = "";
+    const CONTACT_EMAIL = "";
+
+    const PLAN_LABELS = {
+        "founding-pilot": "Founding Pilot — 90 days",
+        "desk": "Desk — monthly",
+        "agency": "Agency — monthly",
+        "enterprise": "Enterprise — talk to us",
+        "unsure": "Not sure yet — book a demo"
+    };
+    const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const FIELDS = ["name", "company", "role", "email", "phone", "ports", "vessels", "plan", "notes"];
+
+    function configuredEndpoint() {
+        const value = String(FORM_ENDPOINT || "").trim();
+        return /^https?:\/\/\S+$/i.test(value) ? value : "";
+    }
+    function configuredEmail() {
+        const value = String(CONTACT_EMAIL || "").trim();
+        return EMAIL_RE.test(value) ? value : "";
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const requestedPlan = params.get("plan");
+    if (requestedPlan && PLAN_LABELS[requestedPlan]) {
+        document.getElementById("plan").value = requestedPlan;
+    }
+
+    function setFieldError(id, message) {
+        const field = document.getElementById(id).closest(".field");
+        const error = document.getElementById(id + "-error");
+        error.textContent = message || "";
+        field.classList.toggle("invalid", Boolean(message));
+        document.getElementById(id).setAttribute("aria-invalid", message ? "true" : "false");
+    }
+
+    function validate() {
+        const name = document.getElementById("name").value.trim();
+        const company = document.getElementById("company").value.trim();
+        const role = document.getElementById("role").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const phone = document.getElementById("phone").value.trim();
+        const ports = document.getElementById("ports").value.trim();
+        const vesselsRaw = document.getElementById("vessels").value.trim();
+        const plan = document.getElementById("plan").value;
+        const notes = document.getElementById("notes").value.trim();
+        const errors = {};
+
+        if (name.length < 2) errors.name = "Enter your name.";
+        if (company.length < 2) errors.company = "Enter the company or agency.";
+        if (role.length < 2) errors.role = "Enter your role.";
+        if (!EMAIL_RE.test(email)) errors.email = "Enter a valid email address.";
+        if (phone) {
+            const digits = phone.replace(/\D/g, "");
+            if (digits.length < 7 || digits.length > 15 || !/^[0-9+().\-\s]+$/.test(phone)) {
+                errors.phone = "Enter a phone number, or leave it blank.";
+            }
+        }
+        if (ports.length < 2) errors.ports = "Enter at least one port.";
+        if (!/^\d+$/.test(vesselsRaw) || Number(vesselsRaw) > 10000) {
+            errors.vessels = "Enter vessels per month as a whole number.";
+        }
+        if (!PLAN_LABELS[plan]) errors.plan = "Select a plan.";
+        if (notes.length > 2000) errors.notes = "Keep notes under 2000 characters.";
+
+        let firstInvalid = "";
+        FIELDS.forEach(function (id) {
+            setFieldError(id, errors[id] || "");
+            if (!firstInvalid && errors[id]) firstInvalid = id;
+        });
+        const formError = document.getElementById("form-error");
+        if (firstInvalid) {
+            formError.textContent = "Check the highlighted fields and try again.";
+            formError.classList.add("show");
+            document.getElementById(firstInvalid).focus();
+            return null;
+        }
+        formError.textContent = "";
+        formError.classList.remove("show");
+        return {
+            name: name,
+            company: company,
+            role: role,
+            email: email,
+            phone: phone,
+            ports: ports,
+            vessels_per_month: Number(vesselsRaw),
+            plan: plan,
+            plan_label: PLAN_LABELS[plan],
+            notes: notes,
+            source: "triton-pilot"
+        };
+    }
+
+    function buildMailto(email, payload) {
+        const lines = [
+            "Triton pilot / demo request",
+            "",
+            "Name: " + payload.name,
+            "Company: " + payload.company,
+            "Role: " + payload.role,
+            "Email: " + payload.email,
+            "Phone: " + (payload.phone || "—"),
+            "Ports: " + payload.ports,
+            "Vessels per month: " + payload.vessels_per_month,
+            "Plan: " + payload.plan_label,
+            "Notes: " + (payload.notes || "—")
+        ];
+        let body = lines.join("\n");
+        const subject = "Triton pilot request — " + payload.company;
+        let href = "mailto:" + encodeURIComponent(email) + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+        if (href.length > 1800) {
+            lines[lines.length - 1] = "Notes: " + (payload.notes || "").slice(0, 400) + "…";
+            body = lines.join("\n");
+            href = "mailto:" + encodeURIComponent(email) + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+        }
+        return href;
+    }
+
+    function showSuccess(title, body, payload) {
+        document.getElementById("form-card").style.display = "none";
+        document.getElementById("success-title").textContent = title;
+        document.getElementById("success-body").textContent = body;
+        const summary = document.getElementById("success-summary");
+        summary.replaceChildren();
+        [
+            ["Name", payload.name],
+            ["Company", payload.company],
+            ["Role", payload.role],
+            ["Email", payload.email],
+            ["Phone", payload.phone || "—"],
+            ["Ports", payload.ports],
+            ["Vessels / month", String(payload.vessels_per_month)],
+            ["Plan", payload.plan_label]
+        ].forEach(function (row) {
+            const li = document.createElement("li");
+            const b = document.createElement("b");
+            b.textContent = row[0];
+            li.append(b, document.createTextNode(row[1]));
+            summary.append(li);
+        });
+        const panel = document.getElementById("success");
+        panel.classList.add("show");
+        panel.focus();
+    }
+
+    document.getElementById("pilot-form").addEventListener("submit", async function (event) {
+        event.preventDefault();
+        const payload = validate();
+        if (!payload) return;
+        const button = document.getElementById("submit-btn");
+        const formError = document.getElementById("form-error");
+        button.disabled = true;
+        const endpoint = configuredEndpoint();
+        const email = configuredEmail();
+        try {
+            if (endpoint) {
+                const response = await fetch(endpoint, {
+                    method: "POST",
+                    headers: { "Accept": "application/json", "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                });
+                if (!response.ok) throw new Error("endpoint");
+                showSuccess(
+                    "Thanks, " + payload.name + ".",
+                    "We’ll reply to " + payload.email + " about " + payload.plan_label + " for " + payload.company + ".",
+                    payload
+                );
+            } else if (email) {
+                window.location.href = buildMailto(email, payload);
+                showSuccess(
+                    "Thanks, " + payload.name + ".",
+                    "Your email app should open with this request. Send the message to finish.",
+                    payload
+                );
+            } else {
+                document.getElementById("success-kicker").textContent = "Not sent";
+                showSuccess(
+                    "Thanks, " + payload.name + ".",
+                    "The request checked out, but signup delivery is not connected yet, so nothing was sent.",
+                    payload
+                );
+            }
+        } catch (err) {
+            formError.textContent = email
+                ? "The signup endpoint didn’t accept the request. Your email app will open instead — send that message to finish."
+                : "The signup endpoint didn’t accept the request. Nothing was sent. Try again in a moment.";
+            formError.classList.add("show");
+            if (email) {
+                window.location.href = buildMailto(email, payload);
+                showSuccess(
+                    "Thanks, " + payload.name + ".",
+                    "The form endpoint didn’t answer, so your email app should open with this request. Send the message to finish.",
+                    payload
+                );
+            }
+        } finally {
+            button.disabled = false;
+        }
+    });
+
+    document.getElementById("reset-btn").addEventListener("click", function () {
+        document.getElementById("pilot-form").reset();
+        FIELDS.forEach(function (id) { setFieldError(id, ""); });
+        document.getElementById("form-error").classList.remove("show");
+        document.getElementById("success").classList.remove("show");
+        document.getElementById("success-kicker").textContent = "Request received";
+        document.getElementById("form-card").style.display = "";
+        document.getElementById("name").focus();
+    });
+
+    const navToggle = document.getElementById("nav-toggle");
+    const navBurger = document.querySelector(".nav-burger");
+    if (navToggle && navBurger) {
+        navBurger.setAttribute("aria-expanded", "false");
+        navToggle.addEventListener("change", function () {
+            navBurger.setAttribute("aria-expanded", navToggle.checked ? "true" : "false");
+        });
+    }
+</script>
+</body>
+</html>
