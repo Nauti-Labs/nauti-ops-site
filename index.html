@@ -2875,10 +2875,10 @@
     </div>
 
     <div class="sidebar-footer">
-      <div class="avatar">JL</div>
+      <div class="avatar">AM</div>
       <div class="sidebar-user">
-        <div class="sidebar-user-name">Justin LeBlanc</div>
-        <div class="sidebar-user-role">Agent · Beaumont</div>
+        <div class="sidebar-user-name">Alex Marin</div>
+        <div class="sidebar-user-role">Agent · Sample desk</div>
       </div>
     </div>
   </aside>
@@ -2979,7 +2979,7 @@
 
   // ─── PEOPLE (all-fictional) ───
   const PEOPLE = [
-    { id: 'p-jl',   name: 'Justin LeBlanc',     role: 'Operations Manager · Houston', companyId: 'co-agency', email: 'justin@demo.nauti-labs.com',   phone: '+1 713 555 0188', initials: 'JL' },
+    { id: 'p-jl',   name: 'Alex Marin',         role: 'Operations Manager · Houston', companyId: 'co-agency', email: 'alex.marin@example.com',       phone: '+1 713 555 0188', initials: 'AM' },
     { id: 'p-rh',   name: 'Renee Holloway',     role: 'Senior Boarding Agent',        companyId: 'co-agency', email: 'renee@demo.nauti-labs.com',    phone: '+1 713 555 0212', initials: 'RH' },
     { id: 'p-eo',   name: 'Emiko Okabe',        role: 'Documentation Lead',           companyId: 'co-agency', email: 'emiko@demo.nauti-labs.com',    phone: '+1 713 555 0244', initials: 'EO' },
     { id: 'p-wb',   name: 'Wesley Brand',       role: 'Boarding Agent',               companyId: 'co-agency', email: 'wesley@demo.nauti-labs.com',   phone: '+1 713 555 0219', initials: 'WB' },
@@ -3046,7 +3046,7 @@
     { id: 'v-polaris',   name: 'M/T Polaris Star',     imo: '9990101', dwt: 49850, loa: 183.0, beam: 32.2, draft: 11.2, type: 'MR2 Chemical/Product', built: 2019, flag: 'LR', operatorId: 'co-helix',    masterId: 'p-cap1', notes: 'IMO II/III, 16 cargo tanks, deepwell pumps.' },
     { id: 'v-tradewind', name: 'M/T Tradewind',        imo: '9990202', dwt: 37500, loa: 184.5, beam: 27.4, draft: 10.5, type: 'MR1 Chemical',         built: 2017, flag: 'MH', operatorId: 'co-helix',    masterId: 'p-cap2' },
     { id: 'v-northern',  name: 'M/T Northern Aurora',  imo: '9990303', dwt: 45000, loa: 183.0, beam: 32.2, draft: 11.0, type: 'MR1 Chemical',         built: 2021, flag: 'NO', operatorId: 'co-borealis', masterId: 'p-cap3' },
-    { id: 'v-compass',   name: 'M/T Compass Rose',     imo: '9990404', dwt: 37200, loa: 184.5, beam: 27.4, draft: 10.4, type: 'MR1 Chemical',         built: 2014, flag: 'NO', operatorId: 'co-borealis', masterId: 'p-cap4' },
+    { id: 'v-compass',   name: 'M/T Compass Rose',     imo: '9990408', dwt: 37200, loa: 184.5, beam: 27.4, draft: 10.4, type: 'MR1 Chemical',         built: 2014, flag: 'NO', operatorId: 'co-borealis', masterId: 'p-cap4' },
     { id: 'v-endeavor',  name: 'M/T Endeavor',         imo: '9990505', dwt: 49998, loa: 183.0, beam: 32.2, draft: 11.0, type: 'MR2 Chemical/Product', built: 2022, flag: 'DE', operatorId: 'co-stratos',  masterId: 'p-cap5' },
     { id: 'v-mariner',   name: 'M/T Mariner Sky',      imo: '9990606', dwt: 37000, loa: 183.0, beam: 32.2, draft: 10.5, type: 'MR1 Chemical',         built: 2010, flag: 'DE', operatorId: 'co-stratos',  masterId: 'p-cap6' },
     { id: 'v-aether',    name: 'M/T Aether',           imo: '9990707', dwt: 46200, loa: 183.0, beam: 32.2, draft: 11.0, type: 'MR2 Chemical/Product', built: 2018, flag: 'GR', operatorId: 'co-delta',    masterId: 'p-cap7' },
@@ -3326,11 +3326,11 @@
   }
 
   const MOCK_DASHBOARD_CALLS = [
-    { vessel: 'M/T Blue Heron', voyage: '0426A', customer: 'Sample Principal A', route: 'Houston -> Freeport', eta: hoursFromNow(7), berth: 'Sample Terminal Dock 2', status: 'Approaching', agent: 'JL', progress: 'Pilot ordered; awaiting berth window' },
-    { vessel: 'M/T Gulf Meridian', voyage: '1180B', customer: 'Sample Principal B', route: 'Texas City', eta: hoursFromNow(-14), berth: 'Mock Chemical Berth 6', status: 'In port', agent: 'JL', progress: 'Cargo operations in progress' },
-    { vessel: 'M/T Harbor Light', voyage: '2207C', customer: 'Sample Principal C', route: 'Corpus Christi -> Houston', eta: hoursFromNow(28), berth: 'Demo Liquids Pier 1', status: 'En route', agent: 'JL', progress: 'ETA holding steady' },
-    { vessel: 'M/T Copper Star', voyage: '3309D', customer: 'Sample Principal D', route: 'Freeport', eta: hoursFromNow(42), berth: 'Example Dock A', status: 'En route', agent: 'JL', progress: 'Terminal lineup pending' },
-    { vessel: 'M/T Bay Compass', voyage: '5102E', customer: 'Sample Principal E', route: 'Beaumont', eta: hoursFromNow(-36), berth: 'Sample River Dock', status: 'Closed', agent: 'JL', progress: 'Sailed; documents pending review' },
+    { vessel: 'M/T Blue Heron', voyage: '0426A', customer: 'Sample Principal A', route: 'Houston -> Freeport', eta: hoursFromNow(7), berth: 'Sample Terminal Dock 2', status: 'Approaching', agent: 'AM', progress: 'Pilot ordered; awaiting berth window' },
+    { vessel: 'M/T Gulf Meridian', voyage: '1180B', customer: 'Sample Principal B', route: 'Texas City', eta: hoursFromNow(-14), berth: 'Mock Chemical Berth 6', status: 'In port', agent: 'AM', progress: 'Cargo operations in progress' },
+    { vessel: 'M/T Harbor Light', voyage: '2207C', customer: 'Sample Principal C', route: 'Corpus Christi -> Houston', eta: hoursFromNow(28), berth: 'Demo Liquids Pier 1', status: 'En route', agent: 'AM', progress: 'ETA holding steady' },
+    { vessel: 'M/T Copper Star', voyage: '3309D', customer: 'Sample Principal D', route: 'Freeport', eta: hoursFromNow(42), berth: 'Example Dock A', status: 'En route', agent: 'AM', progress: 'Terminal lineup pending' },
+    { vessel: 'M/T Bay Compass', voyage: '5102E', customer: 'Sample Principal E', route: 'Beaumont', eta: hoursFromNow(-36), berth: 'Sample River Dock', status: 'Closed', agent: 'AM', progress: 'Sailed; documents pending review' },
   ];
 
   function normalizePortName(city) {
@@ -4419,7 +4419,7 @@
     $page.innerHTML = `
       <div class="page-header">
         <div class="page-title-block">
-          <h1>Good morning, Justin</h1>
+          <h1>Good morning, Alex</h1>
           <div class="subtitle">${TODAY.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })} · mock operations board · fictional sample seed in the protected modules</div>
         </div>
         <div class="page-actions">
@@ -5696,7 +5696,7 @@
       infoNote: 'Required fields enforced. Once saved, <b>draft auto-syncs from AIS / PortVision</b> using the agency login on file. Edits autosave to the draft record until all required info is in.',
       fields: [
         { key: 'name',  label: 'Vessel name', required: true, placeholder: 'M/T Polaris Star', full: true },
-        { key: 'imo',   label: 'IMO number',  required: true, placeholder: '9876543' },
+        { key: 'imo',   label: 'IMO number',  required: true, placeholder: '9990001' },
         { key: 'flag',  label: 'Flag',        required: true, placeholder: 'LR / MH / MT / PA' },
         { key: 'type',  label: 'Type',        required: true, placeholder: 'MR1 / MR2 / Handy / Small Tanker' },
         { key: 'dwt',   label: 'DWT (mt)',    required: true, type: 'number' },
@@ -6101,7 +6101,7 @@
         const h = TODAY.getHours();
         const greet = h < 12 ? 'Morning' : (h < 17 ? 'Afternoon' : 'Evening');
         return {
-          text: `${greet}, Justin. What can I knock out for you?`,
+          text: `${greet}, Alex. What can I knock out for you?`,
           suggestions: ["What's hot today?", "Demurrage on Northern Aurora", "Send today's updates"],
         };
       }

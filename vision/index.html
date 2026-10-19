@@ -997,12 +997,12 @@ document.getElementById('key-skip').addEventListener('click', () => {
     setStatus('dead', 'Demo (no stream)');
     // Seed a few demo vessels so the UI isn't empty
     const demo = [
-        { mmsi: 1, name: 'ULTRA HOUSTON',     type: 84, lat: 29.72, lon: -94.98, sog: 8.4,  cog: 320, dest: 'HOU' },
-        { mmsi: 2, name: 'STOLT TAURUS',      type: 82, lat: 29.47, lon: -94.87, sog: 11.2, cog: 300, dest: 'BAYPORT' },
-        { mmsi: 3, name: 'MOL CELEBRATION',   type: 70, lat: 29.61, lon: -95.01, sog: 0.1,  cog: 0,   dest: 'HOU' },
-        { mmsi: 4, name: 'ENTERPRISE LPG 3',  type: 81, lat: 29.38, lon: -94.76, sog: 12.7, cog: 120, dest: 'SEA' },
-        { mmsi: 5, name: 'SAN JACINTO TUG',   type: 52, lat: 29.68, lon: -95.05, sog: 6.8,  cog: 90,  dest: '' },
-        { mmsi: 6, name: 'CHEM VENTURE',      type: 82, lat: 29.55, lon: -94.92, sog: 0.0,  cog: 0,   dest: 'ANCHOR' },
+        { mmsi: 1, name: 'CEDAR FINCH',       type: 84, lat: 29.72, lon: -94.98, sog: 8.4,  cog: 320, dest: 'HOU' },
+        { mmsi: 2, name: 'NORTHLINE HERON',   type: 82, lat: 29.47, lon: -94.87, sog: 11.2, cog: 300, dest: 'BAYPORT' },
+        { mmsi: 3, name: 'PAPER LARK',        type: 70, lat: 29.61, lon: -95.01, sog: 0.1,  cog: 0,   dest: 'HOU' },
+        { mmsi: 4, name: 'LANTERN SKIFF',     type: 81, lat: 29.38, lon: -94.76, sog: 12.7, cog: 120, dest: 'SEA' },
+        { mmsi: 5, name: 'HARBOR TUG',        type: 52, lat: 29.68, lon: -95.05, sog: 6.8,  cog: 90,  dest: '' },
+        { mmsi: 6, name: 'AMBER KEEL',        type: 82, lat: 29.55, lon: -94.92, sog: 0.0,  cog: 0,   dest: 'ANCHOR' },
     ];
     demo.forEach(v => { v.lastSeen = Date.now(); vessels.set(v.mmsi, v); upsertMarker(v); });
     renderList(); updateStats();
