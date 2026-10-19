@@ -1,0 +1,399 @@
+<!-- Copyright (c) 2026 Nauti-Labs LLC. All rights reserved. -->
+<!-- page-url: https://ops.nauti-labs.com/pricing/ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing — Triton</title>
+    <meta name="description" content="Triton pricing for Houston Ship Channel ship agencies: a 90-day Founding Pilot, Desk and Agency monthly plans, and Enterprise.">
+    <link rel="canonical" href="https://ops.nauti-labs.com/pricing/">
+    <meta name="theme-color" content="#06090f">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ops.nauti-labs.com/pricing/">
+    <meta property="og:title" content="Pricing — Triton">
+    <meta property="og:description" content="A 90-day Founding Pilot, Desk and Agency monthly plans, and Enterprise. The maritime ops console for Houston Ship Channel agencies.">
+    <meta property="og:image" content="https://ops.nauti-labs.com/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Triton — Stop running the channel from a spreadsheet.">
+    <meta property="og:site_name" content="Nauti-Labs">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://ops.nauti-labs.com/pricing/">
+    <meta name="twitter:title" content="Pricing — Triton">
+    <meta name="twitter:description" content="Founding Pilot, Desk, Agency, and Enterprise for Houston Ship Channel agencies.">
+    <meta name="twitter:image" content="https://ops.nauti-labs.com/og.png">
+    <meta name="twitter:image:alt" content="Triton — Stop running the channel from a spreadsheet.">
+    <link rel="icon" type="image/svg+xml" href="/triton-mark.svg">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --blue:        #0077ff;
+            --blue-glow:   rgba(0, 119, 255, 0.45);
+            --blue-dim:    rgba(0, 119, 255, 0.08);
+            --amber:       #ffaa00;
+            --amber-glow:  rgba(255, 170, 0, 0.45);
+            --amber-dim:   rgba(255, 170, 0, 0.08);
+            --bg:          #06090f;
+            --bg2:         #0b1018;
+            --bg3:         #101722;
+            --border:      rgba(0, 119, 255, 0.15);
+            --border-amber:rgba(255, 170, 0, 0.2);
+            --text:        #e0f0ff;
+            --text-muted:  rgba(200, 225, 255, 0.45);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            background-image:
+                radial-gradient(ellipse at 20% 10%, rgba(0,119,255,0.07) 0%, transparent 55%),
+                radial-gradient(ellipse at 80% 90%, rgba(255,170,0,0.04) 0%, transparent 55%);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        a { color: var(--blue); text-decoration: none; transition: color 0.2s; }
+        a:hover { color: var(--amber); }
+        .sr {
+            position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+            overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+        }
+
+        header {
+            padding: 1.2rem 2rem;
+            background: linear-gradient(180deg, var(--bg2) 0%, transparent 100%);
+            border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: space-between;
+            position: sticky; top: 0; backdrop-filter: blur(8px); z-index: 10;
+        }
+        .brand { display: flex; align-items: center; gap: 14px; color: inherit; }
+        .brand:hover { color: inherit; }
+        .wheel-mark {
+            width: 38px; height: 38px;
+            filter: drop-shadow(0 0 8px var(--blue-glow));
+        }
+        .brand-txt { display: flex; flex-direction: column; line-height: 1; }
+        .brand-name {
+            font-size: 1.4rem; font-weight: 800; letter-spacing: -0.02em;
+            background: linear-gradient(135deg, var(--blue) 0%, #40aaff 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .brand-sub {
+            font-size: 0.65rem; font-weight: 600; letter-spacing: 0.16em;
+            color: var(--amber); text-transform: uppercase; opacity: 0.85;
+            margin-top: 4px;
+        }
+        .nav-toggle { position: absolute; opacity: 0; pointer-events: none; }
+        .nav-burger {
+            display: none; width: 42px; height: 42px;
+            border: 1px solid var(--border); border-radius: 8px;
+            align-items: center; justify-content: center; cursor: pointer;
+        }
+        .nav-burger > span:first-child,
+        .nav-burger > span:first-child::before,
+        .nav-burger > span:first-child::after {
+            display: block; width: 18px; height: 2px; background: var(--text); position: relative;
+        }
+        .nav-burger > span:first-child::before,
+        .nav-burger > span:first-child::after { content: ""; position: absolute; left: 0; }
+        .nav-burger > span:first-child::before { top: -6px; }
+        .nav-burger > span:first-child::after { top: 6px; }
+        .nav-links { display: flex; gap: 1.5rem; align-items: center; }
+        .nav-links a { font-size: 0.82rem; font-weight: 500; color: var(--text-muted); }
+        .nav-links a:hover, .nav-links a[aria-current="page"] { color: var(--blue); }
+
+        .hero { padding: 4.5rem 2rem 2rem; max-width: 960px; margin: 0 auto; text-align: center; }
+        .eyebrow {
+            display: inline-block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem; font-weight: 600; color: var(--amber);
+            text-transform: uppercase; letter-spacing: 0.2em;
+            padding: 0.4rem 1rem; background: var(--amber-dim);
+            border: 1px solid var(--border-amber); border-radius: 50px; margin-bottom: 1.5rem;
+        }
+        h1 {
+            font-size: clamp(2.1rem, 5vw, 3.4rem);
+            font-weight: 900; letter-spacing: -0.03em; line-height: 1.05; margin-bottom: 1.2rem;
+        }
+        h1 .accent {
+            background: linear-gradient(135deg, var(--blue) 0%, #40aaff 60%, var(--amber) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .hero-sub { font-size: 1.12rem; color: var(--text-muted); max-width: 640px; margin: 0 auto; }
+
+        .pricing-section { padding: 2.5rem 1.5rem 4rem; max-width: 1180px; margin: 0 auto; }
+        .tiers { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; }
+        .tier {
+            background: var(--bg2); border: 1px solid var(--border); border-radius: 12px;
+            padding: 1.6rem 1.3rem; display: flex; flex-direction: column; transition: border-color 0.2s, transform 0.2s;
+        }
+        .tier:hover { border-color: var(--blue); transform: translateY(-3px); }
+        .tier.featured {
+            border-color: var(--amber);
+            box-shadow: 0 0 0 1px var(--amber), 0 20px 60px rgba(255,170,0,0.15);
+        }
+        .tier-name {
+            font-size: 0.75rem; font-weight: 700; letter-spacing: 0.16em;
+            text-transform: uppercase; color: var(--amber); margin-bottom: 0.6rem;
+        }
+        .tier-price { font-size: 2.15rem; font-weight: 900; letter-spacing: -0.03em; line-height: 1.1; }
+        .tier-price .per { font-size: 0.9rem; font-weight: 500; color: var(--text-muted); }
+        .tier-tag { font-size: 0.84rem; color: var(--text-muted); margin: 0.7rem 0 1.2rem; min-height: 3.2rem; }
+        .tier-features { list-style: none; margin-bottom: 1.4rem; flex: 1; }
+        .tier-features li {
+            padding: 0.5rem 0; font-size: 0.86rem;
+            display: flex; align-items: flex-start; gap: 0.55rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .tier-features li::before { content: '◆'; color: var(--blue); font-size: 0.7rem; margin-top: 3px; }
+        .tier.featured .tier-features li::before { color: var(--amber); }
+        .tier-features li:last-child { border-bottom: none; }
+        .btn {
+            display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+            padding: 0.9rem 1.2rem; font-size: 0.9rem; font-weight: 700; border-radius: 8px;
+            border: 1px solid transparent; cursor: pointer; transition: all 0.2s;
+            font-family: 'Inter', sans-serif; letter-spacing: 0.01em; text-align: center;
+        }
+        .btn.primary { background: var(--amber); color: var(--bg); box-shadow: 0 4px 20px rgba(255,170,0,0.25); }
+        .btn.primary:hover { background: #ffb82e; color: var(--bg); transform: translateY(-2px); }
+        .btn.ghost { background: transparent; border-color: var(--border); color: var(--text); }
+        .btn.ghost:hover { border-color: var(--blue); color: var(--blue); }
+        .tier .btn { width: 100%; }
+
+        .note {
+            max-width: 760px; margin: 0 auto 3rem; padding: 0 1.5rem;
+            text-align: center; color: var(--text-muted); font-size: 0.88rem;
+        }
+        .faq-section { padding: 1rem 1.5rem 4rem; max-width: 780px; margin: 0 auto; }
+        .faq-section h2 { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.5rem; text-align: center; }
+        .faq { padding: 1.1rem 0; border-bottom: 1px solid var(--border); }
+        .faq:last-child { border-bottom: none; }
+        .faq-q { font-size: 1rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--amber); }
+        .faq-a { color: var(--text-muted); font-size: 0.92rem; }
+
+        footer {
+            border-top: 1px solid var(--border); padding: 2rem; text-align: center;
+            color: var(--text-muted); font-size: 0.82rem;
+        }
+        footer a { color: var(--text-muted); }
+        footer a:hover { color: var(--blue); }
+
+        @media (max-width: 1100px) { .tiers { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+        @media (max-width: 720px) {
+            header { padding: 0.9rem 1rem; }
+            .nav-burger { display: inline-flex; }
+            .nav-links {
+                display: none; position: absolute; top: 100%; left: 0; right: 0;
+                flex-direction: column; align-items: stretch; gap: 0;
+                padding: 0.4rem 0 0.8rem; background: rgba(6, 9, 15, 0.97);
+                border-bottom: 1px solid var(--border);
+            }
+            .nav-links a { padding: 0.85rem 1.25rem; }
+            .nav-toggle:checked ~ .nav-links { display: flex; }
+            .nav-toggle:focus-visible + .nav-burger { outline: 2px solid var(--blue); outline-offset: 2px; }
+            .tiers { grid-template-columns: 1fr; }
+            .tier:hover { transform: none; }
+            .hero { padding: 3rem 1.1rem 1.5rem; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .tier, .btn { transition: none; }
+            .tier:hover, .btn.primary:hover { transform: none; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="/" class="brand">
+        <img class="wheel-mark" src="/triton-mark.svg" alt="">
+        <div class="brand-txt">
+            <div class="brand-name">Triton</div>
+            <div class="brand-sub">Maritime Operations</div>
+        </div>
+    </a>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle">
+    <label class="nav-burger" for="nav-toggle"><span></span><span class="sr">Menu</span></label>
+    <nav class="nav-links" aria-label="Primary">
+        <a href="/">Console</a>
+        <a href="/pricing/" aria-current="page">Pricing</a>
+        <a href="/pilot/">Book a demo</a>
+    </nav>
+</header>
+
+<section class="hero">
+    <div class="eyebrow">Houston Ship Channel · Ship agencies</div>
+    <h1>Pricing for a desk<br><span class="accent">that already has too many tabs.</span></h1>
+    <p class="hero-sub">A paid 90-day Founding Pilot, a Desk plan, a per-agency monthly plan, and Enterprise when the book is bigger than one office.</p>
+</section>
+
+<section class="pricing-section" aria-labelledby="plans-heading">
+    <h2 id="plans-heading" class="sr">Plans</h2>
+    <div class="tiers" id="tiers"></div>
+</section>
+
+<p class="note">One agency means one company on one Triton workspace. A vessel call is a port call opened during the month. Pilot is prepaid for 90 days. Desk and Agency are month to month. Booking confirms the rate before anything is billed.</p>
+
+<section class="faq-section">
+    <h2>Questions desks actually ask</h2>
+    <div class="faq">
+        <div class="faq-q">Who are these plans for?</div>
+        <div class="faq-a">Small and mid ship agencies and operators running calls on the Houston Ship Channel. Desk is one working board. Agency is the whole office. Enterprise is more than one office, or coverage past this channel.</div>
+    </div>
+    <div class="faq">
+        <div class="faq-q">Is the Founding Pilot free?</div>
+        <div class="faq-a">No. It is a paid 90-day engagement so both sides treat it like a live book, not a tire kick. The fee and the call cap are on the Pilot card.</div>
+    </div>
+    <div class="faq">
+        <div class="faq-q">What is in the console?</div>
+        <div class="faq-a">Voyages, vessels, cargos, Statement of Facts, the berth and terminal board, customer updates, and Captain AI. The sample console on this site is demo data.</div>
+    </div>
+    <div class="faq">
+        <div class="faq-q">Can we move from Pilot to Agency?</div>
+        <div class="faq-a">Yes. Book Agency when the 90 days end, or sooner if the desk is already living in it. Enterprise is a conversation, not a checkout.</div>
+    </div>
+</section>
+
+<footer>
+    © 2026 Nauti-Labs LLC · Mont Belvieu, TX ·
+    <a href="/">Console</a> ·
+    <a href="/pricing/">Pricing</a> ·
+    <a href="/pilot/">Book a demo</a> ·
+    <a href="/vision/">Live intel</a> ·
+    <a href="/letter/">Letter</a>
+</footer>
+
+<script>
+    // ─────────────────────────────────────────────────────────────
+    // PROPOSED TRITON PRICES — the only place dollar amounts live.
+    // Justin: confirm or edit these numbers. They are proposals.
+    // Call caps live here too, so the cards stay in sync with the price.
+    // ─────────────────────────────────────────────────────────────
+    const TRITON_PRICING = {
+        currency: "USD",
+        tiers: [
+            {
+                id: "founding-pilot",
+                name: "Founding Pilot",
+                price: 2500,
+                period: "90 days",
+                summary: "A paid 90-day trial for one ship agency. Full console, a fixed window, no monthly contract.",
+                callsPerMonth: 40,
+                cta: "Start the 90-day pilot",
+                featured: false,
+                features: [
+                    "One agency workspace for 90 days",
+                    "Voyages, Statement of Facts, and customer updates",
+                    "Berth board and Captain AI",
+                    "Onboarding call to load the first book",
+                    "Email support for the length of the pilot"
+                ]
+            },
+            {
+                id: "desk",
+                name: "Desk",
+                price: 750,
+                period: "month",
+                summary: "One working desk for a small agency. Month to month.",
+                callsPerMonth: 25,
+                cta: "Choose Desk",
+                featured: false,
+                features: [
+                    "One agent desk",
+                    "Voyages, Statement of Facts, and the berth board",
+                    "Customer update studio",
+                    "Month to month, one desk",
+                    "Email support"
+                ]
+            },
+            {
+                id: "agency",
+                name: "Agency",
+                price: 1500,
+                period: "month",
+                summary: "The per-agency plan for a small or mid Houston desk with more than one board.",
+                callsPerMonth: 80,
+                cta: "Choose Agency",
+                featured: true,
+                features: [
+                    "Everything in Desk",
+                    "Several agents on one agency",
+                    "Captain AI on the live book",
+                    "Month to month, one agency",
+                    "Email support on business days"
+                ]
+            },
+            {
+                id: "enterprise",
+                name: "Enterprise",
+                price: null,
+                priceLabel: "Talk to us",
+                period: "",
+                summary: "Several offices, extra ports, or a rollout that should start with a conversation.",
+                callsPerMonth: null,
+                cta: "Talk to us",
+                featured: false,
+                features: [
+                    "More than one agency or office",
+                    "Ports beyond the Houston Ship Channel",
+                    "Volume above the Agency cap",
+                    "Rollout help and a direct line",
+                    "Nothing billed until the scope is agreed"
+                ]
+            }
+        ]
+    };
+
+    function money(amount) {
+        return new Intl.NumberFormat("en-US", {
+            style: "currency",
+            currency: TRITON_PRICING.currency,
+            maximumFractionDigits: 0
+        }).format(amount);
+    }
+
+    function escapeHtml(value) {
+        return String(value).replace(/[&<>"']/g, function (ch) {
+            return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[ch];
+        });
+    }
+
+    function renderTiers() {
+        const root = document.getElementById("tiers");
+        root.innerHTML = TRITON_PRICING.tiers.map(function (tier) {
+            const price = tier.price == null
+                ? escapeHtml(tier.priceLabel || "Talk to us")
+                : money(tier.price) + (tier.period ? '<span class="per"> / ' + escapeHtml(tier.period) + "</span>" : "");
+            const volume = tier.callsPerMonth
+                ? "<li>Up to " + escapeHtml(tier.callsPerMonth) + " vessel calls a month</li>"
+                : "";
+            const features = volume + tier.features.map(function (item) {
+                return "<li>" + escapeHtml(item) + "</li>";
+            }).join("");
+            return ''
+                + '<article class="tier' + (tier.featured ? " featured" : "") + '">'
+                + '<div class="tier-name">' + escapeHtml(tier.name) + "</div>"
+                + '<div class="tier-price">' + price + "</div>"
+                + '<p class="tier-tag">' + escapeHtml(tier.summary) + "</p>"
+                + '<ul class="tier-features">' + features + "</ul>"
+                + '<a class="btn ' + (tier.featured || tier.id === "founding-pilot" ? "primary" : "ghost") + '" href="/pilot/?plan=' + encodeURIComponent(tier.id) + '">' + escapeHtml(tier.cta) + " →</a>"
+                + "</article>";
+        }).join("");
+    }
+
+    renderTiers();
+
+    const navToggle = document.getElementById("nav-toggle");
+    const navBurger = document.querySelector(".nav-burger");
+    if (navToggle && navBurger) {
+        navBurger.setAttribute("aria-expanded", "false");
+        navToggle.addEventListener("change", function () {
+            navBurger.setAttribute("aria-expanded", navToggle.checked ? "true" : "false");
+        });
+    }
+</script>
+</body>
+</html>
