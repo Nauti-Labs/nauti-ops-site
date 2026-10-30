@@ -10,6 +10,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Triton — Maritime Operations Platform</title>
 <meta name="description" content="Stop running the channel from a spreadsheet. Voyages, Statement of Facts, Captain AI, berth rotations — the maritime ops console for Houston Ship Channel agencies and operators.">
+<link rel="canonical" href="https://ops.nauti-labs.com/">
+<meta name="theme-color" content="#0077ff">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Triton",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Web",
+  "url": "https://ops.nauti-labs.com/",
+  "description": "Maritime operations console for ship agencies handling chemical tankers on the Houston Ship Channel.",
+  "provider": {
+    "@type": "Organization",
+    "name": "Nauti-Labs",
+    "url": "https://nauti-labs.com/maritime/"
+  }
+}
+</script>
+<script src="/contact.js"></script>
 
 <!-- Open Graph (link previews on Slack, iMessage, LinkedIn, Discord, etc.) -->
 <meta property="og:type" content="website">
@@ -2815,6 +2834,155 @@
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
+
+  /* ─── SALES PITCH ─── */
+  .pitch {
+    background:
+      radial-gradient(ellipse at 12% 0%, rgba(0,119,255,0.16), transparent 55%),
+      radial-gradient(ellipse at 88% 100%, rgba(255,170,0,0.10), transparent 46%),
+      var(--bg-elev);
+    border-bottom: 1px solid var(--line);
+    padding: 2.5rem 1.4rem 2.2rem;
+  }
+  .pitch-inner { max-width: 1040px; margin: 0 auto; }
+  .pitch-kicker {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--amber);
+    font-weight: 700;
+    margin-bottom: 0.7rem;
+  }
+  .pitch h2 {
+    font-size: clamp(1.7rem, 3vw, 2.35rem);
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+    font-weight: 800;
+    max-width: 18ch;
+    margin-bottom: 0.75rem;
+  }
+  .pitch-lead {
+    max-width: 68ch;
+    color: var(--text-2);
+    font-size: 1.02rem;
+    margin-bottom: 1.3rem;
+  }
+  .pitch-benefits {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.8rem;
+    margin-bottom: 1.3rem;
+  }
+  .pitch-benefits article {
+    background: rgba(0,119,255,0.05);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 0.95rem 1rem 1.05rem;
+  }
+  .pitch-benefits h3 {
+    font-size: 0.95rem;
+    margin-bottom: 0.35rem;
+    color: #fff;
+  }
+  .pitch-benefits p { color: var(--text-muted); font-size: 0.86rem; }
+  .pitch-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; }
+  .pitch-cta {
+    display: inline-flex;
+    align-items: center;
+    background: var(--amber);
+    color: #121416;
+    font-weight: 700;
+    padding: 0.75rem 1.15rem;
+    border-radius: 8px;
+  }
+  .pitch-cta:hover { background: var(--brand-accent-2); color: #121416; }
+  .pitch-secondary { color: var(--text-2); font-weight: 600; padding: 0.75rem 0.2rem; }
+  .pitch-secondary:hover { color: var(--blue); }
+  .pitch-note { margin-top: 0.9rem; color: var(--text-faint); font-size: 0.78rem; }
+  .pitch-note a { color: var(--amber); }
+  .pitch-note a:hover { color: var(--blue); }
+
+  .nav-toggle {
+    display: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 7px;
+    border: 1px solid var(--line);
+    align-items: center;
+    justify-content: center;
+    color: var(--text);
+    flex: 0 0 34px;
+  }
+  .nav-toggle:hover { background: var(--bg-sunk); }
+  .nav-backdrop { display: none; }
+  .search-results {
+    position: absolute;
+    z-index: 40;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    background: var(--bg-elev);
+    border: 1px solid var(--line-strong);
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    max-height: 320px;
+    overflow: auto;
+  }
+  .search-hit {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    width: 100%;
+    text-align: left;
+    padding: 0.55rem 0.75rem;
+    border-bottom: 1px solid var(--line);
+    color: var(--text);
+  }
+  .search-hit:hover, .search-hit.active { background: var(--bg-sunk); }
+  .search-hit small { color: var(--text-muted); font-size: 0.72rem; }
+  .search-empty { padding: 0.75rem; color: var(--text-muted); font-size: 0.8rem; }
+
+  @media (max-width: 800px) {
+    .pitch { padding: 1.6rem 1rem 1.45rem; }
+    .pitch-benefits { grid-template-columns: 1fr; }
+    .nav-toggle { display: inline-flex; }
+    .demo-banner { flex-wrap: wrap; letter-spacing: 0.03em; }
+    .app { grid-template-columns: minmax(0, 1fr); }
+    .sidebar {
+      position: fixed;
+      z-index: 80;
+      width: min(280px, 88vw);
+      height: 100vh;
+      height: 100dvh;
+      transform: translateX(-105%);
+      transition: transform 0.2s ease;
+      box-shadow: var(--shadow-lg);
+    }
+    body.nav-open .sidebar { transform: none; }
+    body.nav-open .chat-fab { visibility: hidden; }
+    body.nav-open .nav-backdrop {
+      display: block;
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 4, 10, 0.55);
+      z-index: 70;
+    }
+    .topbar { flex-wrap: wrap; }
+    .topbar-search { flex: 1 1 100%; max-width: none; order: 5; }
+    .breadcrumbs { flex: 1; min-width: 0; }
+    .env-pill { display: none; }
+    .cb-toggle { min-width: 36px; width: 36px; padding: 0; }
+    .cb-toggle-label { display: none; }
+    .page { padding-bottom: 5.5rem; }
+    .card, .stack, .detail-grid, .page { min-width: 0; }
+    .card-body.flush { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .tbl { min-width: 640px; }
+    .field-grid, .field-grid.three, .field-grid.four { grid-template-columns: 1fr; }
+    .filter-bar input { min-width: 0; width: 100%; }
+    .page-header { align-items: stretch; }
+  }
 </style>
 </head>
 <body>
@@ -2823,10 +2991,38 @@
   <span class="dot-live"></span> <b>TRITON</b> &nbsp;·&nbsp; Maritime Operations Platform &nbsp;·&nbsp; ops.nauti-labs.com &nbsp;·&nbsp; <span class="demo-tag">DEMO · SAMPLE DATA</span>
 </div>
 
-<div class="app">
+<section class="pitch" aria-labelledby="pitch-title">
+  <div class="pitch-inner">
+    <p class="pitch-kicker">Houston Ship Channel</p>
+    <h2 id="pitch-title">The ops console for chemical tanker agencies.</h2>
+    <p class="pitch-lead">Triton is for ship agencies handling chemical tankers on the Houston Ship Channel. The morning board, the cargo, and the update that still has to go out live in one place.</p>
+    <div class="pitch-benefits">
+      <article>
+        <h3>Every call on one board</h3>
+        <p>ETAs, berth prospects, cargo grade, and the agent on the job — the channel picture without a spreadsheet and a stack of inboxes.</p>
+      </article>
+      <article>
+        <h3>Statement of Facts from the call</h3>
+        <p>Laytime events stay on the voyage, so the final SOF is assembled from the call instead of rebuilt from notes the night the ship sails.</p>
+      </article>
+      <article>
+        <h3>Principal updates, reviewed first</h3>
+        <p>Captain drafts the customer update in the agency’s house style. An agent reads it before anything leaves the desk.</p>
+      </article>
+    </div>
+    <div class="pitch-actions">
+      <a class="pitch-cta" data-contact data-subject="Triton demo request">Request a demo</a>
+      <a class="pitch-secondary" href="#console">Open the console</a>
+    </div>
+    <p class="pitch-note">Fictional sample records only. <a href="/port-medical/">Port Medical</a> is a separate product for maritime medical cases, not this console.</p>
+  </div>
+</section>
+
+<div class="nav-backdrop" id="nav-backdrop"></div>
+<div class="app" id="console">
 
   <!-- ───────────── SIDEBAR ───────────── -->
-  <aside class="sidebar">
+  <aside class="sidebar" id="site-nav">
     <div class="sidebar-brand">
       <div class="brand-mark" aria-hidden="true">
         <img src="/triton-mark.svg" alt="">
@@ -2874,6 +3070,22 @@
       </a>
     </div>
 
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Nauti-Labs</div>
+      <a class="nav-item" href="https://nauti-labs.com/maritime/">
+        <span class="icon">${ICON.compass}</span> Maritime
+      </a>
+      <a class="nav-item" href="/vision/">
+        <span class="icon">${ICON.ship}</span> Nauti-Vision
+      </a>
+      <a class="nav-item" href="/letter/">
+        <span class="icon">${ICON.mail}</span> Nauti-Letter
+      </a>
+      <a class="nav-item" href="/port-medical/" title="Separate product for maritime medical cases">
+        <span class="icon">${ICON.users}</span> Port Medical <span class="badge">separate</span>
+      </a>
+    </div>
+
     <div class="sidebar-footer">
       <div class="avatar">AM</div>
       <div class="sidebar-user">
@@ -2886,6 +3098,9 @@
   <!-- ───────────── MAIN ───────────── -->
   <main class="main">
     <div class="topbar">
+      <button class="nav-toggle" id="nav-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="site-nav">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
       <div class="breadcrumbs" id="breadcrumbs"></div>
       <div class="topbar-search">
         <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
@@ -3318,6 +3533,7 @@
             <label>PIN</label>
             <input id="pin-entry" type="password" inputmode="numeric" placeholder="Enter PIN" onkeydown="if(event.key==='Enter') unlockPinArea('${area}')" autofocus>
             <div id="pin-error" class="hint" style="color:var(--status-alert);min-height:18px;margin-top:8px"></div>
+            <div class="hint" style="margin-top:6px">Sample desk PIN <span class="mono">6353</span>. Fictional demo only.</div>
           </div>
           <button class="btn primary" onclick="unlockPinArea('${area}')">Unlock</button>
         </div>
@@ -4553,6 +4769,7 @@
 
     setActiveNav('voyages');
     const vessel = byId(VESSELS, v.vesselId);
+    if (!vessel) return renderVoyages();
     const op = byId(COMPANIES, v.operatorId);
     const customers = (v.customerIds || []).map(id => byId(COMPANIES, id));
     const master = byId(PEOPLE, vessel.masterId);
@@ -4883,7 +5100,7 @@
     // Find related voyages
     const related = VOYAGES.filter(vy => {
       const vs = byId(VESSELS, vy.vesselId);
-      return vy.assignedAgentId === p.id || vs.masterId === p.id || (vy.customerIds || []).includes(p.companyId);
+      return vy.assignedAgentId === p.id || vs?.masterId === p.id || (vy.customerIds || []).includes(p.companyId);
     });
 
     $page.innerHTML = `
@@ -5555,7 +5772,7 @@
     const v = byId(VOYAGES, voyageId);
     if (!v) return;
     const draft = buildEmailDraft(v);
-    const userEmail = 'consulting@nauti-labs.com';
+    const userEmail = 'agent@example.com';
     const plainText = htmlToPlainText(draft.bodyHtml);
     const mailtoUrl = `mailto:${userEmail}?subject=${encodeURIComponent(draft.subject)}&body=${encodeURIComponent(plainText)}`;
 
@@ -6134,6 +6351,9 @@
   }
 
   function route() {
+    document.body.classList.remove('nav-open');
+    const navToggle = document.getElementById('nav-toggle');
+    if (navToggle) navToggle.setAttribute('aria-expanded', 'false');
     const hash = location.hash.replace(/^#\/?/, '') || 'dashboard';
     const [r, id] = hash.split(':');
     document.getElementById('page').scrollTo?.(0, 0);
@@ -6183,6 +6403,76 @@
   window.addEventListener('hashchange', route);
   route();
   captainChat.init();
+
+  const navToggleBtn = document.getElementById('nav-toggle');
+  const navBackdrop = document.getElementById('nav-backdrop');
+  function setNavOpen(open) {
+    document.body.classList.toggle('nav-open', open);
+    if (navToggleBtn) navToggleBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+  navToggleBtn?.addEventListener('click', () => setNavOpen(!document.body.classList.contains('nav-open')));
+  navBackdrop?.addEventListener('click', () => setNavOpen(false));
+
+  const searchInput = document.querySelector('.topbar-search input');
+  const searchResults = document.createElement('div');
+  searchResults.className = 'search-results';
+  searchResults.hidden = true;
+  searchResults.setAttribute('role', 'listbox');
+  searchInput.setAttribute('aria-label', 'Search the sample desk');
+  searchInput.setAttribute('autocomplete', 'off');
+  searchInput.parentElement.appendChild(searchResults);
+
+  const searchIndex = [
+    ...VESSELS.map(v => ({ label: v.name, meta: `${v.type} · IMO ${v.imo}`, route: `vessel:${v.id}`, hay: `${v.name} ${v.imo} ${v.type}`.toLowerCase() })),
+    ...VOYAGES.map(v => {
+      const vessel = byId(VESSELS, v.vesselId);
+      const name = vessel?.name || 'Voyage';
+      return { label: `${name} · V.${v.voyageNo}`, meta: v.status, route: `voyage:${v.id}`, hay: `${name} ${v.voyageNo} ${v.status}`.toLowerCase() };
+    }),
+    ...COMPANIES.map(c => ({ label: c.name, meta: c.type, route: `company:${c.id}`, hay: `${c.name} ${c.type} ${c.city}`.toLowerCase() })),
+    ...PEOPLE.map(p => ({ label: p.name, meta: p.role, route: `person:${p.id}`, hay: `${p.name} ${p.role}`.toLowerCase() })),
+    ...TERMINALS.map(t => ({ label: t.name, meta: t.city, route: `terminal:${t.id}`, hay: `${t.name} ${t.city}`.toLowerCase() })),
+    ...CARGOS.map(c => ({ label: c.grade, meta: 'Cargo guide', route: `cargo:${c.id}`, hay: `${c.grade} ${c.stowage || ''}`.toLowerCase() })),
+  ];
+
+  function hideSearch() {
+    searchResults.hidden = true;
+    searchResults.innerHTML = '';
+  }
+  function showSearch(query) {
+    const q = query.trim().toLowerCase();
+    if (q.length < 2) { hideSearch(); return; }
+    const hits = searchIndex.filter(row => row.hay.includes(q)).slice(0, 8);
+    if (!hits.length) {
+      searchResults.innerHTML = '<div class="search-empty">No sample records match.</div>';
+      searchResults.hidden = false;
+      return;
+    }
+    searchResults.innerHTML = hits.map(hit => `
+      <button type="button" class="search-hit" data-route="${escapeHtml(hit.route)}">
+        ${escapeHtml(hit.label)}
+        <small>${escapeHtml(hit.meta || '')}</small>
+      </button>`).join('');
+    searchResults.hidden = false;
+  }
+  searchInput.addEventListener('input', () => showSearch(searchInput.value));
+  searchInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') { hideSearch(); return; }
+    if (e.key === 'Enter') {
+      const first = searchResults.querySelector('.search-hit');
+      if (first) {
+        e.preventDefault();
+        first.click();
+      }
+    }
+  });
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.topbar-search')) hideSearch();
+  });
+  searchResults.addEventListener('click', () => {
+    searchInput.value = '';
+    hideSearch();
+  });
 
   // ─── COLOR BOMB ───
   const CB_PRESETS = {

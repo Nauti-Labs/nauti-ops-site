@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nauti-Vision — Houston Ship Channel Live Intel</title>
     <meta name="description" content="Live AIS vessel tracking and tide data for the Houston Ship Channel. Built by Nauti-Labs in Mont Belvieu, TX.">
+    <link rel="canonical" href="https://ops.nauti-labs.com/vision/">
     <meta name="theme-color" content="#f5a118">
     <link rel="icon" type="image/svg+xml" href="/triton-mark.svg">
     <link rel="apple-touch-icon" href="/icon-192.png">
@@ -448,9 +449,41 @@
         .footer-strip .source { color: var(--blue); }
 
         @media (max-width: 1100px) {
-            main { grid-template-columns: 1fr; grid-template-rows: auto 1fr auto; }
+            main { grid-template-columns: 1fr; grid-template-rows: minmax(280px, 1fr) auto auto; }
             .panel { max-height: 240px; }
             .footer-strip { left: 0; right: 0; }
+            main > div { order: 1; min-height: 280px; }
+            main > .panel { order: 2; }
+            main > .panel.right { order: 3; }
+        }
+        @media (max-width: 720px) {
+            body { overflow: auto; }
+            .page { height: auto; min-height: 100vh; min-height: 100dvh; }
+            header {
+                flex-wrap: wrap;
+                align-items: flex-start;
+                gap: 0.6rem;
+                padding: 0.75rem 0.9rem;
+            }
+            .header-right {
+                width: 100%;
+                justify-content: flex-start;
+                flex-wrap: wrap;
+                gap: 0.45rem;
+            }
+            .time-badge { display: none; }
+            .brand-name { font-size: 1.15rem; }
+            main { overflow: visible; grid-template-rows: minmax(300px, 52vh) auto auto; }
+            .panel { max-height: none; }
+            #map { min-height: 300px; }
+            .footer-strip {
+                position: absolute;
+                left: 0;
+                right: 0;
+                flex-wrap: wrap;
+                gap: 0.25rem 0.8rem;
+                font-size: 0.62rem;
+            }
         }
     </style>
 </head>
@@ -486,6 +519,8 @@
                 <span id="ws-status">Connecting</span>
             </div>
             <div class="time-badge" id="clock">--:--:--</div>
+            <a class="back-link" data-contact data-subject="Triton demo request">Request a demo</a>
+            <a class="back-link" href="https://nauti-labs.com/maritime/">Nauti-Labs</a>
             <a class="back-link" href="/">← Triton</a>
         </div>
     </header>
@@ -538,7 +573,7 @@
                 <div>
                     AIS via <span class="source">aisstream.io</span> ·
                     Tides via <span class="source">NOAA CO-OPS</span> ·
-                    Map <span class="source">OpenStreetMap</span>
+                    Map <span class="source">© Esri</span>
                 </div>
                 <div id="last-update">—</div>
             </div>
@@ -600,7 +635,7 @@
             <div class="upsell">
                 <h3>Want it in your inbox?</h3>
                 <p>Nauti-Letter delivers a daily Houston Ship Channel digest at 6am CT — vessels, tides, anomalies. Built by a Mont Belvieu local who used to run these calls.</p>
-                <a class="upsell-cta" href="/letter/">Subscribe →</a>
+                <a class="upsell-cta" href="/letter/">See the sample digest →</a>
             </div>
         </aside>
     </main>
@@ -622,6 +657,7 @@
     </div>
 </div>
 
+<script src="/contact.js"></script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script>
@@ -672,14 +708,14 @@ let reconnectTimer = null;
 // ── MAP ────────────────────────────────────────────────────────────────
 const map = L.map('map', {
     zoomControl: true,
-    attributionControl: true,
+    attributionControl: false,
     preferCanvas: true,
+    maxZoom: 16,
 }).setView([29.55, -94.98], 11);
 
-L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-    attribution: '© OpenStreetMap · © CARTO',
-    subdomains: 'abcd',
-    maxZoom: 19,
+L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+    attribution: 'Tiles © Esri — Esri, DeLorme, NAVTEQ',
+    maxZoom: 16,
 }).addTo(map);
 
 // Ship Channel corridor overlay (hint rectangle)
@@ -954,10 +990,14 @@ async function loadTides() {
 
 // ── CLOCK ──────────────────────────────────────────────────────────────
 function tickClock() {
-    const now = new Date();
-    const pad = n => String(n).padStart(2, '0');
-    document.getElementById('clock').textContent =
-        `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())} CT`;
+    const clock = new Intl.DateTimeFormat('en-GB', {
+        timeZone: 'America/Chicago',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hourCycle: 'h23',
+    }).format(new Date());
+    document.getElementById('clock').textContent = `${clock} CT`;
 }
 setInterval(tickClock, 1000); tickClock();
 
@@ -1006,9 +1046,12 @@ document.getElementById('key-skip').addEventListener('click', () => {
     ];
     demo.forEach(v => { v.lastSeen = Date.now(); vessels.set(v.mmsi, v); upsertMarker(v); });
     renderList(); updateStats();
+    map.invalidateSize();
 });
 
+window.addEventListener('resize', () => map.invalidateSize());
 boot();
+setTimeout(() => map.invalidateSize(), 200);
 </script>
 </body>
 </html>
