@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nauti-Letter — Houston Ship Channel Daily Digest</title>
     <meta name="description" content="The daily Houston Ship Channel intelligence digest. Vessels, tides, anomalies — delivered at 6am CT. Built by a Mont Belvieu local.">
+    <link rel="canonical" href="https://ops.nauti-labs.com/letter/">
     <meta name="theme-color" content="#f5a118">
     <link rel="icon" type="image/svg+xml" href="/triton-mark.svg">
     <link rel="apple-touch-icon" href="/icon-192.png">
@@ -209,8 +210,8 @@
             font-style: italic;
         }
 
-        /* ── PRICING ── */
-        .pricing-section {
+        /* ── SAMPLE COVERAGE ── */
+        .coverage-section {
             padding: 4rem 2rem;
             max-width: 1100px; margin: 0 auto;
         }
@@ -230,6 +231,16 @@
         }
         .tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
         @media (max-width: 900px) { .tiers { grid-template-columns: 1fr; } }
+        @media (max-width: 720px) {
+            header { flex-wrap: wrap; gap: 0.75rem; padding: 1rem; }
+            .nav-links { flex-wrap: wrap; gap: 0.75rem 1rem; }
+            .hero { padding: 2.6rem 1.1rem 2rem; }
+            .digest-section, .coverage-section, .faq-section { padding-left: 1rem; padding-right: 1rem; }
+            .digest-body { padding: 1.2rem; }
+            .digest-body li { grid-template-columns: 1fr; gap: 0.3rem; }
+            .capture { margin: 0 1rem 3rem; padding: 1.5rem 1rem; }
+            .capture input { min-width: 0; width: 100%; }
+        }
         .tier {
             background: var(--bg2);
             border: 1px solid var(--border);
@@ -248,15 +259,6 @@
             letter-spacing: 0.2em; text-transform: uppercase;
             color: var(--amber);
             margin-bottom: 0.5rem;
-        }
-        .tier-price {
-            font-size: 2.2rem; font-weight: 900;
-            letter-spacing: -0.02em;
-            margin-bottom: 0.2rem;
-        }
-        .tier-price .per {
-            font-size: 0.9rem; font-weight: 500;
-            color: var(--text-muted);
         }
         .tier-tag {
             font-size: 0.82rem; color: var(--text-muted);
@@ -399,7 +401,8 @@
     <nav class="nav-links">
         <a href="/vision/">Live Dashboard</a>
         <a href="/">Triton</a>
-        <a href="#subscribe">Subscribe</a>
+        <a href="https://nauti-labs.com/maritime/">Nauti-Labs</a>
+        <a href="#subscribe">Sample digest</a>
     </nav>
 </header>
 
@@ -415,7 +418,7 @@
         operators who need a clean read before the desk gets noisy.
     </p>
     <div class="hero-cta">
-        <a href="#subscribe" class="btn primary">See Plans →</a>
+        <a class="btn primary" data-contact data-subject="Nauti-Letter demo request">Request a demo</a>
         <a href="/vision/" class="btn ghost">Open Live Dashboard</a>
     </div>
 </section>
@@ -459,58 +462,52 @@
     <p class="digest-preview-note">This is a mock. Real digests pull live from AIS, NOAA, and USCG feeds. Sent weekdays at 6am CT.</p>
 </section>
 
-<section class="pricing-section" id="subscribe">
+<section class="coverage-section" id="subscribe">
     <div class="section-head">
         <h2>Built by someone who used to run these calls.</h2>
-        <p>Start free. Pro is the first paid tier. Custom coverage is quoted case by case.</p>
-        <p class="section-note">Stripe checkout is being wired next. Founding customers can be onboarded directly by email in the meantime.</p>
+        <p>Three sample coverage shapes for a Houston Ship Channel desk. This demo does not take signups or payment.</p>
+        <p class="section-note">Ask for a walkthrough and we will show the digest on fictional channel traffic.</p>
     </div>
 
     <div class="tiers">
         <div class="tier">
-            <div class="tier-name">Free Digest</div>
-            <div class="tier-price">$0<span class="per">/mo</span></div>
-            <div class="tier-tag">The morning email. No card required.</div>
+            <div class="tier-name">Morning note</div>
+            <div class="tier-tag">The weekday email a boarding agent can read before the phone starts.</div>
             <ul class="tier-features">
                 <li>Daily 6am CT digest (weekdays)</li>
-                <li>Top 10 vessel movements</li>
+                <li>Top vessel movements</li>
                 <li>Tide window summary</li>
                 <li>USCG advisory callouts</li>
-                <li>Best-effort send, community support</li>
             </ul>
-            <a href="#subscribe-form" class="btn ghost">Join Free →</a>
+            <a class="btn ghost" data-contact data-subject="Nauti-Letter morning note">Request a demo</a>
         </div>
 
         <div class="tier featured">
-            <div class="tier-name">Pro</div>
-            <div class="tier-price">$99<span class="per">/mo</span></div>
-            <div class="tier-tag">Full morning brief, live dashboard access, and watchlist coverage for a real desk.</div>
+            <div class="tier-name">Desk brief</div>
+            <div class="tier-tag">The full morning board, live channel view, and a watchlist for one agency desk.</div>
             <ul class="tier-features">
-                <li>Everything in Free</li>
-                <li>Complete vessel board, not just the top 10 moves</li>
+                <li>Everything in the morning note</li>
+                <li>Complete vessel board, not just the top moves</li>
                 <li>Live dashboard access (Nauti-Vision)</li>
-                <li>Custom vessel watchlist with alert emails</li>
-                <li>Historical lookback (30 days)</li>
+                <li>Vessel watchlist with alert emails</li>
+                <li>Historical lookback</li>
                 <li>Agent-ready CSV export</li>
-                <li>Priority support from Nauti-Labs</li>
             </ul>
-            <a href="mailto:consulting@nauti-labs.com?subject=Nauti-Letter%20Pro%20Access" class="btn primary">Request Pro Access →</a>
+            <a class="btn primary" data-contact data-subject="Nauti-Letter desk brief">Request a demo</a>
         </div>
 
         <div class="tier">
-            <div class="tier-name">Custom</div>
-            <div class="tier-price">Quoted</div>
-            <div class="tier-tag">For desks that need custom port coverage, pilot visibility, or team delivery.</div>
+            <div class="tier-name">Custom coverage</div>
+            <div class="tier-tag">For desks that need another port, a terminal watch, or delivery to a whole team.</div>
             <ul class="tier-features">
-                <li>Everything in Pro</li>
+                <li>Everything in the desk brief</li>
                 <li>Custom port or terminal coverage</li>
-                <li>Pilot and berth workflow enrichment where licensed</li>
+                <li>Pilot and berth notes where a feed is licensed</li>
                 <li>Team distribution and watchlist setup</li>
-                <li>Custom reports for your fleet or terminal</li>
+                <li>Reports shaped for one fleet or terminal</li>
                 <li>Slack or Teams delivery options</li>
-                <li>Direct line to the builder</li>
             </ul>
-            <a href="mailto:consulting@nauti-labs.com?subject=Nauti-Letter%20Custom%20Coverage" class="btn ghost">Discuss Custom Coverage →</a>
+            <a class="btn ghost" data-contact data-subject="Nauti-Letter custom coverage">Request a demo</a>
         </div>
     </div>
 </section>
@@ -531,15 +528,15 @@
 
     <div class="faq">
         <div class="faq-q">Where does the data come from?</div>
-        <div class="faq-a">AIS vessel positions from aisstream.io, tides and currents from NOAA CO-OPS, and USCG notice data. Pro adds Nauti-Labs curation and desk-friendly formatting. Custom plans can include additional licensed or client-specific inputs.</div>
+        <div class="faq-a">AIS vessel positions from aisstream.io, tides and currents from NOAA CO-OPS, and USCG notice data. The desk brief adds Nauti-Labs curation and desk-friendly formatting. Custom coverage can include additional licensed inputs.</div>
     </div>
     <div class="faq">
         <div class="faq-q">Who is this for?</div>
         <div class="faq-a">Vessel agents, ship brokers, terminal ops, P&I clubs, commodity traders with Gulf exposure, and anyone who needs Houston Ship Channel situational awareness without building it themselves.</div>
     </div>
     <div class="faq">
-        <div class="faq-q">Can I cancel?</div>
-        <div class="faq-a">Anytime. Month-to-month. No phone trees and no retention dance. Email consulting@nauti-labs.com and it gets handled.</div>
+        <div class="faq-q">How do I see it on my desk?</div>
+        <div class="faq-a">Request a demo. This page is a sample of the digest, built on fictional vessel names. Nothing here is billed.</div>
     </div>
     <div class="faq">
         <div class="faq-q">Do you cover Galveston / Texas City / Freeport?</div>
@@ -547,16 +544,16 @@
     </div>
     <div class="faq">
         <div class="faq-q">Is this affiliated with Houston Pilots or the Port Bureau?</div>
-        <div class="faq-a">No. Nauti-Labs is independent. Free and Pro use public and operator-curated sources. Any premium pilot or terminal data would be handled as a separately scoped custom engagement.</div>
+        <div class="faq-a">No. Nauti-Labs is independent. The sample uses public and operator-curated sources. Any licensed pilot or terminal feed would be a separately scoped conversation.</div>
     </div>
 </section>
 
 <section class="capture" id="subscribe-form">
-    <h3>Get the next digest.</h3>
-    <p>Drop your email — first one hits your inbox tomorrow morning. Unsubscribe with one click.</p>
-    <form id="signup" action="mailto:consulting@nauti-labs.com" method="POST" enctype="text/plain">
+    <h3>Ask for the next sample.</h3>
+    <p>Leave an address and the mailto opens a note to the demo inbox. Nothing is stored on this page.</p>
+    <form id="signup" data-contact data-subject="Nauti-Letter sample digest">
         <input type="email" name="email" placeholder="you@company.com" required>
-        <button type="submit" class="btn primary">Subscribe Free</button>
+        <button type="submit" class="btn primary">Request the sample</button>
     </form>
     <p style="margin-top: 1rem; font-size: 0.78rem; color: var(--text-muted);">
         No spam. No selling your address. Built in Mont Belvieu, TX.
@@ -567,8 +564,10 @@
     © 2026 Nauti-Labs LLC · Mont Belvieu, TX ·
     <a href="/">Triton</a> ·
     <a href="/vision/">Live Dashboard</a> ·
-    <a href="mailto:consulting@nauti-labs.com">consulting@nauti-labs.com</a>
+    <a href="https://nauti-labs.com/maritime/">Nauti-Labs</a> ·
+    <a data-contact data-subject="Nauti-Letter demo request" data-contact-label>demo@example.com</a>
 </footer>
+<script src="/contact.js"></script>
 
 </body>
 </html>
